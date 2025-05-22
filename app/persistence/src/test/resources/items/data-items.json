@@ -1,0 +1,71 @@
+{
+  "items": [
+    {
+      "id": "484889ca-df2e-4a78-b5e1-fbe2eea8a796",
+      "itemType": "WEAPON",
+      "name": "Short bow",
+      "description": "A short bow",
+      "icon": "items/weapons/bows/bow_07_b.png",
+      "weaponGroup": "bows",
+      "damageDice": 1,
+      "damageFixed": 1,
+      "minStr": -1,
+      "cost": 90,
+      "ability": "ACCURACY",
+      "focus": "BOWS",
+      "encumbrance": 1,
+      "attackType": "RANGED",
+      "damageAbility": "STRENGTH",
+      "penetrating": false,
+      "normalRange": 8,
+      "longRange": 16
+    },
+    {
+      "id": "79370ee4-049f-4681-95e1-256fe11aa8c6",
+      "itemType": "WEAPON",
+      "name": "Battleaxe",
+      "description": "A battle axe",
+      "icon": "items/weapons/axes/axe_12_b.png",
+      "weaponGroup": "axes",
+      "damageDice": 2,
+      "damageFixed": 0,
+      "minStr": 1,
+      "cost": 14,
+      "ability": "FIGHTING",
+      "focus": "AXES",
+      "attackType": "MELEE",
+      "damageAbility": "STRENGTH",
+      "penetrating": false,
+      "normalRange": 1,
+      "longRange": 1
+    },
+    {
+      "id": "ad3bdf17-5356-414c-96f4-c2fb8d5e0ffe",
+      "itemType": "WEAPON",
+      "name": "Long Sword",
+      "description": "A long sword",
+      "icon": "items/weapons/swords/swords_02_b.png",
+      "weaponGroup": "heavy blades",
+      "damageDice": 2,
+      "damageFixed": 0,
+      "minStr": 1,
+      "cost": 18,
+      "ability": "FIGHTING",
+      "focus": "HEAVY_BLADES",
+      "attackType": "MELEE",
+      "damageAbility": "STRENGTH",
+      "penetrating": false,
+      "normalRange": 1,
+      "longRange": 1
+    },
+    {
+      "id": "6b8d8149-a13d-4935-8c52-a704566fec49",
+      "itemType": "OTHER",
+      "name": "Lettre",
+      "description": "Lettre importante",
+      "icon": "icon/TabletopBadges_43.png",
+      "cost": 5,
+      "encumbrance": 1
+    }
+  ]
+}

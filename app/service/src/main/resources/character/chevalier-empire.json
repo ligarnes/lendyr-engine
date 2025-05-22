@@ -1,0 +1,79 @@
+{
+  "name": "Chevalier de l'empire",
+  "speed": 11,
+  "defense": 13,
+  "armorRating": 7,
+  "armorPenalty": 0,
+  "healthPoint": 53,
+  "currentHealthPoint": 53,
+  "abilities": {
+    "accuracy": {
+      "value": 1,
+      "focuses": [
+        "BRAWLING",
+        "BOWS"
+      ],
+      "primary": true
+    },
+    "communication": {
+      "value": 1,
+      "focuses": [
+      ],
+      "primary": true
+    },
+    "constitution": {
+      "value": 4,
+      "focuses": [
+      ],
+      "primary": false
+    },
+    "dexterity": {
+      "value": 1,
+      "focuses": [
+        "RIDING"
+      ],
+      "primary": true
+    },
+    "fighting": {
+      "value": 4,
+      "focuses": [
+        "HEAVY_BLADES"
+      ],
+      "primary": false
+    },
+    "intelligence": {
+      "value": 0,
+      "focuses": [
+        "HERALDRY"
+      ],
+      "primary": false
+    },
+    "perception": {
+      "value": 1,
+      "focuses": [],
+      "primary": true
+    },
+    "strength": {
+      "value": 2,
+      "focuses": [
+      ],
+      "primary": false
+    },
+    "willpower": {
+      "value": 2,
+      "focuses": [
+      ],
+      "primary": false
+    }
+  },
+  "attacks": {
+    "Bastard sword": {
+      "attack": "FIGHTING",
+      "attackFocus": "HEAVY_BLADES",
+      "diceCount": "2",
+      "fixedDamage": "1",
+      "penetrating": false,
+      "damageBonus": "STRENGTH"
+    }
+  }
+}

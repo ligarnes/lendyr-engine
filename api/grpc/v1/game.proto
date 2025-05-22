@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+option java_package = "net.alteiar.lendyr.grpc.model.v1.game";
+option java_multiple_files = true;
+option optimize_for = SPEED;
+
+package model.game;
+
+import "persona.proto";
+import "combat.proto";
+import "player.proto";
+import "item.proto";
+import "map.proto";
+
+service LendyrGameService {
+  // Load a new game
+  rpc load(LendyrLoadGameRequest) returns (EmptyResponse);
+
+  // Load item
+  rpc getItems(EmptyResponse) returns (LendyrItems);
+
+  // Load maps
+  rpc getMaps(LendyrGetById) returns (model.map.LendyrMap);
+
+  // Retrieve current state
+  rpc currentState(EmptyResponse) returns (LendyrGameState);
+
+  // register to all the game updates
+  rpc registerCurrentState(EmptyResponse) returns (stream LendyrGameState);
+
+  // send an action
+  rpc act(combat.LendyrAction) returns (model.combat.LendyrActionResult);
+
+  // End the turn
+  rpc endTurn(EmptyResponse) returns (EmptyResponse);
+}
+
+service LendyrCharacterService {
+
+  rpc create(model.persona.LendyrPersona) returns (CreatedResponse);
+
+  rpc get(LendyrGetById) returns (model.persona.LendyrPersona);
+}
+
+message LendyrLoadGameRequest {
+  string saveName = 1;
+}
+
+message LendyrGameState {
+  GameStatus statuses = 1;
+  model.combat.LendyrEncounter encounter = 2;
+  repeated model.persona.LendyrPersona persona = 3;
+  repeated model.player.LendyrPlayer players = 4;
+}
+
+message GameStatus {
+  bool gameOver = 1;
+}
+
+message EmptyResponse{}
+
+message CreatedResponse {
+  bytes id = 1;
+}
+
+message LendyrGetById {
+  bytes id = 1;
+}
+
+message LendyrItems {
+  repeated  model.item.LendyrItem items = 1;
+}

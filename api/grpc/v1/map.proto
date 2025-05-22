@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_package = "net.alteiar.lendyr.grpc.model.v1.map";
+option java_multiple_files = true;
+option optimize_for = SPEED;
+
+package model.map;
+
+message LendyrMap {
+  string mapPath = 1;
+
+  int32 widthInPixel = 2;
+  int32 heightInPixel = 3;
+  int32 pixelPerMeter = 4;
+
+  repeated LendyrWall walls = 5;
+}
+
+message LendyrWall {
+  float x = 1;
+  float y = 2;
+  float width = 3;
+  float height = 4;
+}

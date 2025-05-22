@@ -1,0 +1,87 @@
+{
+  "name": "Jesper Rask",
+  "speed": 14,
+  "defense": 15,
+  "armorRating": 4,
+  "armorPenalty": 0,
+  "healthPoint": 70,
+  "currentHealthPoint": 70,
+  "abilities": {
+    "accuracy": {
+      "value": 4,
+      "focuses": [
+        "DUELING"
+      ],
+      "primary": true
+    },
+    "communication": {
+      "value": 2,
+      "focuses": [
+        "LEADERSHIP"
+      ],
+      "primary": true
+    },
+    "constitution": {
+      "value": 4,
+      "focuses": [
+        "STAMINA",
+        "TOLERANCE"
+      ],
+      "primary": false
+    },
+    "dexterity": {
+      "value": 4,
+      "focuses": [
+        "INITIATIVE"
+      ],
+      "primary": true
+    },
+    "fighting": {
+      "value": 1,
+      "focuses": [],
+      "primary": false
+    },
+    "intelligence": {
+      "value": 1,
+      "focuses": [],
+      "primary": false
+    },
+    "perception": {
+      "value": 3,
+      "focuses": [],
+      "primary": true
+    },
+    "strength": {
+      "value": 0,
+      "focuses": [
+        "CLIMBING"
+      ],
+      "primary": false
+    },
+    "willpower": {
+      "value": 0,
+      "focuses": [
+        "COURAGE"
+      ],
+      "primary": false
+    }
+  },
+  "attacks": {
+    "Battle axe": {
+      "attack": "FIGHTING",
+      "attackFocus": "AXES",
+      "diceCount": "2",
+      "fixedDamage": "0",
+      "penetrating": false,
+      "damageBonus": "STRENGTH"
+    },
+    "Rapier": {
+      "attack": "ACCURACY",
+      "attackFocus": "DUELING",
+      "diceCount": "1",
+      "fixedDamage": "3",
+      "penetrating": false,
+      "damageBonus": "PERCEPTION"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option java_package = "net.alteiar.lendyr.grpc.model.v1.item";
+option java_multiple_files = true;
+option optimize_for = SPEED;
+
+package model.item;
+
+import "generic.proto";
+
+message LendyrItem {
+  bytes id = 15;
+  string name = 1;
+  string description = 2;
+  string icon = 3;
+  int32 cost = 8;
+  int32 encumbrance = 9;
+
+  oneof properties {
+    LendyrWeaponProperties weapon = 10;
+  }
+}
+
+enum LendyrWeaponType {
+  MELEE = 0;
+  RANGED = 1;
+  MAGIC = 2;
+}
+
+message LendyrWeaponProperties {
+  string weaponGroup = 1;
+  int32 damageDice = 2;
+  int32 damageFixed = 3;
+  int32 minStr = 4;
+  model.generic.LendyrAbility ability = 5;
+  model.generic.LendyrAbilityFocus focus = 6;
+  LendyrWeaponType attackType = 7;
+  model.generic.LendyrAbility damageAbility = 8;
+  bool penetrating = 9;
+  float normalRange = 10;
+  float longRange = 11;
+}

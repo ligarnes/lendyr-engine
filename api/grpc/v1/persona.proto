@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+option java_package = "net.alteiar.lendyr.grpc.model.v1.persona";
+option java_multiple_files = true;
+option optimize_for = SPEED;
+
+package model.persona;
+
+import "generic.proto";
+import "item.proto";
+
+message LendyrPersona {
+  bytes id = 1;
+  string name = 2;
+  int32 speed = 3;
+
+  string portraitPath = 4;
+  string tokenPath = 5;
+  model.generic.LendyrPosition position = 6;
+  model.generic.LendyrSize size = 7;
+
+  int32 armorRating = 10;
+  int32 armorPenalty = 11;
+  int32 defense = 12;
+
+  int32 healthPoint = 20;
+  int32 currentHealthPoint = 21;
+
+  LendyrAbilities abilities = 30;
+
+  LendyrPersonaEquipped equipped = 40;
+  LendyrPersonaInventory inventory = 50;
+}
+
+message LendyrPersonaEquipped {
+  LendyrPersonaEquipment armor = 1;
+  LendyrPersonaEquipment belt = 2;
+  LendyrPersonaEquipment gloves = 3;
+  LendyrPersonaEquipment shoes = 4;
+  LendyrPersonaEquipment neckless = 5;
+  LendyrPersonaEquipment ring1 = 6;
+  LendyrPersonaEquipment leftHand = 7;
+  LendyrPersonaEquipment rightHand = 8;
+  LendyrPersonaEquipment twoHanded = 9;
+}
+
+enum EquipmentStatus {
+  READY = 0;
+  NEED_RELOAD = 1;
+  NEED_REPAIR = 3;
+  BROKEN = 4;
+}
+
+message LendyrPersonaEquipment {
+  bytes itemId = 1;
+  EquipmentStatus status = 2;
+  // Quantity might means different things: ammunition count, quantity of the same items etc.
+  int32 quantity = 3;
+}
+
+message LendyrPersonaInventory {
+  repeated LendyrPersonaEquipment backpack = 10;
+}
+
+message LendyrAbilities {
+  LendyrAbilityValue accuracy = 1;
+  LendyrAbilityValue communication = 2;
+  LendyrAbilityValue constitution = 3;
+  LendyrAbilityValue dexterity = 4;
+  LendyrAbilityValue fighting = 5;
+  LendyrAbilityValue intelligence = 6;
+  LendyrAbilityValue perception = 7;
+  LendyrAbilityValue strength = 8;
+  LendyrAbilityValue willpower = 9;
+}
+
+enum AttackType {
+  MELEE = 0;
+  RANGE = 1;
+  MAGIC = 2;
+}
+
+message LendyrAbilityValue {
+  bool isPrimary = 1;
+  int32 value = 2;
+  repeated model.generic.LendyrAbilityFocus focuses = 3;
+}
+

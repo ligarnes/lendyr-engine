@@ -1,0 +1,98 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <!-- The Basics -->
+  <groupId>net.alteiar.lendyr</groupId>
+  <artifactId>parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Lendyr: root</name>
+  <description>The root module of the project</description>
+
+  <properties>
+    <maven.compiler.source>22</maven.compiler.source>
+    <maven.compiler.target>22</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <grpc.version>1.72.0</grpc.version>
+    <protobuf.version>3.25.5</protobuf.version>
+    <protoc.version>3.25.5</protoc.version>
+    <lombok.version>1.18.38</lombok.version>
+    <mapstruct.version>1.6.3</mapstruct.version>
+
+    <!-- Dependencies -->
+    <!-- compile -->
+    <log4j.version>2.24.3</log4j.version>
+    <libgdx.version>1.13.1</libgdx.version>
+    <jackson.version>2.18.3</jackson.version>
+
+    <!-- tests -->
+    <junit.version>5.12.2</junit.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.grpc</groupId>
+        <artifactId>grpc-bom</artifactId>
+        <version>${grpc.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>app</module>
+    <!--<module>assembly</module>-->
+  </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.14.0</version>
+          <configuration>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+              </path>
+              <path>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+              </path>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-mapstruct-binding</artifactId>
+                <version>0.2.0</version>
+              </path>
+            </annotationProcessorPaths>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>

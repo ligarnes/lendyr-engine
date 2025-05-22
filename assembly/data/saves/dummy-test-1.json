@@ -1,0 +1,264 @@
+{
+  "personas": [
+    {
+      "id": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79",
+      "name": "Ulfrik",
+      "speed": 8,
+      "defense": 10,
+      "portraitPath": "portrait/ulfrik-portrait.jpeg",
+      "tokenPath": "token/ulfrik-token.png",
+      "position": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "size": {
+        "width": 1.0,
+        "height": 1.0
+      },
+      "armorRating": 2,
+      "armorPenalty": -1,
+      "healthPoint": 40,
+      "currentHealthPoint": 20,
+      "abilities": {
+        "accuracy": {
+          "value": 1,
+          "focuses": [
+            "BRAWLING",
+            "BOWS"
+          ],
+          "primary": false
+        },
+        "communication": {
+          "value": 2,
+          "focuses": null,
+          "primary": false
+        },
+        "constitution": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "dexterity": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "fighting": {
+          "value": 3,
+          "focuses": null,
+          "primary": false
+        },
+        "intelligence": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "perception": {
+          "value": 3,
+          "focuses": null,
+          "primary": false
+        },
+        "strength": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "willpower": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        }
+      },
+      "equipped": {
+        "twoHanded": {
+          "itemId": "484889ca-df2e-4a78-b5e1-fbe2eea8a796",
+          "status": "READY",
+          "quantity": 20
+        }
+      },
+      "inventory": {
+        "backpack": [
+          {
+            "itemId": "ad3bdf17-5356-414c-96f4-c2fb8d5e0ffe",
+            "status": "READY",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
+      "name": "Cyrilla",
+      "speed": 8,
+      "defense": 10,
+      "portraitPath": "portrait/cyrilla-portrait.jpeg",
+      "tokenPath": "token/cyrilla-token.png",
+      "position": {
+        "x": 15.0,
+        "y": 15.0
+      },
+      "size": {
+        "width": 1.0,
+        "height": 1.0
+      },
+      "armorRating": 2,
+      "armorPenalty": -1,
+      "healthPoint": 40,
+      "currentHealthPoint": 36,
+      "abilities": {
+        "accuracy": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "communication": {
+          "value": 2,
+          "focuses": null,
+          "primary": false
+        },
+        "constitution": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "dexterity": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "fighting": {
+          "value": 3,
+          "focuses": null,
+          "primary": false
+        },
+        "intelligence": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "perception": {
+          "value": 0,
+          "focuses": null,
+          "primary": false
+        },
+        "strength": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "willpower": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        }
+      },
+      "equipped": {
+        "leftHand": {
+          "itemId": "79370ee4-049f-4681-95e1-256fe11aa8c6",
+          "status": "READY",
+          "quantity": 1
+        }
+      },
+      "inventory": {
+        "backpack": [
+          {
+            "itemId": "6b8d8149-a13d-4935-8c52-a704566fec49",
+            "status": "READY",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81",
+      "name": "Izidor",
+      "speed": 8,
+      "defense": 10,
+      "portraitPath": "portrait/izydor-portrait.jpeg",
+      "tokenPath": "token/izydor-token.png",
+      "position": {
+        "x": 10.0,
+        "y": 10.0
+      },
+      "size": {
+        "width": 1.0,
+        "height": 1.0
+      },
+      "armorRating": 2,
+      "armorPenalty": -1,
+      "healthPoint": 40,
+      "currentHealthPoint": 36,
+      "abilities": {
+        "accuracy": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "communication": {
+          "value": 2,
+          "focuses": null,
+          "primary": false
+        },
+        "constitution": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "dexterity": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "fighting": {
+          "value": 3,
+          "focuses": null,
+          "primary": false
+        },
+        "intelligence": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "perception": {
+          "value": 0,
+          "focuses": null,
+          "primary": false
+        },
+        "strength": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        },
+        "willpower": {
+          "value": 1,
+          "focuses": null,
+          "primary": false
+        }
+      },
+      "equipped": {
+        "rightHand": {
+          "itemId": "79370ee4-049f-4681-95e1-256fe11aa8c6",
+          "status": "READY",
+          "quantity": 1
+        }
+      }
+    }
+  ],
+  "encounter": {
+    "name": "Les ruines",
+    "mapId": "f2659d86-a181-47a5-b201-1e6b2b48b94f",
+    "currentState": {
+      "turn": 1,
+      "initiative": [
+        "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79",
+        "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
+        "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81"
+      ],
+      "currentPersona": {
+        "initiativeIdx": 0,
+        "majorActionUsed": false,
+        "minorActionUsed": false
+      }
+    }
+  }
+}

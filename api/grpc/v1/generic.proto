@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+option java_package = "net.alteiar.lendyr.grpc.model.v1.generic";
+option java_multiple_files = true;
+option optimize_for = SPEED;
+
+package model.generic;
+
+message LendyrPosition {
+  float x = 1;
+  float y = 2;
+}
+
+message LendyrSize {
+  float width = 1;
+  float height = 2;
+}
+
+enum LendyrAbilityFocus {
+  // Accuracy Focuses
+  ARCANE_BLAST = 0;
+  BLACK_POWDER = 1;
+  BOWS = 2;
+  BRAWLING = 3;
+  DUELING = 4;
+  GRENADES = 5;
+  LIGHT_BLADES = 6;
+  STAVES = 7;
+  SLINGS = 8;
+
+  // Communication Focuses
+  ANIMAL_HANDLING = 9;
+  BARGAINING = 10;
+  DECEPTION = 11;
+  DISGUISE = 12;
+  ETIQUETTE = 13;
+  GAMBLING = 14;
+  INVESTIGATION = 15;
+  LEADERSHIP = 16;
+  PERFORMANCE = 17;
+  PERSUASION = 18;
+  SEDUCTION = 19;
+
+  // Constitution Focuses
+  ROWING = 20;
+  RUNNING = 21;
+  STAMINA = 22;
+  SWIMMING = 23;
+  TOLERANCE = 24;
+
+  // Dexterity Focuses
+  ACROBATICS = 25;
+  CALLIGRAPHY = 26;
+  CRAFTING = 27;
+  INITIATIVE = 28;
+  LEGERDEMAIN = 29;
+  LOCK_PICKING = 30;
+  RIDING = 31;
+  SAILING = 32;
+  STEALTH = 33;
+  TRAPS = 34;
+
+  // Fighting Focuses
+  AXES = 35;
+  BLUDGEONS = 36;
+  HEAVY_BLADES = 37;
+  LANCES = 38;
+  POLEARMS = 39;
+  SPEARS = 40;
+
+  // Intelligence Focuses
+  ARCANA = 100;
+  ARCANE_LORE = 41;
+  BREWING = 42;
+  CARTOGRAPHY = 43;
+  CRYPTOGRAPHY = 44;
+  CULTURAL_LORE = 45;
+  ENGINEERING = 46;
+  EVALUATION = 47;
+  HEALING = 48;
+  HERALDRY = 49;
+  HISTORICAL_LORE = 50;
+  MILITARY_LORE = 51;
+  MUSICAL_LORE = 52;
+  NATURAL_LORE = 53;
+  NAVIGATION = 54;
+  RELIGIOUS_LORE = 55;
+  RESEARCH = 56;
+  THIEVES_LORE = 57;
+  WRITING = 58;
+
+  // Perception Focuses
+  EMPATHY = 59;
+  HEARING = 60;
+  SEARCHING = 61;
+  SEEING = 62;
+  SMELLING = 63;
+  TASTING = 64;
+  TOUCHING = 65;
+  TRACKING = 66;
+
+  // Strength Focuses
+  CLIMBING = 67;
+  DRIVING = 68;
+  INTIMIDATION = 69;
+  JUMPING = 70;
+  MIGHT = 71;
+  SMITHING = 72;
+
+  // Willpower Focuses
+  COURAGE = 73;
+  FAITH = 74;
+  MORAL = 75;
+  SELF_DISCIPLINE = 76;
+}
+
+enum LendyrAbility {
+  ACCURACY = 0;
+  COMMUNICATION = 1;
+  CONSTITUTION = 2;
+  DEXTERITY = 3;
+  FIGHTING = 4;
+  INTELLIGENCE = 5;
+  PERCEPTION = 6;
+  STRENGTH = 7;
+  WILLPOWER = 8;
+}

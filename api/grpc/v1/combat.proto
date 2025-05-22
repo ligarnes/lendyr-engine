@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+option java_package = "net.alteiar.lendyr.grpc.model.v1.encounter";
+option java_multiple_files = true;
+option optimize_for = SPEED;
+
+package model.combat;
+
+import "generic.proto";
+
+message LendyrEncounter {
+  string name = 1;
+  bytes mapId = 2;
+
+  LendyrCombatState currentState = 10;
+}
+
+message LendyrCombatState {
+  int32  currentTurn = 1;
+  LendyrCurrentInitiative  active = 2;
+  repeated bytes initiativeOrder = 3;
+}
+
+message LendyrCurrentInitiative {
+  int32 activePersonaIdx = 1;
+  bool minorActionUsed = 2;
+  bool majorActionUsed = 3;
+}
+
+// Actions
+message LendyrAction {
+  oneof actions {
+    // Major action
+    LendyrAttackAction attack = 1;
+    LendyrChargeAttackAction chargeAttack = 2;
+
+    // Minor action
+    LendyrMoveAction move = 3;
+  }
+}
+
+// Major Action
+message LendyrAttackAction {
+  bytes sourceId = 1;
+  bytes targetId = 2;
+}
+
+message LendyrChargeAttackAction {
+  bytes sourceId = 1;
+  bytes targetId = 2;
+  repeated model.generic.LendyrPosition path = 3;
+}
+
+// Minor Action
+message LendyrMoveAction {
+  bytes sourceId = 1;
+
+  // intermediary path
+  repeated model.generic.LendyrPosition position = 2;
+}
+
+// Action Result
+message LendyrActionResult {
+  LendyrActionResultStatusType type = 1;
+  oneof actions {
+    LendyrActionErrorResult error = 2;
+    LendyrAttackActionResult attack = 3;
+  }
+}
+
+enum LendyrActionResultStatusType {
+  UNKNOWN = 0;
+  SUCCESS = 1;
+
+  // Server Errors
+  NOT_IMPLEMENTED = 10;
+  UNEXPECTED = 11;
+
+  // Client Errors
+  NOT_FOUND = 20;
+  NOT_YOUR_TURN = 21;
+  NOT_ENOUGH_ACTION = 22;
+  NOT_ALLOWED = 23;
+}
+
+message LendyrActionErrorResult {
+  string description = 2;
+}
+
+message LendyrAttackActionResult {
+  LendyrSkillResult attackResult = 1;
+  int32 mitigatedDamage = 2;
+  int32 rawDamage = 3;
+}
+
+message LendyrSkillResult {
+  int32 dice1 = 1;
+  int32 dice2 = 2 ;
+  int32  stunDie = 3;
+  int32 bonus = 4;
+}
+
+// Generic

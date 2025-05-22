@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "net.alteiar.lendyr.grpc.model.v1.player";
+option java_multiple_files = true;
+option optimize_for = SPEED;
+
+package model.player;
+
+message LendyrPlayer {
+  bytes id = 1;
+  string name = 2;
+
+  repeated bytes controlledPersonaIds = 3;
+}

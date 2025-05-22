@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>net.alteiar.lendyr</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>app</artifactId>
+  <packaging>pom</packaging>
+
+  <name>Lendyr: App: Parent</name>
+  <description>The root module of the application</description>
+
+  <properties>
+    <jackson.version>2.19.0</jackson.version>
+  </properties>
+
+  <modules>
+    <module>grpc-api-v1</module>
+    <module>model</module>
+    <module>algorithm</module>
+    <module>persistence</module>
+    <module>engine</module>
+    <module>grpc-server-v1-impl</module>
+    <module>service</module>
+    <module>service-client</module>
+  </modules>
+
+</project>
