@@ -1,6 +1,8 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
+import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrCombatActor;
 import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrEncounter;
+import net.alteiar.lendyr.model.encounter.CombatActor;
 import net.alteiar.lendyr.model.encounter.Encounter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,15 @@ class EncounterMapperTest {
     Assertions.assertEquals(encounter.getCurrentState().getCurrentPersona().getInitiativeIdx(), dto.getCurrentState().getActive().getActivePersonaIdx());
     Assertions.assertEquals(encounter.getCurrentState().getCurrentPersona().isMajorActionUsed(), dto.getCurrentState().getActive().getMajorActionUsed());
     Assertions.assertEquals(encounter.getCurrentState().getCurrentPersona().isMinorActionUsed(), dto.getCurrentState().getActive().getMinorActionUsed());
-    Assertions.assertEquals(encounter.getCurrentState().getInitiative().stream().map(GenericMapper.INSTANCE::convertUUIDToBytes).toList(), dto.getCurrentState().getInitiativeOrderList());
+    
+    Assertions.assertEquals(encounter.getCurrentState().getInitiative().size(), dto.getCurrentState().getInitiativeOrderCount());
+
+    for (int i = 0; i < encounter.getCurrentState().getInitiative().size(); i++) {
+      CombatActor combatActor = encounter.getCurrentState().getInitiative().get(i);
+      LendyrCombatActor dtoActor = dto.getCurrentState().getInitiativeOrder(i);
+      Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(combatActor.getPersonaId()), dtoActor.getPersonaId());
+      Assertions.assertEquals(combatActor.getInitiative(), dtoActor.getInitiative());
+      Assertions.assertEquals(combatActor.getTeam(), dtoActor.getTeam());
+    }
   }
 }

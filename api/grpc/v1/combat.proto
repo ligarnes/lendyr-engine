@@ -18,7 +18,15 @@ message LendyrEncounter {
 message LendyrCombatState {
   int32  currentTurn = 1;
   LendyrCurrentInitiative  active = 2;
-  repeated bytes initiativeOrder = 3;
+  repeated LendyrCombatActor initiativeOrder = 3;
+
+  bool isActive = 4;
+}
+
+message LendyrCombatActor {
+  bytes personaId = 1;
+  int32 initiative = 2;
+  int32 team = 3;
 }
 
 message LendyrCurrentInitiative {

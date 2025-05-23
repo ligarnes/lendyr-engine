@@ -14,7 +14,6 @@ import net.alteiar.lendyr.engine.entity.exception.NotAllowedException;
 import net.alteiar.lendyr.engine.entity.exception.NotEnoughActionException;
 import net.alteiar.lendyr.engine.entity.exception.NotFoundException;
 import net.alteiar.lendyr.engine.random.SkillResult;
-import net.alteiar.lendyr.model.encounter.CurrentPersona;
 import net.alteiar.lendyr.model.persona.Attack;
 import net.alteiar.lendyr.model.persona.AttackType;
 
@@ -47,11 +46,10 @@ public class ChargeAttackAction implements GameAction {
     personaTarget = context.getGame().findById(targetId)
         .orElseThrow(() -> new NotFoundException(String.format("the persona with id [%s] does not exists", targetId)));
 
-    CurrentPersona currentPersona = context.getGame().getEncounter().getEncounter().getCurrentState().getCurrentPersona();
-    if (currentPersona.isMajorActionUsed()) {
+    if (context.getGame().getEncounter().isMajorActionUsed()) {
       throw new NotEnoughActionException(String.format("the persona with id [%s] has already consumed the major action", personaSource.getId()));
     }
-    UUID currentPersonaId = context.getGame().getEncounter().getEncounter().getCurrentState().getInitiative().get(currentPersona.getInitiativeIdx());
+    UUID currentPersonaId = context.getGame().getEncounter().getCurrentPersona().getPersonaId();
     if (!Objects.equals(currentPersonaId, personaSource.getId())) {
       throw new NotAllowedException(String.format("the persona with id [%s] is not the current ", personaSource.getId()));
     }

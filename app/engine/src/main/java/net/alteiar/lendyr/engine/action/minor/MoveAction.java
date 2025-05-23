@@ -11,7 +11,6 @@ import net.alteiar.lendyr.engine.action.result.GenericActionResult;
 import net.alteiar.lendyr.engine.entity.exception.NotAllowedException;
 import net.alteiar.lendyr.engine.entity.exception.NotEnoughActionException;
 import net.alteiar.lendyr.engine.entity.exception.NotFoundException;
-import net.alteiar.lendyr.model.encounter.CurrentPersona;
 import net.alteiar.lendyr.model.persona.Persona;
 
 import java.util.List;
@@ -44,11 +43,10 @@ public class MoveAction implements GameAction {
     persona = context.findById(characterId)
         .orElseThrow(() -> new NotFoundException(String.format("the persona with id [%s] does not exists", characterId)));
 
-    CurrentPersona currentPersona = context.getGame().getEncounter().getEncounter().getCurrentState().getCurrentPersona();
-    if (currentPersona.isMinorActionUsed()) {
+    if (context.getGame().getEncounter().isMinorActionUsed()) {
       throw new NotEnoughActionException(String.format("the persona with id [%s] has already consumed the minor action", characterId));
     }
-    UUID currentPersonaId = context.getGame().getEncounter().getEncounter().getCurrentState().getInitiative().get(currentPersona.getInitiativeIdx());
+    UUID currentPersonaId = context.getGame().getEncounter().getCurrentPersona().getPersonaId();
     if (!Objects.equals(currentPersonaId, characterId)) {
       throw new NotAllowedException(String.format("the persona with id [%s] is not the current ", characterId));
     }

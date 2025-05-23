@@ -1,28 +1,23 @@
 package net.alteiar.lendyr.engine.entity;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.engine.GameContext;
+import net.alteiar.lendyr.model.encounter.CombatActor;
 import net.alteiar.lendyr.model.encounter.Encounter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
 public final class EncounterEntity {
   private final GameContext gameContext;
 
-  @Getter
   private Encounter encounter;
-
-  private final List<PersonaEntity> personaEntities;
 
   @Builder
   EncounterEntity(@NonNull GameContext gameContext) {
     this.gameContext = gameContext;
-    personaEntities = new ArrayList<>();
   }
 
   /**
@@ -32,11 +27,25 @@ public final class EncounterEntity {
    */
   public void load(Encounter encounter) {
     this.encounter = encounter;
-    personaEntities.clear();
-    personaEntities.addAll(encounter.getCurrentState().getInitiative().stream()
-        .map(gameContext.getGame()::findById)
-        .map(opt -> opt.orElseThrow(() -> new IllegalArgumentException("The persona could not be found")))
-        .toList());
+  }
+
+  public boolean isMajorActionUsed() {
+    return encounter.getCurrentState().getCurrentPersona().isMajorActionUsed();
+  }
+
+  public boolean isMinorActionUsed() {
+    return encounter.getCurrentState().getCurrentPersona().isMinorActionUsed();
+  }
+
+  public CombatActor getCurrentPersona() {
+    int idx = encounter.getCurrentState().getCurrentPersona().getInitiativeIdx();
+
+    return this.encounter.getCurrentState().getInitiative().get(idx);
+  }
+
+  private boolean isEncounterComplete() {
+    List<Integer> remainingTeams = encounter.getCurrentState().getInitiative().stream().map(CombatActor::getTeam).distinct().toList();
+    return remainingTeams.size() > 1;
   }
 
   public void useMinorAction() {

@@ -250,9 +250,21 @@
     "currentState": {
       "turn": 1,
       "initiative": [
-        "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79",
-        "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
-        "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81"
+        {
+          "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79",
+          "initiative": 12,
+          "team": 1
+        },
+        {
+          "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
+          "initiative": 11,
+          "team": 2
+        },
+        {
+          "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81",
+          "initiative": 8,
+          "team": 2
+        }
       ],
       "currentPersona": {
         "initiativeIdx": 0,

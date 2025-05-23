@@ -22,8 +22,7 @@ public class GameEntity {
 
   @Getter
   private final MapEntity map;
-
-
+  
   @Builder
   public GameEntity(@NonNull GameContext gameContext) {
     this.gameContext = gameContext;

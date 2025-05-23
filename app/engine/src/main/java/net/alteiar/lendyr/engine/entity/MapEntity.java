@@ -4,9 +4,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import net.alteiar.lendyr.engine.GameContext;
+import net.alteiar.lendyr.model.encounter.CombatActor;
 import net.alteiar.lendyr.model.encounter.Encounter;
 import net.alteiar.lendyr.model.encounter.EncounterMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,12 +21,14 @@ public class MapEntity {
   @Builder
   public MapEntity(GameContext gameContext) {
     this.gameContext = gameContext;
+    this.personaEntities = new ArrayList<>();
   }
 
   public void load(Encounter encounter) {
     this.map = gameContext.getMapRepository().findMapById(encounter.getMapId());
     personaEntities.clear();
     personaEntities.addAll(encounter.getCurrentState().getInitiative().stream()
+        .map(CombatActor::getPersonaId)
         .map(gameContext.getGame()::findById)
         .map(opt -> opt.orElseThrow(() -> new IllegalArgumentException("The persona could not be found")))
         .toList());
