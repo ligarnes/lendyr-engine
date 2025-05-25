@@ -55,7 +55,7 @@ public class MoveAction implements GameAction {
     float totalDest = 0;
     Vector2 current = persona.getPosition();
     for (Vector2 target : positions) {
-      totalDest += roundToQuarter(Vector2.dst(current.x, current.y, target.x, target.y));
+      totalDest += roundToQuarter(current.dst(target));
       current = target;
 
       // Validate no collision.
@@ -66,6 +66,7 @@ public class MoveAction implements GameAction {
 
     double halfSpeed = Math.ceil(persona.getSpeed() / 2d);
     if (totalDest > halfSpeed) {
+      log.info("Invalid distance: {} < {} for {}", halfSpeed, totalDest, positions);
       throw new NotAllowedException(
           String.format("the persona with id [%s] cannot move this far; distance: %.0f ; max distance: %.0f ", characterId, halfSpeed, totalDest));
     }

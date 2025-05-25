@@ -12,6 +12,7 @@ import java.io.IOException;
 public class LendyrGameServer {
 
   private GameContext gameContext;
+  private GrpcServer grpcServer;
 
   public LendyrGameServer(File dataFolder) {
     RepositoryFactory repoFactory = new RepositoryFactory(dataFolder);
@@ -24,9 +25,15 @@ public class LendyrGameServer {
 
   public void run(int port) throws IOException, InterruptedException {
     // Load game
-    GrpcServer grpcServer = GrpcServer.builder().gameContext(gameContext).build();
+    grpcServer = GrpcServer.builder().gameContext(gameContext).build();
     grpcServer.start(port);
+  }
 
+  public void blockUntilShutdown() throws InterruptedException {
     grpcServer.blockUntilShutdown();
+  }
+
+  public void shutdown() throws InterruptedException {
+    grpcServer.stop();
   }
 }
