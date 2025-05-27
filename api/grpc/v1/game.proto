@@ -47,14 +47,17 @@ message LendyrLoadGameRequest {
 }
 
 message LendyrGameState {
-  GameStatus statuses = 1;
   model.combat.LendyrEncounter encounter = 2;
   repeated model.persona.LendyrPersona persona = 3;
-  repeated model.player.LendyrPlayer players = 4;
+  model.player.LendyrPlayer players = 4;
+  model.map.LendyrWorld map = 5;
+  LendyrPlayState playState = 6;
 }
 
-message GameStatus {
-  bool gameOver = 1;
+enum LendyrPlayState {
+  COMBAT = 0;
+  TURN_BASE = 1;
+  REAL_TIME = 2;
 }
 
 message EmptyResponse{}

@@ -15,9 +15,9 @@ class PlayerMapperTest {
 
     Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(player.getId()), dto.getId());
     Assertions.assertEquals(player.getName(), dto.getName());
-    Assertions.assertEquals(player.getControlledPersonas().size(), dto.getControlledPersonaIdsCount());
-    for (int i = 0; i < player.getControlledPersonas().size(); i++) {
-      Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(player.getControlledPersonas().get(i)), dto.getControlledPersonaIds(i));
+    Assertions.assertEquals(player.getControlledPersonaIds().size(), dto.getControlledPersonaIdsCount());
+    for (int i = 0; i < player.getControlledPersonaIds().size(); i++) {
+      Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(player.getControlledPersonaIds().get(i)), dto.getControlledPersonaIds(i));
     }
   }
 }

@@ -4,31 +4,31 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import net.alteiar.lendyr.engine.GameContext;
-import net.alteiar.lendyr.model.encounter.CombatActor;
-import net.alteiar.lendyr.model.encounter.Encounter;
-import net.alteiar.lendyr.model.encounter.EncounterMap;
+import net.alteiar.lendyr.model.encounter.GameMap;
+import net.alteiar.lendyr.model.encounter.WorldMap;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class MapEntity {
+public class WorldMapEntity {
   private final GameContext gameContext;
 
-  private EncounterMap map;
+  private WorldMap worldMap;
+  private GameMap gameMap;
   private List<PersonaEntity> personaEntities;
 
   @Builder
-  public MapEntity(GameContext gameContext) {
+  public WorldMapEntity(GameContext gameContext) {
     this.gameContext = gameContext;
     this.personaEntities = new ArrayList<>();
   }
 
-  public void load(Encounter encounter) {
-    this.map = gameContext.getMapRepository().findMapById(encounter.getMapId());
+  public void load(WorldMap map) {
+    this.worldMap = map;
+    this.gameMap = gameContext.getMapRepository().findMapById(map.getMapId());
     personaEntities.clear();
-    personaEntities.addAll(encounter.getCurrentState().getInitiative().stream()
-        .map(CombatActor::getPersonaId)
+    personaEntities.addAll(map.getEntities().stream()
         .map(gameContext.getGame()::findById)
         .map(opt -> opt.orElseThrow(() -> new IllegalArgumentException("The persona could not be found")))
         .toList());
@@ -50,7 +50,7 @@ public class MapEntity {
   }
 
   private boolean checkCollisionWithWalls(Rectangle newPositionBox) {
-    return map.getWalls().stream().anyMatch(newPositionBox::overlaps);
+    return false;// gameMap.getWalls().stream().anyMatch(newPositionBox::overlaps);
   }
 
   private boolean checkCollisionWithOtherEntities(UUID personaId, Rectangle newPositionBox) {
@@ -59,4 +59,7 @@ public class MapEntity {
         .anyMatch(newPositionBox::overlaps);
   }
 
+  public WorldMap toModel() {
+    return worldMap;
+  }
 }

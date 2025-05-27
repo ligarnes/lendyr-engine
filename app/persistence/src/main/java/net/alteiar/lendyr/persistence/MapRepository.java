@@ -1,7 +1,7 @@
 package net.alteiar.lendyr.persistence;
 
 import lombok.NonNull;
-import net.alteiar.lendyr.model.encounter.EncounterMap;
+import net.alteiar.lendyr.model.encounter.GameMap;
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ public class MapRepository {
     this.jsonMapper = jsonMapper;
   }
 
-  public EncounterMap findMapById(@NonNull UUID id) {
-    return jsonMapper.load("./maps/map-%s.json".formatted(id), EncounterMap.class);
+  public GameMap findMapById(@NonNull UUID id) {
+    return jsonMapper.load("./maps/map-%s.json".formatted(id), GameMap.class);
   }
 }

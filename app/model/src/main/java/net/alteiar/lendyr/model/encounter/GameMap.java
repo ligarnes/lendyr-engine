@@ -1,19 +1,21 @@
-package net.alteiar.lendyr.model;
+package net.alteiar.lendyr.model.encounter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Player {
-  private UUID id;
-  private String name;
-  private List<UUID> controlledPersonaIds;
+public class GameMap {
+  UUID mapId;
+  String path;
+  int worldWidth;
+  int worldHeight;
+  float scale;
 }

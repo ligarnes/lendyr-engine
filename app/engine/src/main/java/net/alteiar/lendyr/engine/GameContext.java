@@ -70,4 +70,8 @@ public class GameContext {
       throw new ProcessingException("Unexpected exception", e);
     }
   }
+
+  public Game toModel() {
+    return this.game.toModel();
+  }
 }

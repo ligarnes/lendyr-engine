@@ -15,18 +15,16 @@ class EncounterMapperTest {
 
     LendyrEncounter dto = EncounterMapper.INSTANCE.businessToDto(encounter);
 
-    Assertions.assertEquals(encounter.getName(), dto.getName());
-    Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(encounter.getMapId()), dto.getMapId());
-    Assertions.assertEquals(encounter.getCurrentState().getTurn(), dto.getCurrentState().getCurrentTurn());
-    Assertions.assertEquals(encounter.getCurrentState().getCurrentPersona().getInitiativeIdx(), dto.getCurrentState().getActive().getActivePersonaIdx());
-    Assertions.assertEquals(encounter.getCurrentState().getCurrentPersona().isMajorActionUsed(), dto.getCurrentState().getActive().getMajorActionUsed());
-    Assertions.assertEquals(encounter.getCurrentState().getCurrentPersona().isMinorActionUsed(), dto.getCurrentState().getActive().getMinorActionUsed());
-    
-    Assertions.assertEquals(encounter.getCurrentState().getInitiative().size(), dto.getCurrentState().getInitiativeOrderCount());
+    Assertions.assertEquals(encounter.getTurn(), dto.getCurrentTurn());
+    Assertions.assertEquals(encounter.getCurrentPersona().getInitiativeIdx(), dto.getActive().getActivePersonaIdx());
+    Assertions.assertEquals(encounter.getCurrentPersona().isMajorActionUsed(), dto.getActive().getMajorActionUsed());
+    Assertions.assertEquals(encounter.getCurrentPersona().isMinorActionUsed(), dto.getActive().getMinorActionUsed());
 
-    for (int i = 0; i < encounter.getCurrentState().getInitiative().size(); i++) {
-      CombatActor combatActor = encounter.getCurrentState().getInitiative().get(i);
-      LendyrCombatActor dtoActor = dto.getCurrentState().getInitiativeOrder(i);
+    Assertions.assertEquals(encounter.getInitiative().size(), dto.getInitiativeOrderCount());
+
+    for (int i = 0; i < encounter.getInitiative().size(); i++) {
+      CombatActor combatActor = encounter.getInitiative().get(i);
+      LendyrCombatActor dtoActor = dto.getInitiativeOrder(i);
       Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(combatActor.getPersonaId()), dtoActor.getPersonaId());
       Assertions.assertEquals(combatActor.getInitiative(), dtoActor.getInitiative());
       Assertions.assertEquals(combatActor.getTeam(), dtoActor.getTeam());

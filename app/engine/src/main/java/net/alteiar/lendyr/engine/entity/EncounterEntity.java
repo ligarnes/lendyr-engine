@@ -30,49 +30,49 @@ public final class EncounterEntity {
   }
 
   public boolean isMajorActionUsed() {
-    return encounter.getCurrentState().getCurrentPersona().isMajorActionUsed();
+    return encounter.getCurrentPersona().isMajorActionUsed();
   }
 
   public boolean isMinorActionUsed() {
-    return encounter.getCurrentState().getCurrentPersona().isMinorActionUsed();
+    return encounter.getCurrentPersona().isMinorActionUsed();
   }
 
   public CombatActor getCurrentPersona() {
-    int idx = encounter.getCurrentState().getCurrentPersona().getInitiativeIdx();
+    int idx = encounter.getCurrentPersona().getInitiativeIdx();
 
-    return this.encounter.getCurrentState().getInitiative().get(idx);
+    return this.encounter.getInitiative().get(idx);
   }
 
   private boolean isEncounterComplete() {
-    List<Integer> remainingTeams = encounter.getCurrentState().getInitiative().stream().map(CombatActor::getTeam).distinct().toList();
+    List<Integer> remainingTeams = encounter.getInitiative().stream().map(CombatActor::getTeam).distinct().toList();
     return remainingTeams.size() > 1;
   }
 
   public void useMinorAction() {
-    this.encounter.getCurrentState().getCurrentPersona().setMinorActionUsed(true);
+    this.encounter.getCurrentPersona().setMinorActionUsed(true);
   }
 
   public void useMajorAction() {
-    this.encounter.getCurrentState().getCurrentPersona().setMajorActionUsed(true);
+    this.encounter.getCurrentPersona().setMajorActionUsed(true);
   }
 
   public void endPlayerTurn() {
     // Reset actions
-    this.encounter.getCurrentState().getCurrentPersona().setMajorActionUsed(false);
-    this.encounter.getCurrentState().getCurrentPersona().setMinorActionUsed(false);
+    this.encounter.getCurrentPersona().setMajorActionUsed(false);
+    this.encounter.getCurrentPersona().setMinorActionUsed(false);
 
     // Next player
-    int currentIdx = this.encounter.getCurrentState().getCurrentPersona().getInitiativeIdx();
+    int currentIdx = this.encounter.getCurrentPersona().getInitiativeIdx();
     int nextIdx = currentIdx + 1;
-    this.encounter.getCurrentState().getCurrentPersona().setInitiativeIdx(nextIdx);
-    if (nextIdx >= this.encounter.getCurrentState().getInitiative().size()) {
+    this.encounter.getCurrentPersona().setInitiativeIdx(nextIdx);
+    if (nextIdx >= this.encounter.getInitiative().size()) {
       newTurn();
     }
   }
 
   public void newTurn() {
-    this.encounter.getCurrentState().setTurn(this.encounter.getCurrentState().getTurn() + 1);
-    this.encounter.getCurrentState().getCurrentPersona().setInitiativeIdx(0);
+    this.encounter.setTurn(this.encounter.getTurn() + 1);
+    this.encounter.getCurrentPersona().setInitiativeIdx(0);
   }
 
   public Encounter toModel() {

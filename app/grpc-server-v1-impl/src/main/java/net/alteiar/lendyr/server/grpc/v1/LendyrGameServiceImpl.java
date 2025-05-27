@@ -19,9 +19,9 @@ import net.alteiar.lendyr.grpc.model.v1.game.*;
 import net.alteiar.lendyr.grpc.model.v1.item.LendyrItem;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
 import net.alteiar.lendyr.server.grpc.v1.mapper.ActionMapper;
-import net.alteiar.lendyr.server.grpc.v1.mapper.EncounterMapMapper;
 import net.alteiar.lendyr.server.grpc.v1.mapper.GenericMapper;
 import net.alteiar.lendyr.server.grpc.v1.mapper.ItemMapper;
+import net.alteiar.lendyr.server.grpc.v1.mapper.WorldMapMapper;
 import net.alteiar.lendyr.server.grpc.v1.processor.CurrentStateProcessor;
 
 import java.util.List;
@@ -143,7 +143,7 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
         () -> {
           UUID id = GenericMapper.INSTANCE.convertBytesToUUID(request.getId());
 
-          responseObserver.onNext(EncounterMapMapper.INSTANCE.mapToDto(gameContext.getMapRepository().findMapById(id)));
+          responseObserver.onNext(WorldMapMapper.INSTANCE.mapToDto(gameContext.getMapRepository().findMapById(id)));
           responseObserver.onCompleted();
         }
     );

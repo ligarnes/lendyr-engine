@@ -26,7 +26,7 @@
     <!-- compile -->
     <log4j.version>2.24.3</log4j.version>
     <libgdx.version>1.13.1</libgdx.version>
-    <jackson.version>2.18.3</jackson.version>
+    <jackson.version>2.19.0</jackson.version>
 
     <!-- tests -->
     <junit.version>5.12.2</junit.version>
@@ -62,6 +62,7 @@
   <modules>
     <module>app</module>
     <!--<module>assembly</module>-->
+    <module>tests</module>
   </modules>
 
   <build>

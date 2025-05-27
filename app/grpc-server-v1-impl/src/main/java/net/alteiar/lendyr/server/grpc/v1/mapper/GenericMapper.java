@@ -37,6 +37,18 @@ public interface GenericMapper {
     return new UUID(high, low);
   }
 
+  default ByteString convertByteArrayToByteString(byte[] bytes) {
+    if (Objects.isNull(bytes) || bytes.length == 0) {
+      return ByteString.EMPTY;
+    }
+
+    return ByteString.copyFrom(bytes);
+  }
+
+  default byte[] convertByteStringToByteArray(ByteString bytes) {
+    return bytes.toByteArray();
+  }
+
   LendyrSize convertSizeDto(Size size);
 
   LendyrPosition convertPositionToDto(Vector2 position);

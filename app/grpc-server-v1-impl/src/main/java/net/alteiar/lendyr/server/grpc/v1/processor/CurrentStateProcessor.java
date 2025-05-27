@@ -48,6 +48,6 @@ public class CurrentStateProcessor implements GameContextListener {
   }
 
   public LendyrGameState currentGameState() {
-    return GameStateMapper.INSTANCE.businessToDto(gameContext.getGame().toModel());
+    return GameStateMapper.INSTANCE.businessToDto(gameContext.toModel());
   }
 }

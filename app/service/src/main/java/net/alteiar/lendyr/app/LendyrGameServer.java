@@ -23,7 +23,7 @@ public class LendyrGameServer {
     gameContext.load(saveName);
   }
 
-  public void run(int port) throws IOException, InterruptedException {
+  public void run(int port) throws IOException {
     // Load game
     grpcServer = GrpcServer.builder().gameContext(gameContext).build();
     grpcServer.start(port);

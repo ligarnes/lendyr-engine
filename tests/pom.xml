@@ -7,20 +7,14 @@
     <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>app</artifactId>
+  <artifactId>tests</artifactId>
   <packaging>pom</packaging>
 
-  <name>Lendyr: App: Parent</name>
-  <description>The root module of the application</description>
+  <name>Lendyr: Tests: Parent</name>
+  <description>The root module of the tests</description>
 
   <modules>
-    <module>grpc-api-v1</module>
-    <module>model</module>
-    <module>algorithm</module>
-    <module>persistence</module>
-    <module>engine</module>
-    <module>grpc-server-v1-impl</module>
-    <module>service</module>
+    <module>api-tests</module>
   </modules>
 
 </project>

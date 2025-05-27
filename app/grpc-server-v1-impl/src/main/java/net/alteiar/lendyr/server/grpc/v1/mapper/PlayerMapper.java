@@ -16,6 +16,6 @@ import org.mapstruct.factory.Mappers;
 public interface PlayerMapper {
   PlayerMapper INSTANCE = Mappers.getMapper(PlayerMapper.class);
 
-  @Mapping(source = "controlledPersonas", target = "controlledPersonaIdsList")
+  @Mapping(source = "controlledPersonaIds", target = "controlledPersonaIdsList")
   LendyrPlayer businessToDto(Player player);
 }

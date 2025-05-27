@@ -9,18 +9,9 @@ package model.combat;
 import "generic.proto";
 
 message LendyrEncounter {
-  string name = 1;
-  bytes mapId = 2;
-
-  LendyrCombatState currentState = 10;
-}
-
-message LendyrCombatState {
   int32  currentTurn = 1;
   LendyrCurrentInitiative  active = 2;
   repeated LendyrCombatActor initiativeOrder = 3;
-
-  bool isActive = 4;
 }
 
 message LendyrCombatActor {

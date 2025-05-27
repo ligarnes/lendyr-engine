@@ -4,15 +4,14 @@
 
   <parent>
     <groupId>net.alteiar.lendyr</groupId>
-    <artifactId>app</artifactId>
+    <artifactId>tests</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>lendyr-service-client</artifactId>
+  <artifactId>lendyr-api-tests</artifactId>
 
-  <name>Lendyr: App: Service Client</name>
-  <description>The service</description>
-
+  <name>Lendyr: Tests: API Tests</name>
+  <description>The API tests</description>
 
   <dependencies>
     <dependency>
@@ -23,9 +22,14 @@
     </dependency>
 
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.18.3</version>
+      <groupId>net.alteiar.lendyr</groupId>
+      <artifactId>lendyr-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.alteiar.lendyr</groupId>
+      <artifactId>lendyr-grpc-api-v1</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -33,13 +37,17 @@
       <artifactId>lendyr-model</artifactId>
       <version>${project.version}</version>
     </dependency>
-
     <dependency>
       <groupId>net.alteiar.lendyr</groupId>
-      <artifactId>lendyr-grpc-api-v1</artifactId>
+      <artifactId>lendyr-grpc-server-v1-impl</artifactId>
       <version>${project.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>net.alteiar.lendyr</groupId>
+      <artifactId>lendyr-game-engine</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
     <!-- gRPC -->
     <dependency>
       <groupId>io.grpc</groupId>
@@ -54,12 +62,12 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.24.3</version>
+      <version>${log4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
-      <version>2.24.3</version>
+      <version>${log4j.version}</version>
     </dependency>
   </dependencies>
 </project>

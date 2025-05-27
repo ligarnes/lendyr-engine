@@ -1,7 +1,9 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
-import net.alteiar.lendyr.model.encounter.EncounterMap;
+import net.alteiar.lendyr.grpc.model.v1.map.LendyrWorld;
+import net.alteiar.lendyr.model.encounter.GameMap;
+import net.alteiar.lendyr.model.encounter.WorldMap;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,15 +15,11 @@ import org.mapstruct.factory.Mappers;
     collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
 )
-public interface EncounterMapMapper {
-  EncounterMapMapper INSTANCE = Mappers.getMapper(EncounterMapMapper.class);
+public interface WorldMapMapper {
+  WorldMapMapper INSTANCE = Mappers.getMapper(WorldMapMapper.class);
 
-  /**
-   * Convert the map to dto.
-   *
-   * @param map the map
-   * @return the dto
-   */
-  @Mapping(source = "walls", target = "wallsList")
-  LendyrMap mapToDto(EncounterMap map);
+  LendyrMap mapToDto(GameMap gameMap);
+
+  @Mapping(source = "entities", target = "entityList")
+  LendyrWorld worldMapToDto(WorldMap worldMap);
 }

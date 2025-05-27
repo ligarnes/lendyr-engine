@@ -6,19 +6,16 @@ option optimize_for = SPEED;
 
 package model.map;
 
-message LendyrMap {
-  string mapPath = 1;
+message LendyrWorld {
+  string name = 1;
+  bytes mapId = 2;
 
-  int32 widthInPixel = 2;
-  int32 heightInPixel = 3;
-  int32 pixelPerMeter = 4;
-
-  repeated LendyrWall walls = 5;
+  repeated bytes entity = 3;
 }
 
-message LendyrWall {
-  float x = 1;
-  float y = 2;
-  float width = 3;
-  float height = 4;
+message LendyrMap {
+  string path = 1;
+  int32 worldWidth = 2;
+  int32 worldHeight = 3;
+  float scale = 4;
 }

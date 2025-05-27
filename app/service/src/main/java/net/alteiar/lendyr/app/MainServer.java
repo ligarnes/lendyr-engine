@@ -10,7 +10,8 @@ public class MainServer {
     int port = 50051;
 
     LendyrGameServer lendyrGameServer = new LendyrGameServer(new File("./data"));
-    lendyrGameServer.load("dummy-test-1");
     lendyrGameServer.run(port);
+//    lendyrGameServer.load("dummy-test-1");
+    lendyrGameServer.blockUntilShutdown();
   }
 }
