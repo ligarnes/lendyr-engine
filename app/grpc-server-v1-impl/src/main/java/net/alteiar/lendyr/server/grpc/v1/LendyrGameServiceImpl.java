@@ -44,7 +44,18 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   public void load(LendyrLoadGameRequest request, StreamObserver<EmptyResponse> responseObserver) {
     Timer.time("load",
         () -> {
-          //  request.getSaveName();
+          this.gameContext.load(request.getSaveName());
+          responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          responseObserver.onCompleted();
+        }
+    );
+  }
+
+  @Override
+  public void save(LendyrSaveGameRequest request, StreamObserver<EmptyResponse> responseObserver) {
+    Timer.time("load",
+        () -> {
+          this.gameContext.save(request.getSaveName());
           responseObserver.onNext(EmptyResponse.getDefaultInstance());
           responseObserver.onCompleted();
         }

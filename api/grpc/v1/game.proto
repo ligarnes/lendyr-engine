@@ -16,6 +16,9 @@ service LendyrGameService {
   // Load a new game
   rpc load(LendyrLoadGameRequest) returns (EmptyResponse);
 
+  // Save the game
+  rpc save(LendyrSaveGameRequest) returns (EmptyResponse);
+
   // Load item
   rpc getItems(EmptyResponse) returns (LendyrItems);
 
@@ -43,6 +46,10 @@ service LendyrCharacterService {
 }
 
 message LendyrLoadGameRequest {
+  string saveName = 1;
+}
+
+message LendyrSaveGameRequest {
   string saveName = 1;
 }
 

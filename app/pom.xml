@@ -18,6 +18,7 @@
     <module>model</module>
     <module>algorithm</module>
     <module>persistence</module>
+    <module>combat-ai</module>
     <module>engine</module>
     <module>grpc-server-v1-impl</module>
     <module>service</module>
