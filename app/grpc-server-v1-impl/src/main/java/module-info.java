@@ -9,6 +9,7 @@ module lendyr.grpc.server.v1 {
   requires lendyr.game.engine;
   requires lendyr.grpc.api;
   requires lendyr.game.persistence;
+  requires lendyr.game.entities;
   requires io.grpc.stub;
   requires org.mapstruct;
   requires com.google.protobuf;

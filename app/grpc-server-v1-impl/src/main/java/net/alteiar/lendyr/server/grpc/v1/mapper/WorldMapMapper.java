@@ -3,7 +3,7 @@ package net.alteiar.lendyr.server.grpc.v1.mapper;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrWorld;
 import net.alteiar.lendyr.model.encounter.GameMap;
-import net.alteiar.lendyr.model.encounter.WorldMap;
+import net.alteiar.lendyr.model.encounter.LocalMap;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,5 +21,5 @@ public interface WorldMapMapper {
   LendyrMap mapToDto(GameMap gameMap);
 
   @Mapping(source = "entities", target = "entityList")
-  LendyrWorld worldMapToDto(WorldMap worldMap);
+  LendyrWorld worldMapToDto(LocalMap localMap);
 }

@@ -19,6 +19,10 @@ service LendyrGameService {
   // Save the game
   rpc save(LendyrSaveGameRequest) returns (EmptyResponse);
 
+  //
+  rpc pause(EmptyResponse) returns(EmptyResponse);
+  rpc resume(EmptyResponse) returns(EmptyResponse);
+
   // Load item
   rpc getItems(EmptyResponse) returns (LendyrItems);
 
@@ -65,6 +69,7 @@ enum LendyrPlayState {
   COMBAT = 0;
   TURN_BASE = 1;
   REAL_TIME = 2;
+  PAUSE = 3;
 }
 
 message EmptyResponse{}

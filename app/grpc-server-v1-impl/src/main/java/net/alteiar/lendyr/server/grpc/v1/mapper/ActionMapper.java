@@ -1,16 +1,16 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
 import com.badlogic.gdx.math.Vector2;
-import net.alteiar.lendyr.engine.action.GameAction;
-import net.alteiar.lendyr.engine.action.major.AttackAction;
-import net.alteiar.lendyr.engine.action.major.ChargeAttackAction;
-import net.alteiar.lendyr.engine.action.minor.MoveAction;
-import net.alteiar.lendyr.engine.action.result.ActionResult;
-import net.alteiar.lendyr.engine.action.result.AttackActionResult;
-import net.alteiar.lendyr.engine.action.result.GenericActionResult;
-import net.alteiar.lendyr.engine.entity.exception.NotSupportedException;
-import net.alteiar.lendyr.engine.entity.exception.ProcessingException;
-import net.alteiar.lendyr.engine.random.SkillResult;
+import net.alteiar.lendyr.entity.SkillResult;
+import net.alteiar.lendyr.entity.action.ActionResult;
+import net.alteiar.lendyr.entity.action.AttackActionResult;
+import net.alteiar.lendyr.entity.action.GameAction;
+import net.alteiar.lendyr.entity.action.GenericActionResult;
+import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
+import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
+import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
+import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
+import net.alteiar.lendyr.entity.action.exception.ProcessingException;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

@@ -35,5 +35,6 @@ public class LendyrGameServer {
 
   public void shutdown() throws InterruptedException {
     grpcServer.stop();
+    gameContext.stop();
   }
 }

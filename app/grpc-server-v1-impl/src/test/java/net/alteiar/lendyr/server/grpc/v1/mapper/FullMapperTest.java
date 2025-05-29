@@ -33,7 +33,7 @@ public class FullMapperTest {
     LendyrGameState gameDto = GameStateMapper.INSTANCE.businessToDto(game);
 
     Assertions.assertEquals(EncounterMapper.INSTANCE.businessToDto(game.getEncounter()), gameDto.getEncounter());
-    Assertions.assertEquals(WorldMapMapper.INSTANCE.worldMapToDto(game.getWorldMap()), gameDto.getMap());
+    Assertions.assertEquals(WorldMapMapper.INSTANCE.worldMapToDto(game.getLocalMap()), gameDto.getMap());
     Assertions.assertEquals(game.getPersonas().size(), gameDto.getPersonaCount());
   }
 }

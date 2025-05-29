@@ -34,6 +34,16 @@
     </dependency>
     <dependency>
       <groupId>net.alteiar.lendyr</groupId>
+      <artifactId>lendyr-game-entities</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.alteiar.lendyr</groupId>
+      <artifactId>lendyr-combat-ai</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.alteiar.lendyr</groupId>
       <artifactId>lendyr-game-persistence</artifactId>
       <version>${project.version}</version>
     </dependency>

@@ -3,7 +3,7 @@ package net.alteiar.lendyr.server.grpc.v1.mapper;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrWorld;
 import net.alteiar.lendyr.model.encounter.GameMap;
-import net.alteiar.lendyr.model.encounter.WorldMap;
+import net.alteiar.lendyr.model.encounter.LocalMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ class GameMapMapperTest {
 
   @Test
   void mapWorldToDto() {
-    WorldMap gameMap = RandomProvider.INSTANCE.nextObject(WorldMap.class);
+    LocalMap gameMap = RandomProvider.INSTANCE.nextObject(LocalMap.class);
 
     LendyrWorld map = WorldMapMapper.INSTANCE.worldMapToDto(gameMap);
 

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.alteiar.lendyr.model.encounter.Encounter;
-import net.alteiar.lendyr.model.encounter.WorldMap;
+import net.alteiar.lendyr.model.encounter.LocalMap;
 import net.alteiar.lendyr.model.items.Item;
 import net.alteiar.lendyr.model.persona.Persona;
 
@@ -19,7 +19,7 @@ public class Game {
   private List<Persona> personas;
   private List<Item> items;
   private Encounter encounter;
-  private WorldMap worldMap;
+  private LocalMap localMap;
   private Player player;
   private PlayState playState;
 }

@@ -34,7 +34,7 @@
     </dependency>
     <dependency>
       <groupId>net.alteiar.lendyr</groupId>
-      <artifactId>lendyr-game-persistence</artifactId>
+      <artifactId>lendyr-game-entities</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -43,16 +43,6 @@
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
       <version>${mapstruct.version}</version>
-    </dependency>
-
-    <!-- gRPC -->
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-netty</artifactId>
     </dependency>
 
     <!-- Libgdx -->

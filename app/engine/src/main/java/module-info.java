@@ -9,15 +9,9 @@ module lendyr.game.engine {
   requires gdx;
   requires lendyr.game.persistence;
   requires java.desktop;
+  requires lendyr.game.entities;
+  requires lendyr.combat.ai;
 
   exports net.alteiar.lendyr.engine;
-  exports net.alteiar.lendyr.engine.entity;
-  exports net.alteiar.lendyr.engine.entity.exception;
-  exports net.alteiar.lendyr.engine.entity.status;
-  exports net.alteiar.lendyr.engine.entity.stunt;
-  exports net.alteiar.lendyr.engine.action;
-  exports net.alteiar.lendyr.engine.action.result;
   exports net.alteiar.lendyr.engine.random;
-  exports net.alteiar.lendyr.engine.action.minor;
-  exports net.alteiar.lendyr.engine.action.major;
 }

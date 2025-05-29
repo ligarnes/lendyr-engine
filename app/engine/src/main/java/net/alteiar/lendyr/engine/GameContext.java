@@ -5,21 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import net.alteiar.lendyr.engine.action.GameAction;
-import net.alteiar.lendyr.engine.action.result.ActionResult;
-import net.alteiar.lendyr.engine.entity.GameEntity;
-import net.alteiar.lendyr.engine.entity.PersonaEntity;
-import net.alteiar.lendyr.engine.entity.exception.ActionException;
-import net.alteiar.lendyr.engine.entity.exception.ProcessingException;
+import net.alteiar.lendyr.engine.random.DiceEngineImpl;
+import net.alteiar.lendyr.entity.DiceEngine;
+import net.alteiar.lendyr.entity.GameEntity;
+import net.alteiar.lendyr.entity.action.ActionResult;
+import net.alteiar.lendyr.entity.action.GameAction;
+import net.alteiar.lendyr.entity.action.exception.ActionException;
+import net.alteiar.lendyr.entity.action.exception.ProcessingException;
 import net.alteiar.lendyr.model.Game;
-import net.alteiar.lendyr.model.persona.Persona;
-import net.alteiar.lendyr.persistence.ItemRepository;
-import net.alteiar.lendyr.persistence.MapRepository;
 import net.alteiar.lendyr.persistence.RepositoryFactory;
 import net.alteiar.lendyr.persistence.SaveRepository;
-
-import java.util.Optional;
-import java.util.UUID;
 
 public class GameContext {
   @Getter
@@ -27,39 +22,49 @@ public class GameContext {
 
   @Setter
   private GameContextListener listener;
-
-  @Getter
-  private final ItemRepository itemRepository;
-  @Getter
-  private final MapRepository mapRepository;
+  private final DiceEngine diceEngine;
   private final SaveRepository saveRepository;
+  private final GameEngine gameEngine;
 
   @Builder
   GameContext(@NonNull RepositoryFactory repositoryFactory) {
     game = null;
-    this.itemRepository = repositoryFactory.getItemRepository();
-    this.mapRepository = repositoryFactory.getMapRepository();
     this.saveRepository = repositoryFactory.getSaveRepository();
+    this.game = GameEntity.builder().repositoryFactory(repositoryFactory).build();
+    this.diceEngine = new DiceEngineImpl();
+    this.gameEngine = GameEngine.builder().gameContext(this).build();
   }
 
   public void load(String saveName) {
     Game loadedGame = saveRepository.load(saveName);
-    this.game = GameEntity.builder().gameContext(this).build();
     this.game.load(loadedGame);
+    this.gameEngine.start();
+  }
+
+  public void stop() {
+    this.gameEngine.stop();
+    // auto-save on stop
+    this.save("auto-save");
   }
 
   public void save(String saveName) {
     saveRepository.save(saveName, game.toModel());
   }
 
-  public Optional<Persona> findById(UUID personaId) {
-    return getGame().findById(personaId).map(PersonaEntity::toModel);
+  public void resume() {
+    this.game.resume();
+    listener.gameChanged();
+  }
+
+  public void pause() {
+    this.game.pause();
+    listener.gameChanged();
   }
 
   public ActionResult act(GameAction action) {
     try {
-      action.ensureAllowed(this);
-      ActionResult result = action.apply(this);
+      action.ensureAllowed(this.game);
+      ActionResult result = action.apply(this.game, diceEngine);
       if (result.hasWorldChanged()) {
         listener.gameChanged();
       }

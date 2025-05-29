@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.engine.GameContext;
-import net.alteiar.lendyr.engine.action.EndTurnAction;
-import net.alteiar.lendyr.engine.action.GameAction;
-import net.alteiar.lendyr.engine.action.result.ActionResult;
-import net.alteiar.lendyr.engine.entity.exception.NotAllowedException;
-import net.alteiar.lendyr.engine.entity.exception.NotEnoughActionException;
-import net.alteiar.lendyr.engine.entity.exception.NotSupportedException;
-import net.alteiar.lendyr.engine.entity.exception.ProcessingException;
+import net.alteiar.lendyr.entity.action.ActionResult;
+import net.alteiar.lendyr.entity.action.GameAction;
+import net.alteiar.lendyr.entity.action.combat.EndTurnAction;
+import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
+import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
+import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
+import net.alteiar.lendyr.entity.action.exception.ProcessingException;
 import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrAction;
 import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrActionResult;
 import net.alteiar.lendyr.grpc.model.v1.game.*;
@@ -56,6 +56,28 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
     Timer.time("load",
         () -> {
           this.gameContext.save(request.getSaveName());
+          responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          responseObserver.onCompleted();
+        }
+    );
+  }
+
+  @Override
+  public void pause(EmptyResponse request, StreamObserver<EmptyResponse> responseObserver) {
+    Timer.time("pause",
+        () -> {
+          this.gameContext.pause();
+          responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          responseObserver.onCompleted();
+        }
+    );
+  }
+
+  @Override
+  public void resume(EmptyResponse request, StreamObserver<EmptyResponse> responseObserver) {
+    Timer.time("resume",
+        () -> {
+          this.gameContext.resume();
           responseObserver.onNext(EmptyResponse.getDefaultInstance());
           responseObserver.onCompleted();
         }
@@ -141,7 +163,7 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   public void getItems(EmptyResponse request, StreamObserver<LendyrItems> responseObserver) {
     Timer.time("getItems",
         () -> {
-          List<LendyrItem> items = gameContext.getItemRepository().findAll().stream().map(ItemMapper.INSTANCE::itemToDto).toList();
+          List<LendyrItem> items = gameContext.getGame().getItemRepository().findAll().stream().map(ItemMapper.INSTANCE::itemToDto).toList();
           responseObserver.onNext(LendyrItems.newBuilder().addAllItems(items).build());
           responseObserver.onCompleted();
         }
@@ -154,7 +176,7 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
         () -> {
           UUID id = GenericMapper.INSTANCE.convertBytesToUUID(request.getId());
 
-          responseObserver.onNext(WorldMapMapper.INSTANCE.mapToDto(gameContext.getMapRepository().findMapById(id)));
+          responseObserver.onNext(WorldMapMapper.INSTANCE.mapToDto(gameContext.getGame().getMapRepository().findMapById(id)));
           responseObserver.onCompleted();
         }
     );

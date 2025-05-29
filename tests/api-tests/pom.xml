@@ -47,7 +47,7 @@
       <artifactId>lendyr-game-engine</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
+
     <!-- gRPC -->
     <dependency>
       <groupId>io.grpc</groupId>
@@ -68,6 +68,13 @@
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
       <version>${log4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>4.3.0</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

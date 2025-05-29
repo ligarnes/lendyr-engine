@@ -1,6 +1,6 @@
 package net.alteiar.lendyr.server.grpc.v1;
 
-import net.alteiar.lendyr.engine.entity.exception.ActionException;
+import net.alteiar.lendyr.entity.action.exception.ActionException;
 import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrAction;
 import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrActionErrorResult;
 import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrActionResult;

@@ -63,8 +63,7 @@ public class ServerApiTest {
     // Then
     Assertions.assertEquals(3, state.getPersonaCount());
     Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(mapId), state.getMap().getMapId());
-    Assertions.assertEquals(LendyrPlayState.COMBAT, state.getPlayState());
+    Assertions.assertEquals(LendyrPlayState.PAUSE, state.getPlayState());
     Assertions.assertEquals(3, state.getEncounter().getInitiativeOrderCount());
-    System.out.println(state.getMap());
   }
 }
