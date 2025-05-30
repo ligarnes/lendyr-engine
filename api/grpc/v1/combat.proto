@@ -60,33 +60,30 @@ message LendyrMoveAction {
 
 // Action Result
 message LendyrActionResult {
-  LendyrActionResultStatusType type = 1;
   oneof actions {
-    LendyrActionErrorResult error = 2;
     LendyrAttackActionResult attack = 3;
+    LendyrMoveActionResult move = 4;
+    LendyrChargeActionResult charge = 5;
   }
 }
 
-enum LendyrActionResultStatusType {
-  UNKNOWN = 0;
-  SUCCESS = 1;
-
-  // Server Errors
-  NOT_IMPLEMENTED = 10;
-  UNEXPECTED = 11;
-
-  // Client Errors
-  NOT_FOUND = 20;
-  NOT_YOUR_TURN = 21;
-  NOT_ENOUGH_ACTION = 22;
-  NOT_ALLOWED = 23;
+message LendyrChargeActionResult {
+  bytes sourceId = 1;
+  bytes targetId = 2;
+  repeated model.generic.LendyrPosition position = 3;
+  LendyrSkillResult attackResult = 4;
+  int32 mitigatedDamage = 5;
+  int32 rawDamage = 6;
 }
 
-message LendyrActionErrorResult {
-  string description = 2;
+message LendyrMoveActionResult {
+  bytes sourceId = 1;
+  repeated model.generic.LendyrPosition position = 2;
 }
 
 message LendyrAttackActionResult {
+  bytes sourceId = 4;
+  bytes targetId = 5;
   LendyrSkillResult attackResult = 1;
   int32 mitigatedDamage = 2;
   int32 rawDamage = 3;
@@ -95,7 +92,7 @@ message LendyrAttackActionResult {
 message LendyrSkillResult {
   int32 dice1 = 1;
   int32 dice2 = 2 ;
-  int32  stunDie = 3;
+  int32 stunDie = 3;
   int32 bonus = 4;
 }
 

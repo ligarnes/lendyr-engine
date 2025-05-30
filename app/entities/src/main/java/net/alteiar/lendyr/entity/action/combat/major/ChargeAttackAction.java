@@ -3,15 +3,17 @@ package net.alteiar.lendyr.entity.action.combat.major;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.entity.DiceEngine;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.entity.SkillResult;
 import net.alteiar.lendyr.entity.action.ActionResult;
-import net.alteiar.lendyr.entity.action.AttackActionResult;
 import net.alteiar.lendyr.entity.action.BaseAction;
+import net.alteiar.lendyr.entity.action.ChargeAttackActionResult;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
 import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
@@ -24,9 +26,13 @@ import java.util.UUID;
 
 
 @Log4j2
+@ToString
 public class ChargeAttackAction extends BaseAction implements MajorAction {
+  @Getter
   private final UUID sourceId;
+  @Getter
   private final UUID targetId;
+  @Getter
   private final List<Vector2> positions;
 
   // Stateful variables
@@ -116,7 +122,10 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
     }
     gameEntity.getEncounter().useMajorAction();
 
-    return AttackActionResult.builder()
+    return ChargeAttackActionResult.builder()
+        .sourceId(sourceId)
+        .targetId(targetId)
+        .path(positions)
         .attackResult(result)
         .rawDamage(totalDamage)
         .mitigatedDamage(mitigatedDamage)

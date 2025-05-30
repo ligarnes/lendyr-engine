@@ -70,6 +70,11 @@ public class GameEngine {
   }
 
   private void updateCombat() {
+    if (gameContext.getGame().getEncounter().isEncounterComplete()) {
+      gameContext.getGame().setPlayState(PlayState.REAL_TIME);
+      return;
+    }
+
     CombatActor actor = gameContext.getGame().getEncounter().getCurrentPersona();
     if (!gameContext.getGame().getPlayer().getControlledPersonaIds().contains(actor.getPersonaId())) {
       // Play only entities that player does not control

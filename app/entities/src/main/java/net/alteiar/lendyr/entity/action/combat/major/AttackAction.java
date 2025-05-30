@@ -2,7 +2,9 @@ package net.alteiar.lendyr.entity.action.combat.major;
 
 import com.badlogic.gdx.math.Rectangle;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.entity.DiceEngine;
 import net.alteiar.lendyr.entity.GameEntity;
@@ -19,8 +21,11 @@ import net.alteiar.lendyr.model.persona.AttackType;
 import java.util.UUID;
 
 @Log4j2
+@ToString
 public class AttackAction extends BaseAction implements MajorAction {
+  @Getter
   private final UUID sourceId;
+  @Getter
   private final UUID targetId;
 
   // Stateful variables
@@ -85,6 +90,8 @@ public class AttackAction extends BaseAction implements MajorAction {
     gameEntity.getEncounter().useMajorAction();
 
     return AttackActionResult.builder()
+        .sourceId(sourceId)
+        .targetId(targetId)
         .attackResult(result)
         .rawDamage(totalDamage)
         .mitigatedDamage(mitigatedDamage)

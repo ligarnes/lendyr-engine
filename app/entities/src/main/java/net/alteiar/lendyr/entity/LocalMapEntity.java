@@ -44,8 +44,16 @@ public class LocalMapEntity {
     PersonaEntity source = gameEntity.findById(persona).orElseThrow(() -> new IllegalArgumentException("The persona does not exists"));
     Rectangle newPositionBox = source.getBoundingBoxAt(newPosition);
 
-    return checkCollisionWithWalls(newPositionBox)
+    return isOutOfMap(newPositionBox)
+        || checkCollisionWithWalls(newPositionBox)
         || checkCollisionWithOtherEntities(persona, newPositionBox);
+  }
+
+  private boolean isOutOfMap(Rectangle newPositionBox) {
+    return newPositionBox.x + newPositionBox.width > gameMap.getWorldWidth()
+        || newPositionBox.x < 0
+        || newPositionBox.y + newPositionBox.height > gameMap.getWorldHeight()
+        || newPositionBox.y < 0;
   }
 
   private boolean checkCollisionWithWalls(Rectangle newPositionBox) {

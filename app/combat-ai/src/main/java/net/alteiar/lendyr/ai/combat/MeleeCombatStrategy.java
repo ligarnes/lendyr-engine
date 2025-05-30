@@ -9,42 +9,27 @@ import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.MajorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MinorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
-import net.alteiar.lendyr.model.encounter.CombatActor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Log4j2
 public class MeleeCombatStrategy implements CombatAiActor {
 
   @Override
   public TurnAction combatTurn(PersonaEntity persona, GameEntity gameEntity) {
-    int team = gameEntity.getEncounter().getPersonaTeam(persona.getId());
-    log.info("Persona {} is in team {}", persona.getName(), team);
-    List<CombatActor> enemies = gameEntity.getEncounter().getOpponents(team);
-    log.info("Enemies {}", enemies);
-
-    List<Enemy> enemiesEntity = enemies.stream()
-        .map(CombatActor::getPersonaId)
-        .map(gameEntity::findById)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .map(p -> this.createEnemy(p, persona))
-        .toList();
-
+    List<Enemy> enemiesEntity = EnemyUtils.listEnemies(gameEntity, persona);
     Enemy enemy = selectTarget(enemiesEntity);
 
     TurnAction.ActionOrder actionOrder = TurnAction.ActionOrder.MINOR_FIRST;
     MajorAction majorAction = AttackAction.builder().sourceId(persona.getId()).targetId(enemy.personaTarget().getId()).build();
     MinorAction minorAction;
 
-    if (enemy.distance() < persona.getAttack().getNormalRange()) {
+    if (enemy.distance() <= persona.getAttack().getNormalRange()) {
       log.info("Enemy is in range (dist: {} vs attack range: {})", enemy.distance(), persona.getAttack().getNormalRange());
       minorAction = null;
     } else {
       log.info("Enemy is too far, just move (dist: {} vs attack range: {})", enemy.distance(), persona.getAttack().getNormalRange());
-      actionOrder = TurnAction.ActionOrder.MINOR_FIRST;
       majorAction = null;
       minorAction = moveTo(persona, findCloserToEnemyPosition(persona, enemy));
     }
@@ -76,13 +61,5 @@ public class MeleeCombatStrategy implements CombatAiActor {
   public Enemy findClosest(List<Enemy> enemiesEntity) {
     return enemiesEntity.stream().min((o1, o2) -> (int) (Math.abs(o1.distance() - o2.distance()) * 1000))
         .orElseThrow(() -> new IllegalStateException("No Enemy found"));
-  }
-
-  public Enemy createEnemy(PersonaEntity personaEntity, PersonaEntity currentPersona) {
-    return Enemy.builder()
-        .personaTarget(personaEntity)
-        .attackType(personaEntity.getAttack().getAttackType())
-        .distance(personaEntity.getPosition().dst(currentPersona.getPosition()))
-        .build();
   }
 }

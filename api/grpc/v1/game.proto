@@ -35,8 +35,11 @@ service LendyrGameService {
   // register to all the game updates
   rpc registerCurrentState(EmptyResponse) returns (stream LendyrGameState);
 
+  // register to all the actions
+  rpc registerActions(EmptyResponse)returns (stream model.combat.LendyrActionResult);
+
   // send an action
-  rpc act(combat.LendyrAction) returns (model.combat.LendyrActionResult);
+  rpc act(combat.LendyrAction) returns (LendyrActionResponse);
 
   // End the turn
   rpc endTurn(EmptyResponse) returns (EmptyResponse);
@@ -70,6 +73,26 @@ enum LendyrPlayState {
   TURN_BASE = 1;
   REAL_TIME = 2;
   PAUSE = 3;
+}
+
+message LendyrActionResponse {
+  LendyrActionResultStatusType type = 1;
+  string errorReason = 2;
+}
+
+enum LendyrActionResultStatusType {
+  UNKNOWN = 0;
+  SUCCESS = 1;
+
+  // Server Errors
+  NOT_IMPLEMENTED = 10;
+  UNEXPECTED = 11;
+
+  // Client Errors
+  NOT_FOUND = 20;
+  NOT_YOUR_TURN = 21;
+  NOT_ENOUGH_ACTION = 22;
+  NOT_ALLOWED = 23;
 }
 
 message EmptyResponse{}

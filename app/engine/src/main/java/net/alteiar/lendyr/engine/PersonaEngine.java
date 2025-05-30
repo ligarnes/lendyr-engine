@@ -36,7 +36,11 @@ public class PersonaEngine {
 
   private void act(GameAction action) {
     if (action != null) {
-      gameContext.act(action);
+      try {
+        gameContext.act(action);
+      } catch (RuntimeException e) {
+        log.warn("AI try unauthorized action: {}", action, e);
+      }
     }
   }
 }

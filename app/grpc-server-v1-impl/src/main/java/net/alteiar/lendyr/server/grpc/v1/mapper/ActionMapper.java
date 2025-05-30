@@ -1,28 +1,31 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
 import com.badlogic.gdx.math.Vector2;
-import net.alteiar.lendyr.entity.SkillResult;
-import net.alteiar.lendyr.entity.action.ActionResult;
-import net.alteiar.lendyr.entity.action.AttackActionResult;
-import net.alteiar.lendyr.entity.action.GameAction;
-import net.alteiar.lendyr.entity.action.GenericActionResult;
+import net.alteiar.lendyr.entity.action.*;
 import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
 import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
 import net.alteiar.lendyr.entity.action.exception.ProcessingException;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
+import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.UUID;
 
-@Mapper
+@Mapper(
+    uses = GenericMapper.class,
+    collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
+    nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+)
 public interface ActionMapper {
   ActionMapper INSTANCE = Mappers.getMapper(ActionMapper.class);
 
-  default GameAction dtoToBusiness(LendyrAction action) {
+  default GameAction gameActionToBusiness(LendyrAction action) {
     if (action == null) {
       return null;
     }
@@ -49,27 +52,25 @@ public interface ActionMapper {
     throw new NotSupportedException(String.format("The action %s is not supported yet.", action.getActionsCase().name()));
   }
 
-  default LendyrActionResult businessToDto(ActionResult actionResult) {
+  default LendyrActionResult actionResultToDto(ActionResult actionResult) {
     if (actionResult instanceof GenericActionResult) {
-      return LendyrActionResult.newBuilder().setType(LendyrActionResultStatusType.SUCCESS).build();
+      return LendyrActionResult.newBuilder().build();
     } else if (actionResult instanceof AttackActionResult attackActionResult) {
-      return LendyrActionResult.newBuilder().setType(LendyrActionResultStatusType.SUCCESS)
-          .setAttack(LendyrAttackActionResult.newBuilder()
-              .setAttackResult(businessToDto(attackActionResult.getAttackResult()))
-              .setRawDamage(attackActionResult.getRawDamage())
-              .setMitigatedDamage(attackActionResult.getMitigatedDamage()))
-          .build();
+      return LendyrActionResult.newBuilder().setAttack(attackResultToDto(attackActionResult)).build();
+    } else if (actionResult instanceof MoveActionResult attackActionResult) {
+      return LendyrActionResult.newBuilder().setMove(moveResultToDto(attackActionResult)).build();
+    } else if (actionResult instanceof ChargeAttackActionResult attackActionResult) {
+      return LendyrActionResult.newBuilder().setCharge(chargeAttackResultToDto(attackActionResult)).build();
     }
 
     throw new ProcessingException(String.format("Cannot map the action result of type %s", actionResult.getClass().getSimpleName()));
   }
 
-  default LendyrSkillResult businessToDto(SkillResult skillResult) {
-    return LendyrSkillResult.newBuilder()
-        .setDice1(skillResult.getDie1())
-        .setDice2(skillResult.getDie2())
-        .setStunDie(skillResult.getStunDie())
-        .setBonus(skillResult.getBonus())
-        .build();
-  }
+  LendyrAttackActionResult attackResultToDto(AttackActionResult attackActionResult);
+
+  @Mapping(source = "path", target = "positionList")
+  LendyrMoveActionResult moveResultToDto(MoveActionResult moveActionResult);
+
+  @Mapping(source = "path", target = "positionList")
+  LendyrChargeActionResult chargeAttackResultToDto(ChargeAttackActionResult moveActionResult);
 }

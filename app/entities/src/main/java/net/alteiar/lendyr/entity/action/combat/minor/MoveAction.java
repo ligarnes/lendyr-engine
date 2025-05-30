@@ -2,13 +2,15 @@ package net.alteiar.lendyr.entity.action.combat.minor;
 
 import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.entity.DiceEngine;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.entity.action.ActionResult;
-import net.alteiar.lendyr.entity.action.GenericActionResult;
+import net.alteiar.lendyr.entity.action.MoveActionResult;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
 import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
@@ -21,8 +23,11 @@ import java.util.UUID;
  * Actions are not thread safe.
  */
 @Log4j2
+@ToString
 public class MoveAction implements MinorAction {
+  @Getter
   private final UUID characterId;
+  @Getter
   private final List<Vector2> positions;
 
   // Stateful variables
@@ -78,7 +83,10 @@ public class MoveAction implements MinorAction {
     persona.setPosition(positions.getLast());
     context.getEncounter().useMinorAction();
 
-    return GenericActionResult.builder().build();
+    return MoveActionResult.builder()
+        .sourceId(characterId)
+        .path(positions)
+        .build();
   }
 
   private float roundToQuarter(float position) {

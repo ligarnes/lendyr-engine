@@ -3,6 +3,7 @@ package net.alteiar.lendyr.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import net.alteiar.lendyr.model.Game;
 import net.alteiar.lendyr.model.PlayState;
 import net.alteiar.lendyr.model.Player;
@@ -29,13 +30,14 @@ public class GameEntity {
 
   @Getter
   private Player player;
+  @Setter
   @Getter
   private PlayState playState;
 
   @Builder
   public GameEntity(@NonNull RepositoryFactory repositoryFactory) {
     this.personas = new HashMap<>();
-    encounter = new EncounterEntity();
+    encounter = new EncounterEntity(this);
 
     itemRepository = repositoryFactory.getItemRepository();
     mapRepository = repositoryFactory.getMapRepository();

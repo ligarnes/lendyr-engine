@@ -8,26 +8,15 @@ import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.MajorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MinorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
-import net.alteiar.lendyr.model.encounter.CombatActor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class RangeCombatStrategy implements CombatAiActor {
 
   @Override
   public TurnAction combatTurn(PersonaEntity persona, GameEntity gameEntity) {
-    int team = gameEntity.getEncounter().getPersonaTeam(persona.getId());
-    List<CombatActor> enemies = gameEntity.getEncounter().getOpponents(team);
-
-    List<Enemy> enemiesEntity = enemies.stream()
-        .map(CombatActor::getPersonaId)
-        .map(gameEntity::findById)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .map(p -> this.createEnemy(p, persona))
-        .toList();
+    List<Enemy> enemiesEntity = EnemyUtils.listEnemies(gameEntity, persona);
 
     Enemy enemy = selectTarget(enemiesEntity);
 
@@ -81,13 +70,4 @@ public class RangeCombatStrategy implements CombatAiActor {
     return enemiesEntity.stream().min((o1, o2) -> (int) (Math.abs(o1.distance() - o2.distance()) * 1000))
         .orElseThrow(() -> new IllegalStateException("No Enemy found"));
   }
-
-  public Enemy createEnemy(PersonaEntity personaEntity, PersonaEntity currentPersona) {
-    return Enemy.builder()
-        .personaTarget(personaEntity)
-        .attackType(personaEntity.getAttack().getAttackType())
-        .distance(personaEntity.getPosition().dst(currentPersona.getPosition()))
-        .build();
-  }
-
 }

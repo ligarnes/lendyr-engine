@@ -10,7 +10,7 @@ public class DiceEngineImpl implements DiceEngine {
 
   @Override
   public SkillResult rollSkill(int bonus) {
-    return SkillResult.builder().die1(rollD6()).die2(rollD6()).stunDie(rollD6()).bonus(bonus).build();
+    return SkillResult.builder().dice1(rollD6()).dice2(rollD6()).stunDie(rollD6()).bonus(bonus).build();
   }
 
   @Override

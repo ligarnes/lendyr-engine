@@ -61,14 +61,14 @@ public class GameContext {
     listener.gameChanged();
   }
 
-  public ActionResult act(GameAction action) {
+  public void act(GameAction action) {
     try {
       action.ensureAllowed(this.game);
       ActionResult result = action.apply(this.game, diceEngine);
       if (result.hasWorldChanged()) {
         listener.gameChanged();
       }
-      return result;
+      listener.newAction(result);
     } catch (ActionException e) {
       throw e;
     } catch (RuntimeException e) {

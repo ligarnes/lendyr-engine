@@ -6,17 +6,17 @@ import lombok.Data;
 @Data
 @Builder
 public class SkillResult {
-  private int die1;
-  private int die2;
+  private int dice1;
+  private int dice2;
   private int stunDie;
   private int bonus;
 
   public boolean hasStun() {
-    return die1 == die2 || die1 == stunDie || die2 == stunDie;
+    return dice1 == dice2 || dice1 == stunDie || dice2 == stunDie;
   }
 
   public int computeTotal() {
-    return die1 + die2 + stunDie + bonus;
+    return dice1 + dice2 + stunDie + bonus;
   }
 
   public int computeStun() {

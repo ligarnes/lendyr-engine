@@ -7,23 +7,25 @@ import net.alteiar.lendyr.app.LendyrGameServer;
 import net.alteiar.lendyr.grpc.model.v1.game.*;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
 import net.alteiar.lendyr.server.grpc.v1.mapper.GenericMapper;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 public class ServerApiTest {
+  private static LendyrGameServer server;
 
   @BeforeAll
   static void beforeAll() throws IOException, InterruptedException {
     File dataFolder = new File("../../assembly/data");
-    LendyrGameServer server = new LendyrGameServer(dataFolder);
-    server.load("dummy-test-1");
+    server = new LendyrGameServer(dataFolder);
     server.run(48080);
+  }
+
+  @AfterAll
+  static void afterAll() throws InterruptedException {
+    server.shutdown();
   }
 
   private LendyrGameServiceGrpc.LendyrGameServiceBlockingV2Stub blockingStub;
@@ -58,6 +60,7 @@ public class ServerApiTest {
     // Given
     UUID mapId = UUID.fromString("f2659d86-a181-47a5-b201-1e6b2b48b94f");
     // When
+    blockingStub.load(LendyrLoadGameRequest.newBuilder().setSaveName("dummy-test-1").build());
     LendyrGameState state = blockingStub.currentState(EmptyResponse.newBuilder().build());
 
     // Then

@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-class GeometryUtilsTest {
+class GeometryEnemyUtilsTest {
 
   @ParameterizedTest
   @MethodSource("provideVectorsAt1Range")

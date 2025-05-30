@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.engine.GameContext;
-import net.alteiar.lendyr.entity.action.ActionResult;
 import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.combat.EndTurnAction;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
@@ -85,7 +84,31 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   }
 
   @Override
+  public void registerActions(EmptyResponse request, StreamObserver<LendyrActionResult> responseObserver) {
+    log.info("Request actions");
+    try {
+      while (!currentStateProcessor.isCompleted()) {
+        try {
+          currentStateProcessor.awaitNewAction(1000).ifPresent(nextAction -> {
+            log.info("Publish new actions");
+            responseObserver.onNext(nextAction);
+          });
+        } catch (InterruptedException e) {
+          log.warn("Interrupted while waiting for current state", e);
+        }
+      }
+    } catch (RuntimeException e) {
+      log.warn(e);
+      Status status = Status.INTERNAL.withDescription(e.getMessage());
+      responseObserver.onError(status.asRuntimeException());
+      return;
+    }
+    responseObserver.onCompleted();
+  }
+
+  @Override
   public void registerCurrentState(EmptyResponse request, StreamObserver<LendyrGameState> responseObserver) {
+    log.info("Request current state");
     // Publish current state first
     try {
       while (!currentStateProcessor.isCompleted()) {
@@ -109,7 +132,6 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
 
   @Override
   public void currentState(EmptyResponse request, StreamObserver<LendyrGameState> responseObserver) {
-    log.info("Request current state");
     Timer.time("currentState",
         () -> {
           responseObserver.onNext(currentStateProcessor.currentGameState());
@@ -119,13 +141,13 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   }
 
   @Override
-  public void act(LendyrAction request, StreamObserver<LendyrActionResult> responseObserver) {
+  public void act(LendyrAction request, StreamObserver<LendyrActionResponse> responseObserver) {
     Timer.time("Act " + request.getActionsCase().name(),
         () -> {
           try {
-            GameAction action = ActionMapper.INSTANCE.dtoToBusiness(request);
-            ActionResult result = gameContext.act(action);
-            responseObserver.onNext(ActionMapper.INSTANCE.businessToDto(result));
+            GameAction action = ActionMapper.INSTANCE.gameActionToBusiness(request);
+            gameContext.act(action);
+            responseObserver.onNext(LendyrActionResponse.newBuilder().setType(LendyrActionResultStatusType.SUCCESS).build());
           } catch (NotSupportedException e) {
             log.warn("Action {} not supported", request.getActionsCase().name(), e);
             responseObserver.onNext(ActionErrorFactory.notImplemented(request));
