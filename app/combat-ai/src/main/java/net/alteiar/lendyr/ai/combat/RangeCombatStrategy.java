@@ -1,6 +1,7 @@
 package net.alteiar.lendyr.ai.combat;
 
 import com.badlogic.gdx.math.Vector2;
+import lombok.NonNull;
 import net.alteiar.lendyr.ai.combat.geometry.GeometryUtils;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.PersonaEntity;
@@ -9,14 +10,19 @@ import net.alteiar.lendyr.entity.action.combat.major.MajorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MinorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RangeCombatStrategy implements CombatAiActor {
 
+  private final GameEntity game;
+
+  RangeCombatStrategy(@NonNull GameEntity game) {
+    this.game = game;
+  }
+
   @Override
-  public TurnAction combatTurn(PersonaEntity persona, GameEntity gameEntity) {
-    List<Enemy> enemiesEntity = EnemyUtils.listEnemies(gameEntity, persona);
+  public TurnAction combatTurn(PersonaEntity persona) {
+    List<Enemy> enemiesEntity = EnemyUtils.listEnemies(game, persona);
 
     Enemy enemy = selectTarget(enemiesEntity);
 
@@ -43,8 +49,7 @@ public class RangeCombatStrategy implements CombatAiActor {
   }
 
   private MoveAction moveTo(PersonaEntity persona, Vector2 target) {
-    List<Vector2> path = new ArrayList<>();
-    Pathfinding.computePath(persona.getPosition(), target, path);
+    List<Vector2> path = Pathfinding.computePath(game, persona, target);
     return MoveAction.builder().characterId(persona.getId()).positions(path).build();
   }
 

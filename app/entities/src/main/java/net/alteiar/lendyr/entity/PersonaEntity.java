@@ -30,6 +30,10 @@ public class PersonaEntity {
     return persona.getId();
   }
 
+  public Size getSize() {
+    return persona.getSize();
+  }
+
   public String getName() {
     return persona.getName();
   }
@@ -162,5 +166,10 @@ public class PersonaEntity {
 
   public Persona toModel() {
     return this.persona;
+  }
+
+  @Override
+  public String toString() {
+    return "PersonaEntity{name=%s}".formatted(persona.getName());
   }
 }

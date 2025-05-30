@@ -7,4 +7,5 @@ module lendyr.combat.ai {
   requires gdx;
 
   requires org.apache.logging.log4j;
+  requires lendyr.game.algorithm;
 }

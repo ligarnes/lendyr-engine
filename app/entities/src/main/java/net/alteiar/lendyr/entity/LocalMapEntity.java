@@ -23,6 +23,14 @@ public class LocalMapEntity {
     this.personaEntities = new ArrayList<>();
   }
 
+  public int getWidth() {
+    return gameMap.getWorldWidth();
+  }
+
+  public int getHeight() {
+    return gameMap.getWorldHeight();
+  }
+
   public void load(LocalMap map, GameMap gameMap) {
     this.localMap = map;
     this.gameMap = gameMap;
@@ -44,9 +52,19 @@ public class LocalMapEntity {
     PersonaEntity source = gameEntity.findById(persona).orElseThrow(() -> new IllegalArgumentException("The persona does not exists"));
     Rectangle newPositionBox = source.getBoundingBoxAt(newPosition);
 
+    return checkCollision(newPositionBox);
+  }
+
+  /**
+   * True if any object collides with the persona and the expected new position.
+   *
+   * @param newPositionBox the desired position bounding box
+   * @return true if the position generates a collision
+   */
+  public boolean checkCollision(Rectangle newPositionBox) {
     return isOutOfMap(newPositionBox)
         || checkCollisionWithWalls(newPositionBox)
-        || checkCollisionWithOtherEntities(persona, newPositionBox);
+        || checkCollisionWithOtherEntities(newPositionBox);
   }
 
   private boolean isOutOfMap(Rectangle newPositionBox) {
@@ -60,8 +78,8 @@ public class LocalMapEntity {
     return false;// gameMap.getWalls().stream().anyMatch(newPositionBox::overlaps);
   }
 
-  private boolean checkCollisionWithOtherEntities(UUID personaId, Rectangle newPositionBox) {
-    return personaEntities.stream().filter(p -> !personaId.equals(p.getId()))
+  private boolean checkCollisionWithOtherEntities(Rectangle newPositionBox) {
+    return personaEntities.stream()
         .map(PersonaEntity::getDefenceBoundingBox)
         .anyMatch(newPositionBox::overlaps);
   }

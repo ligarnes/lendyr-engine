@@ -64,6 +64,7 @@ public final class EncounterEntity {
     this.encounter.getCurrentPersona().setMinorActionUsed(false);
 
     // Next player alive
+    log.info("Next player turn, was {}", this.encounter.getCurrentPersona().getInitiativeIdx());
     boolean isNextDead = true;
     while (isNextDead) {
       int currentIdx = this.encounter.getCurrentPersona().getInitiativeIdx();
@@ -72,8 +73,9 @@ public final class EncounterEntity {
       if (nextIdx >= this.encounter.getInitiative().size()) {
         newTurn();
       }
-      isNextDead = gameEntity.findById(getCurrentPersona().getPersonaId()).map(PersonaEntity::isDefeated).orElse(false);
+      isNextDead = gameEntity.findById(getCurrentPersona().getPersonaId()).map(PersonaEntity::isDefeated).orElse(true);
     }
+    log.info("Next player turn, now is {}", this.encounter.getCurrentPersona().getInitiativeIdx());
   }
 
   public void newTurn() {

@@ -22,12 +22,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>net.alteiar.lendyr</groupId>
       <artifactId>lendyr-model</artifactId>
       <version>${project.version}</version>
@@ -35,6 +29,11 @@
     <dependency>
       <groupId>net.alteiar.lendyr</groupId>
       <artifactId>lendyr-game-entities</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.alteiar.lendyr</groupId>
+      <artifactId>lendyr-game-algorithm</artifactId>
       <version>${project.version}</version>
     </dependency>
 

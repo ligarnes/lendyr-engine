@@ -10,16 +10,16 @@ public class CombatAiSelector implements CombatAiActor {
   private final RangeCombatStrategy rangeStrategy;
 
   @Builder
-  CombatAiSelector() {
-    meleeStrategy = new MeleeCombatStrategy();
-    rangeStrategy = new RangeCombatStrategy();
+  CombatAiSelector(GameEntity game) {
+    meleeStrategy = new MeleeCombatStrategy(game);
+    rangeStrategy = new RangeCombatStrategy(game);
   }
 
   @Override
-  public TurnAction combatTurn(PersonaEntity persona, GameEntity gameEntity) {
+  public TurnAction combatTurn(PersonaEntity persona) {
     return switch (persona.getAttack().getAttackType()) {
-      case MELEE -> meleeStrategy.combatTurn(persona, gameEntity);
-      case RANGE, MAGIC -> rangeStrategy.combatTurn(persona, gameEntity);
+      case MELEE -> meleeStrategy.combatTurn(persona);
+      case RANGE, MAGIC -> rangeStrategy.combatTurn(persona);
     };
   }
 }

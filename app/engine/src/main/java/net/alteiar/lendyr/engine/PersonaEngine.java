@@ -17,12 +17,12 @@ public class PersonaEngine {
   @Builder
   PersonaEngine(@NonNull GameContext gameContext) {
     this.gameContext = gameContext;
-    combatAiSelector = CombatAiSelector.builder().build();
+    combatAiSelector = CombatAiSelector.builder().game(gameContext.getGame()).build();
   }
 
   public void playTurn(PersonaEntity persona) {
     log.info("Playing turn for {}", persona.getName());
-    TurnAction turnAction = combatAiSelector.combatTurn(persona, gameContext.getGame());
+    TurnAction turnAction = combatAiSelector.combatTurn(persona);
 
     if (turnAction.getActionOrder() == TurnAction.ActionOrder.MAJOR_FIRST) {
       act(turnAction.getMajorAction());

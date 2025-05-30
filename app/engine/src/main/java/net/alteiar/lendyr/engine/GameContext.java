@@ -18,7 +18,7 @@ import net.alteiar.lendyr.persistence.SaveRepository;
 
 public class GameContext {
   @Getter
-  private GameEntity game;
+  private final GameEntity game;
 
   @Setter
   private GameContextListener listener;
@@ -28,7 +28,6 @@ public class GameContext {
 
   @Builder
   GameContext(@NonNull RepositoryFactory repositoryFactory) {
-    game = null;
     this.saveRepository = repositoryFactory.getSaveRepository();
     this.game = GameEntity.builder().repositoryFactory(repositoryFactory).build();
     this.diceEngine = new DiceEngineImpl();

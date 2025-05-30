@@ -18,26 +18,29 @@ class GridNetworkTest {
       }
     }
 
-    return GridNetwork.builder()
+    GridNetwork gridNetwork = GridNetwork.builder()
         .width(width)
         .height(height)
         .tiles(tiles)
         .build();
+
+    for (Tile t : gridNetwork.getTiles()) {
+      t.calculateNeighbours(gridNetwork);
+    }
+
+    return gridNetwork;
   }
 
   @Test
   void test() {
     GridNetwork gridNetwork = generateGrid(100, 100);
-    for (Tile t : gridNetwork.getTiles()) {
-      t.calculateNeighbours(gridNetwork);
-    }
 
     AStarAlgorithm<GridNetwork, Tile> astar = new AStarAlgorithm<>(gridNetwork);
 
     astar.solve(gridNetwork.find(10, 10), gridNetwork.find(30, 30));
     ArrayList<Tile> path = astar.getPath();
 
-    for (Tile t : path) {
+    for (Tile t : path.reversed()) {
       System.out.println(t.getX() + "," + t.getY());
     }
   }
