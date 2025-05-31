@@ -6,6 +6,8 @@ module lendyr.game.entities {
   requires lendyr.model;
   requires gdx;
   requires lendyr.game.persistence;
+  requires com.fasterxml.jackson.dataformat.xml;
+  requires lendyr.tiled.map.parser;
 
   exports net.alteiar.lendyr.entity;
   exports net.alteiar.lendyr.entity.action;
@@ -13,4 +15,5 @@ module lendyr.game.entities {
   exports net.alteiar.lendyr.entity.action.combat;
   exports net.alteiar.lendyr.entity.action.combat.major;
   exports net.alteiar.lendyr.entity.action.combat.minor;
+  exports net.alteiar.lendyr.entity.map;
 }

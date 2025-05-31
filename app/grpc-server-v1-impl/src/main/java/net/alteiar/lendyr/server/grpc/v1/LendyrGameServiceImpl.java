@@ -198,7 +198,7 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
         () -> {
           UUID id = GenericMapper.INSTANCE.convertBytesToUUID(request.getId());
 
-          responseObserver.onNext(WorldMapMapper.INSTANCE.mapToDto(gameContext.getGame().getMapRepository().findMapById(id)));
+          responseObserver.onNext(WorldMapMapper.INSTANCE.mapToDto(gameContext.getGame().getMapRepository().findMapById(id).getMap()));
           responseObserver.onCompleted();
         }
     );

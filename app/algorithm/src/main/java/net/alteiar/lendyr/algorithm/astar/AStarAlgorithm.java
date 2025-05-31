@@ -1,15 +1,16 @@
 package net.alteiar.lendyr.algorithm.astar;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+@Log4j2
 public class AStarAlgorithm<N extends Network<E>, E extends Node<E>> {
-
   @Getter
   private final N network;
-  @Getter
   private final ArrayList<E> path;
 
   private final ArrayList<E> openList;
@@ -23,51 +24,60 @@ public class AStarAlgorithm<N extends Network<E>, E extends Node<E>> {
     this.closedList = new ArrayList<>();
   }
 
-  public void solve(E start, E end) {
+  public List<E> solve(E start, E end) {
     reset();
 
     if (start == null && end == null) {
-      return;
+      return path;
     }
 
     if (Objects.equals(start, end)) {
-      return;
+      return path;
     }
 
+    solveInternal(start, end);
+    retracePath(end);
+    return path.reversed();
+  }
+
+  private void solveInternal(E start, E end) {
     this.openList.add(start);
 
     while (!openList.isEmpty()) {
       E current = getLowestF();
 
       if (current.equals(end)) {
-        retracePath(current);
         break;
       }
 
-      openList.remove(current);
-      closedList.add(current);
+      for (E next : current.getNeighbours()) {
+        if (next.equals(end)) {
+          next.setParent(current);
+          return;
+        }
 
-      for (E n : current.getNeighbours()) {
-        if (closedList.contains(n) || !n.isValid()) {
+        if (closedList.contains(next) || !next.isValid()) {
           continue;
         }
 
-        double tempScore = current.getCost() + current.distanceTo(n);
+        double newCost = current.getCost() + current.distanceTo(next);
 
-        if (openList.contains(n)) {
-          if (tempScore < n.getCost()) {
-            n.setCost(tempScore);
-            n.setParent(current);
+        if (openList.contains(next)) {
+          if (newCost < next.getCost()) {
+            next.setCost(newCost);
+            next.setParent(current);
           }
         } else {
-          n.setCost(tempScore);
-          openList.add(n);
-          n.setParent(current);
+          next.setCost(newCost);
+          openList.add(next);
+          next.setParent(current);
         }
 
-        n.setHeuristic(n.heuristic(end));
-        n.setFunction(n.getCost() + n.getHeuristic());
+        next.setHeuristic(next.heuristic(end));
+        next.setFunction(next.getCost() + next.getHeuristic());
       }
+
+      closedList.add(current);
     }
   }
 
@@ -94,6 +104,7 @@ public class AStarAlgorithm<N extends Network<E>, E extends Node<E>> {
         lowest = n;
       }
     }
+    openList.remove(lowest);
     return lowest;
   }
 }

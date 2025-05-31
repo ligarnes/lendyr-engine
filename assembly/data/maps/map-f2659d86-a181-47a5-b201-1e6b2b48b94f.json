@@ -3,5 +3,15 @@
   "path": "tiled/sample.tmx",
   "worldWidth": 30,
   "worldHeight": 20,
-  "scale": 0.03125
+  "scale": 0.03125,
+  "layers": [
+    {
+      "layerId": 1,
+      "layerName": "obstacles-layer-1"
+    },
+    {
+      "layerId": 2,
+      "layerName": "obstacles-layer-2"
+    }
+  ]
 }

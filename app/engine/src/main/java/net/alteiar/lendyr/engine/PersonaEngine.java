@@ -22,14 +22,18 @@ public class PersonaEngine {
 
   public void playTurn(PersonaEntity persona) {
     log.info("Playing turn for {}", persona.getName());
-    TurnAction turnAction = combatAiSelector.combatTurn(persona);
+    try {
+      TurnAction turnAction = combatAiSelector.combatTurn(persona);
 
-    if (turnAction.getActionOrder() == TurnAction.ActionOrder.MAJOR_FIRST) {
-      act(turnAction.getMajorAction());
-      act(turnAction.getMinorAction());
-    } else {
-      act(turnAction.getMinorAction());
-      act(turnAction.getMajorAction());
+      if (turnAction.getActionOrder() == TurnAction.ActionOrder.MAJOR_FIRST) {
+        act(turnAction.getMajorAction());
+        act(turnAction.getMinorAction());
+      } else {
+        act(turnAction.getMinorAction());
+        act(turnAction.getMajorAction());
+      }
+    } catch (RuntimeException e) {
+      log.warn("Fatal error in IA", e);
     }
     act(new EndTurnAction());
   }

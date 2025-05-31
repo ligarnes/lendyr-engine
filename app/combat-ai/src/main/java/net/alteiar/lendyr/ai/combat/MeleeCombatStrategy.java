@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.ai.combat.geometry.GeometryUtils;
+import net.alteiar.lendyr.ai.combat.geometry.PersonaWorldRepresentation;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
@@ -17,9 +18,12 @@ import java.util.List;
 public class MeleeCombatStrategy implements CombatAiActor {
 
   private final GameEntity game;
+  private final PersonaWorldRepresentation worldRepresentation;
 
-  MeleeCombatStrategy(@NonNull GameEntity game) {
+
+  MeleeCombatStrategy(@NonNull GameEntity game, @NonNull PersonaWorldRepresentation worldRepresentation) {
     this.game = game;
+    this.worldRepresentation = worldRepresentation;
   }
 
   @Override
@@ -38,6 +42,7 @@ public class MeleeCombatStrategy implements CombatAiActor {
       log.info("Enemy is too far, just move (dist: {} vs attack range: {})", enemy.distance(), persona.getAttack().getNormalRange());
       majorAction = null;
       minorAction = moveTo(persona, findCloserToEnemyPosition(persona, enemy));
+      log.info("Move to action is completed");
     }
 
     return TurnAction.builder()
@@ -48,7 +53,10 @@ public class MeleeCombatStrategy implements CombatAiActor {
   }
 
   private MoveAction moveTo(PersonaEntity persona, Vector2 target) {
-    List<Vector2> path = Pathfinding.computePath(game, persona, target);
+    List<Vector2> path = worldRepresentation.computePath(persona, target);
+    if (path.isEmpty()) {
+      return null;
+    }
     return MoveAction.builder().characterId(persona.getId()).positions(path).build();
   }
 
@@ -56,7 +64,8 @@ public class MeleeCombatStrategy implements CombatAiActor {
     float maxDistance = persona.getMoveDistance() - 0.5f;
     float normalRange = persona.getAttack().getNormalRange();
 
-    return GeometryUtils.findClosestAtRange(persona.getPosition(), enemy.personaTarget().getPosition(), maxDistance, normalRange);
+    Vector2 optimal = GeometryUtils.findClosestAtRange(persona.getPosition(), enemy.personaTarget().getPosition(), maxDistance, normalRange);
+    return worldRepresentation.findClosestAvailablePosition(persona, optimal);
   }
 
   public Enemy selectTarget(List<Enemy> enemiesEntity) {

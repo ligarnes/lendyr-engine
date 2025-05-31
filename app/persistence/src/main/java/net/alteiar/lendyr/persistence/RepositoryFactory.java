@@ -12,7 +12,8 @@ public final class RepositoryFactory {
 
   public RepositoryFactory(File dataFolder) {
     JsonMapper jsonMapper = JsonMapper.builder().dataRepository(dataFolder).build();
-    mapRepository = new MapRepository(jsonMapper);
+    XmlObjectMapper xmlMapper = XmlObjectMapper.builder().dataRepository(dataFolder).build();
+    mapRepository = new MapRepository(jsonMapper, xmlMapper);
     saveRepository = new SaveRepository(jsonMapper);
     itemRepository = new ItemRepository(jsonMapper);
   }

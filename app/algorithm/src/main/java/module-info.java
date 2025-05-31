@@ -1,7 +1,9 @@
 module lendyr.game.algorithm {
+  exports net.alteiar.lendyr.algorithm.battlemap;
+  exports net.alteiar.lendyr.algorithm.astar;
+
   requires static lombok;
   requires lendyr.game.entities;
   requires gdx;
-  exports net.alteiar.lendyr.algorithm.battlemap;
-  exports net.alteiar.lendyr.algorithm.astar;
+  requires org.apache.logging.log4j;
 }

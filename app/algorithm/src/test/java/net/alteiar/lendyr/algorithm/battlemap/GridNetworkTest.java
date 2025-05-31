@@ -5,6 +5,7 @@ import net.alteiar.lendyr.algorithm.astar.AStarAlgorithm;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class GridNetworkTest {
 
@@ -37,8 +38,7 @@ class GridNetworkTest {
 
     AStarAlgorithm<GridNetwork, Tile> astar = new AStarAlgorithm<>(gridNetwork);
 
-    astar.solve(gridNetwork.find(10, 10), gridNetwork.find(30, 30));
-    ArrayList<Tile> path = astar.getPath();
+    List<Tile> path = astar.solve(gridNetwork.find(10, 10), gridNetwork.find(30, 30));
 
     for (Tile t : path.reversed()) {
       System.out.println(t.getX() + "," + t.getY());

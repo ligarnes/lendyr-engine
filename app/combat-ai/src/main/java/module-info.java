@@ -8,4 +8,5 @@ module lendyr.combat.ai {
 
   requires org.apache.logging.log4j;
   requires lendyr.game.algorithm;
+  requires lendyr.tiled.map.parser;
 }

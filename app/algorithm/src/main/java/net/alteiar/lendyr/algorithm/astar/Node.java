@@ -1,6 +1,7 @@
 package net.alteiar.lendyr.algorithm.astar;
 
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public abstract class Node<T extends Node<T>> {
   @Setter
   private double cost, heuristic, function;
   @Getter
+  @Setter(AccessLevel.PROTECTED)
   private boolean valid;
 
   protected Node(boolean valid) {

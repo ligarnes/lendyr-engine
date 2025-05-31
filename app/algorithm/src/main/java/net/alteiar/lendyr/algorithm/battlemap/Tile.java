@@ -2,17 +2,37 @@ package net.alteiar.lendyr.algorithm.battlemap;
 
 import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
+import lombok.Getter;
 import net.alteiar.lendyr.algorithm.astar.Node;
 
 import java.util.ArrayList;
 
 public class Tile extends Node<Tile> {
+  @Getter
   private final Vector2 vector2;
+  @Getter
+  private boolean movableObject;
 
   @Builder
   public Tile(Vector2 position, boolean valid) {
     super(valid);
     this.vector2 = position;
+  }
+
+  public void reset() {
+    if (this.movableObject) {
+      this.setValid(true);
+      this.movableObject = false;
+    }
+    this.setCost(0);
+    this.setHeuristic(0);
+    this.setFunction(0);
+    this.setParent(null);
+  }
+
+  public void setMovableObject() {
+    this.setValid(false);
+    this.movableObject = true;
   }
 
   public float getX() {
@@ -74,5 +94,10 @@ public class Tile extends Node<Tile> {
   @Override
   public double distanceTo(Tile dest) {
     return vector2.dst2(dest.vector2);
+  }
+
+  @Override
+  public String toString() {
+    return "[%s, %s]".formatted(vector2, isValid() ? "_" : "x");
   }
 }
