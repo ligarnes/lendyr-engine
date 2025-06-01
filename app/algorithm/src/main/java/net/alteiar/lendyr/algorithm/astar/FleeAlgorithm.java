@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.*;
 
 @Log4j2
-public class AStarAlgorithm<E extends Node<E>> {
+public class FleeAlgorithm<E extends Node<E>> {
   @Getter
   private final ArrayList<E> path;
 
@@ -14,39 +14,33 @@ public class AStarAlgorithm<E extends Node<E>> {
   private final Map<E, E> cameFrom;
   private final Map<E, Float> costSoFar;
 
-  public AStarAlgorithm() {
+  public FleeAlgorithm() {
     this.path = new ArrayList<>();
     this.frontier = new PriorityQueue<>((Comparator<Node<E>>) (o1, o2) -> (int) Math.ceil(o1.getFunction() - o2.getFunction()));
     this.cameFrom = new HashMap<>();
     this.costSoFar = new HashMap<>();
   }
 
-  public List<E> solve(E start, E end) {
+  public List<E> solve(E start, E danger, float maxDistance) {
     reset();
-    if (start == null && end == null) {
-      return path;
-    }
-
-    if (Objects.equals(start, end)) {
-      return path;
-    }
-
-    solveInternal(start, end);
+    E end = solveInternal(start, danger, maxDistance);
     retracePath(start, end);
     return path.reversed();
   }
 
 
-  private void solveInternal(E start, E end) {
+  private E solveInternal(E start, E danger, float maxDistance) {
     this.frontier.add(start);
     this.cameFrom.put(start, start);
     this.costSoFar.put(start, 0.0f);
 
+    E latest = null;
     while (!frontier.isEmpty()) {
       E current = frontier.poll();
+      latest = current;
 
-      if (current == end) {
-        return;
+      if (costSoFar.get(current) >= maxDistance) {
+        return current;
       }
 
       current.getValidNeighbours().forEach(next -> {
@@ -54,13 +48,14 @@ public class AStarAlgorithm<E extends Node<E>> {
 
         if (!costSoFar.containsKey(next) || newCost < costSoFar.get(next)) {
           costSoFar.put(next, newCost);
-          float priority = newCost + next.heuristic(end);
+          float priority = newCost + next.fleeHeuristic(danger);
           next.setFunction(priority);
           frontier.add(next);
           cameFrom.put(next, current);
         }
       });
     }
+    return latest;
   }
 
   public void reset() {

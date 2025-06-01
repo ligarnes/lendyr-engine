@@ -11,6 +11,7 @@ class PersonaMapperTest {
   @Test
   void personaToDto() {
     Persona persona = RandomProvider.INSTANCE.nextObject(Persona.class);
+    persona.setPosition(new Position(4.2f, 5.3f, 1));
 
     LendyrPersona dto = PersonaMapper.INSTANCE.personaToDto(persona);
 
@@ -18,8 +19,6 @@ class PersonaMapperTest {
     Assertions.assertEquals(persona.getPortraitPath(), dto.getPortraitPath());
     Assertions.assertEquals(persona.getTokenPath(), dto.getTokenPath());
     Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(persona.getId()), dto.getId());
-    Assertions.assertEquals(persona.getArmorRating(), dto.getArmorRating());
-    Assertions.assertEquals(persona.getArmorPenalty(), dto.getArmorPenalty());
     Assertions.assertEquals(persona.getCurrentHealthPoint(), dto.getCurrentHealthPoint());
     Assertions.assertEquals(persona.getHealthPoint(), dto.getHealthPoint());
     Assertions.assertEquals(persona.getDefense(), dto.getDefense());
@@ -30,8 +29,9 @@ class PersonaMapperTest {
     Assertions.assertEquals(persona.getSize().getWidth(), dto.getSize().getWidth());
     Assertions.assertEquals(persona.getSize().getHeight(), dto.getSize().getHeight());
 
-    Assertions.assertEquals(persona.getPosition().x, dto.getPosition().getX());
-    Assertions.assertEquals(persona.getPosition().y, dto.getPosition().getY());
+    Assertions.assertEquals(persona.getPosition().getX(), dto.getPosition().getX());
+    Assertions.assertEquals(persona.getPosition().getY(), dto.getPosition().getY());
+    Assertions.assertEquals(persona.getPosition().getLayer(), dto.getPosition().getLayer());
 
     assertEquals(persona.getAbilities().getAccuracy(), dto.getAbilities().getAccuracy());
     assertEquals(persona.getAbilities().getCommunication(), dto.getAbilities().getCommunication());

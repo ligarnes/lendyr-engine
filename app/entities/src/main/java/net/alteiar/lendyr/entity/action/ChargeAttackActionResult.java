@@ -1,10 +1,10 @@
 package net.alteiar.lendyr.entity.action;
 
-import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import net.alteiar.lendyr.entity.SkillResult;
+import net.alteiar.lendyr.model.persona.Position;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,7 @@ public class ChargeAttackActionResult implements ActionResult {
   @NonNull
   UUID targetId;
   @NonNull
-  List<Vector2> path;
+  List<Position> path;
   @NonNull
   SkillResult attackResult;
   int mitigatedDamage;

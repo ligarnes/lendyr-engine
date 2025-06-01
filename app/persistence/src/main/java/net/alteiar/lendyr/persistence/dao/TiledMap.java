@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -13,6 +15,20 @@ import java.util.List;
 public class TiledMap {
   private int width;
   private int height;
+  private int tilewidth;
+  private int tileheight;
   @JacksonXmlElementWrapper(useWrapping = false)
   private List<TiledObjectGroup> objectgroup;
+
+  public float getScaleX() {
+    return 1 / (float) tilewidth;
+  }
+
+  public float getScaleY() {
+    return 1 / (float) tileheight;
+  }
+
+  public Optional<TiledObjectGroup> getByName(String name) {
+    return objectgroup.stream().filter(g -> Objects.equals(g.getName(), name)).findFirst();
+  }
 }

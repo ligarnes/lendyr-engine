@@ -1,7 +1,6 @@
 package net.alteiar.lendyr.entity.action.combat.major;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -19,6 +18,7 @@ import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
 import net.alteiar.lendyr.model.persona.Attack;
 import net.alteiar.lendyr.model.persona.AttackType;
+import net.alteiar.lendyr.model.persona.Position;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,14 +33,14 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
   @Getter
   private final UUID targetId;
   @Getter
-  private final List<Vector2> positions;
+  private final List<Position> positions;
 
   // Stateful variables
   private PersonaEntity personaSource;
   private PersonaEntity personaTarget;
 
   @Builder
-  public ChargeAttackAction(@NonNull UUID sourceId, @NonNull UUID targetId, @NonNull List<Vector2> positions) {
+  public ChargeAttackAction(@NonNull UUID sourceId, @NonNull UUID targetId, @NonNull List<Position> positions) {
     this.sourceId = sourceId;
     this.targetId = targetId;
     this.positions = positions;
@@ -63,9 +63,9 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
 
     // Validate distance
     float totalDest = 0;
-    Vector2 current = personaSource.getPosition();
-    for (Vector2 target : positions) {
-      totalDest += roundToQuarter(Vector2.dst(current.x, current.y, target.x, target.y));
+    Position current = personaSource.getPosition();
+    for (Position target : positions) {
+      totalDest += roundToQuarter(current.dst(target));
       current = target;
 
       // Validate no collision.
@@ -86,7 +86,7 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
 
     // Check if they are in range
     Rectangle attackRange = personaSource.getAttackLongBoundingBox();
-    attackRange.setPosition(positions.getLast());
+    attackRange.setPosition(positions.getLast().getX(), positions.getLast().getY());
     Rectangle target = personaTarget.getDefenceBoundingBox();
 
     if (!attackRange.overlaps(target)) {

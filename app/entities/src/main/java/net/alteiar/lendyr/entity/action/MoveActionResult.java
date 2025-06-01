@@ -1,9 +1,9 @@
 package net.alteiar.lendyr.entity.action;
 
-import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import net.alteiar.lendyr.model.persona.Position;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,5 +14,5 @@ public class MoveActionResult implements ActionResult {
   @NonNull
   UUID sourceId;
   @NonNull
-  List<Vector2> path;
+  List<Position> path;
 }

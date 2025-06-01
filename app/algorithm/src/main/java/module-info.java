@@ -6,4 +6,5 @@ module lendyr.game.algorithm {
   requires lendyr.game.entities;
   requires gdx;
   requires org.apache.logging.log4j;
+  requires lendyr.model;
 }

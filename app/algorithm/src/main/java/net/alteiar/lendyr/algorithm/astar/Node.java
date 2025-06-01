@@ -1,29 +1,36 @@
 package net.alteiar.lendyr.algorithm.astar;
 
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
-@Getter
 public abstract class Node<T extends Node<T>> {
+  @Getter
   @Setter
   private T parent;
   @Setter
-  private ArrayList<T> neighbours;
-  @Setter
-  private double cost, heuristic, function;
+  private List<T> neighbours;
   @Getter
-  @Setter(AccessLevel.PROTECTED)
+  @Setter
+  private float function;
+  @Getter
+  @Setter
   private boolean valid;
 
   protected Node(boolean valid) {
     this.valid = valid;
   }
 
-  public abstract double distanceTo(T dest);
+  public Stream<T> getValidNeighbours() {
+    return neighbours.stream().filter(Node::isValid);
+  }
 
-  public abstract double heuristic(T dest);
+  public abstract float distanceTo(T dest);
+
+  public abstract float heuristic(T dest);
+
+  public abstract float fleeHeuristic(T dest);
 }

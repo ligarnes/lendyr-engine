@@ -1,6 +1,5 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
-import com.badlogic.gdx.math.Vector2;
 import net.alteiar.lendyr.entity.action.*;
 import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
@@ -8,6 +7,7 @@ import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
 import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
 import net.alteiar.lendyr.entity.action.exception.ProcessingException;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
+import net.alteiar.lendyr.model.persona.Position;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -32,7 +32,7 @@ public interface ActionMapper {
     if (action.hasMove()) {
       LendyrMoveAction move = action.getMove();
       UUID characterId = GenericMapper.INSTANCE.convertBytesToUUID(move.getSourceId());
-      List<Vector2> positions = move.getPositionList().stream().map(GenericMapper.INSTANCE::convertPositionFromDto).toList();
+      List<Position> positions = move.getPositionList().stream().map(GenericMapper.INSTANCE::convertPositionFromDto).toList();
       return MoveAction.builder().characterId(characterId).positions(positions).build();
     }
     if (action.hasAttack()) {
@@ -45,7 +45,7 @@ public interface ActionMapper {
       LendyrChargeAttackAction charge = action.getChargeAttack();
       UUID sourceId = GenericMapper.INSTANCE.convertBytesToUUID(charge.getSourceId());
       UUID targetId = GenericMapper.INSTANCE.convertBytesToUUID(charge.getTargetId());
-      List<Vector2> positions = charge.getPathList().stream().map(GenericMapper.INSTANCE::convertPositionFromDto).toList();
+      List<Position> positions = charge.getPathList().stream().map(GenericMapper.INSTANCE::convertPositionFromDto).toList();
       return ChargeAttackAction.builder().sourceId(sourceId).targetId(targetId).positions(positions).build();
     }
 

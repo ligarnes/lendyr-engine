@@ -1,6 +1,5 @@
 package net.alteiar.lendyr.model.persona;
 
-import com.badlogic.gdx.math.Vector2;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +19,7 @@ public class Persona {
 
   private String portraitPath;
   private String tokenPath;
-  private Vector2 position;
+  private Position position;
   private Size size;
 
   private int armorRating;

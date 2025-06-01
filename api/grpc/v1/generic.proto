@@ -9,6 +9,7 @@ package model.generic;
 message LendyrPosition {
   float x = 1;
   float y = 2;
+  int32 layer = 3;
 }
 
 message LendyrSize {

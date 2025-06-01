@@ -25,7 +25,8 @@
       "tokenPath": "2Archer",
       "position": {
         "x": 12.0,
-        "y": 12.0
+        "y": 12.0,
+        "layer": 3
       },
       "size": {
         "width": 1.0,
@@ -111,7 +112,8 @@
       "tokenPath": "6Crusader",
       "position": {
         "x": 8.0,
-        "y": 3.0
+        "y": 3.0,
+        "layer": 1
       },
       "size": {
         "width": 1.0,
@@ -194,7 +196,8 @@
       "tokenPath": "3Footsoldier",
       "position": {
         "x": 3.0,
-        "y": 3.0
+        "y": 3.0,
+        "layer": 1
       },
       "size": {
         "width": 1.0,

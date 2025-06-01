@@ -1,8 +1,6 @@
 package net.alteiar.lendyr.ai.combat;
 
-import com.badlogic.gdx.math.Vector2;
 import lombok.NonNull;
-import net.alteiar.lendyr.ai.combat.geometry.GeometryUtils;
 import net.alteiar.lendyr.ai.combat.geometry.PersonaWorldRepresentation;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.PersonaEntity;
@@ -10,6 +8,7 @@ import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.MajorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MinorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
+import net.alteiar.lendyr.model.persona.Position;
 
 import java.util.List;
 
@@ -34,14 +33,14 @@ public class RangeCombatStrategy implements CombatAiActor {
     MinorAction minorAction;
 
     if (enemy.distance() < persona.getAttack().getNormalRange()) {
-      minorAction = moveTo(persona, findSafePosition(persona, enemy));
+      minorAction = moveTo(persona, worldRepresentation.fleeFrom(persona, enemy.personaTarget().getPosition()));
     } else if (enemy.distance() < persona.getAttack().getLongRange()) {
       actionOrder = TurnAction.ActionOrder.MINOR_FIRST;
-      minorAction = moveTo(persona, findCloserToEnemyPosition(persona, enemy));
+      minorAction = moveTo(persona, enemy.personaTarget().getPosition());
     } else {
       actionOrder = TurnAction.ActionOrder.MINOR_FIRST;
       majorAction = null;
-      minorAction = moveTo(persona, findCloserToEnemyPosition(persona, enemy));
+      minorAction = moveTo(persona, enemy.personaTarget().getPosition());
     }
 
     return TurnAction.builder()
@@ -51,28 +50,16 @@ public class RangeCombatStrategy implements CombatAiActor {
         .build();
   }
 
-  private MoveAction moveTo(PersonaEntity persona, Vector2 target) {
-    List<Vector2> path = worldRepresentation.computePath(persona, target);
+  private MoveAction moveTo(PersonaEntity persona, Position target) {
+    List<Position> path = worldRepresentation.pathTo(persona, target);
+    return moveTo(persona, path);
+  }
+
+  private MoveAction moveTo(PersonaEntity persona, List<Position> path) {
     if (path.isEmpty()) {
       return null;
     }
     return MoveAction.builder().characterId(persona.getId()).positions(path).build();
-  }
-
-  public Vector2 findCloserToEnemyPosition(PersonaEntity persona, Enemy enemy) {
-    float maxDistance = persona.getMoveDistance() - 0.5f;
-    float normalRange = persona.getAttack().getNormalRange();
-
-    Vector2 optimal = GeometryUtils.findClosestAtRange(persona.getPosition(), enemy.personaTarget().getPosition(), maxDistance, normalRange);
-    return worldRepresentation.findClosestAvailablePosition(persona, optimal);
-  }
-
-  public Vector2 findSafePosition(PersonaEntity persona, Enemy enemy) {
-    float maxDistance = persona.getMoveDistance() - 0.5f;
-    float normalRange = persona.getAttack().getNormalRange();
-
-    Vector2 optimal = GeometryUtils.findFarthestAtRange(persona.getPosition(), enemy.personaTarget().getPosition(), maxDistance, normalRange);
-    return worldRepresentation.findClosestAvailablePosition(persona, optimal);
   }
 
   public Enemy selectTarget(List<Enemy> enemiesEntity) {

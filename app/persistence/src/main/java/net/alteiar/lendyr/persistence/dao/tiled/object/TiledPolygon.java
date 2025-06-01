@@ -1,5 +1,6 @@
 package net.alteiar.lendyr.persistence.dao.tiled.object;
 
+import com.badlogic.gdx.math.Polygon;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,4 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TiledPolygon {
   private String points;
+
+  public Polygon getPolygon() {
+    return new Polygon(PropertyUtils.readPoints(points));
+  }
+
 }

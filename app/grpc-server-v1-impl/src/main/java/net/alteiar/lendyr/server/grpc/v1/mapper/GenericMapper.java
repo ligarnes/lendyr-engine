@@ -1,9 +1,9 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
-import com.badlogic.gdx.math.Vector2;
 import com.google.protobuf.ByteString;
 import net.alteiar.lendyr.grpc.model.v1.generic.LendyrPosition;
 import net.alteiar.lendyr.grpc.model.v1.generic.LendyrSize;
+import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.model.persona.Size;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -51,7 +51,7 @@ public interface GenericMapper {
 
   LendyrSize convertSizeDto(Size size);
 
-  LendyrPosition convertPositionToDto(Vector2 position);
+  LendyrPosition convertPositionToDto(Position position);
 
-  Vector2 convertPositionFromDto(LendyrPosition position);
+  Position convertPositionFromDto(LendyrPosition position);
 }

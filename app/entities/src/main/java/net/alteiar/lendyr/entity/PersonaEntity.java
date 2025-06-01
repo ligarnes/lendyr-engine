@@ -1,7 +1,6 @@
 package net.alteiar.lendyr.entity;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -34,6 +33,10 @@ public class PersonaEntity {
     return persona.getSize();
   }
 
+  public int getLayer() {
+    return persona.getPosition().getLayer();
+  }
+
   public String getName() {
     return persona.getName();
   }
@@ -42,12 +45,14 @@ public class PersonaEntity {
     return getCurrentHealthPoint() <= 0;
   }
 
-  public Vector2 getPosition() {
+  public Position getPosition() {
     return persona.getPosition();
   }
 
-  public void setPosition(Vector2 position) {
-    persona.setPosition(position);
+  public void setPosition(Position position) {
+    persona.getPosition().setX(position.getX());
+    persona.getPosition().setY(position.getY());
+    persona.getPosition().setLayer(position.getLayer());
   }
 
   public float getMoveDistance() {
@@ -99,9 +104,9 @@ public class PersonaEntity {
     return getBoundingBox(0);
   }
 
-  public Rectangle getBoundingBoxAt(Vector2 nextPosition) {
-    float sourceX = nextPosition.x;
-    float sourceY = nextPosition.y;
+  public Rectangle getBoundingBoxAt(Position nextPosition) {
+    float sourceX = nextPosition.getX();
+    float sourceY = nextPosition.getY();
     float sourceWidth = persona.getSize().getWidth();
     float sourceHeight = persona.getSize().getHeight();
 
@@ -109,8 +114,8 @@ public class PersonaEntity {
   }
 
   private Rectangle getBoundingBox(float extension) {
-    float sourceX = persona.getPosition().x - extension;
-    float sourceY = persona.getPosition().y - extension;
+    float sourceX = persona.getPosition().getX() - extension;
+    float sourceY = persona.getPosition().getY() - extension;
     float sourceWidth = persona.getSize().getWidth() + extension * 2;
     float sourceHeight = persona.getSize().getHeight() + extension * 2;
 

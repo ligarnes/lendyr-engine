@@ -1,109 +1,94 @@
 package net.alteiar.lendyr.ai.combat.geometry;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import lombok.extern.log4j.Log4j2;
-import net.alteiar.lendyr.algorithm.battlemap.GridNetwork;
-import net.alteiar.lendyr.algorithm.battlemap.Tile;
+import net.alteiar.lendyr.algorithm.battlemap.MultiLayerNetwork;
 import net.alteiar.lendyr.entity.PersonaEntity;
-import net.alteiar.lendyr.entity.map.LayeredMap;
 import net.alteiar.lendyr.entity.map.WorldMap;
+import net.alteiar.lendyr.model.persona.Position;
+import net.alteiar.lendyr.model.persona.Size;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 public class PersonaWorldRepresentation {
   private final WorldMap map;
-  private Pathfinding layer1;
+  private Pathfinding pathfinding;
 
   public PersonaWorldRepresentation(WorldMap map) {
     this.map = map;
   }
 
   private void load() {
-    if (layer1 != null) {
+    if (pathfinding != null) {
       return;
     }
     if (map.getLayeredMap() != null) {
-      GridNetwork gridNetwork1 = generate(map.getLayeredMap(), 1);
-      layer1 = Pathfinding.builder().gridNetwork(gridNetwork1).build();
+      MultiLayerNetwork multiLayerNetwork = MultiLayerNetworkFactory.generate(map.getLayeredMap());
+      pathfinding = Pathfinding.builder().layeredMap(multiLayerNetwork).build();
     }
   }
 
   public void update() {
     load();
     if (map.getLayeredMap() != null) {
-      layer1.getGridNetwork().getTiles().forEach(Tile::reset);
+      pathfinding.getMultiLayerNetwork().reset();
       this.map.getMovableObjects().forEach(rectangle -> {
-        layer1.getGridNetwork().find(Math.round(rectangle.getX()), Math.round(rectangle.getY())).setMovableObject();
+        int startX = MathUtils.floor(rectangle.getX());
+        int startY = MathUtils.floor(rectangle.getY());
+        int width = MathUtils.ceil(rectangle.getX() + rectangle.getWidth());
+        int height = MathUtils.ceil(rectangle.getY() + rectangle.getHeight());
+        for (int x = startX; x < width; x++) {
+          for (int y = startY; y < height; y++) {
+            pathfinding.getMultiLayerNetwork().addObstacle(x, y);
+          }
+        }
       });
-      debug();
     }
   }
 
-  public Vector2 findClosestAvailablePosition(PersonaEntity entity, Vector2 target) {
-    clampToWorld(entity, target);
-    Tile targetTile = layer1.getGridNetwork().find(Math.round(target.x), Math.round(target.y));
-    log.info("Find closest position to ({},{})", targetTile.getX(), targetTile.getY());
-    Vector2 found = findClosestAvailablePosition(entity, targetTile);
-    log.info("Resolved to ({},{})", found.x, found.y);
-    return found;
+  public List<Position> fleeFrom(PersonaEntity entity, Position target) {
+    return pathfinding.fleePath(entity.getPosition(), target, entity.getMoveDistance());
   }
 
-  private Vector2 findClosestAvailablePosition(PersonaEntity entity, Tile target) {
-    if (target.isValid()) {
-      return new Vector2(target.getX(), target.getY());
-    }
+  public List<Position> pathTo(PersonaEntity entity, Position end) {
+    clampToWorld(end, entity.getSize());
 
-    List<Tile> neighbors = target.getNeighbours();
-    for (Tile neighbor : neighbors) {
-      if (neighbor.isValid()) {
-        return new Vector2(neighbor.getX(), neighbor.getY());
-      }
-    }
+    debug(List.of());
+    List<Position> path = pathfinding.computePath(entity.getPosition(), end, entity.getMoveDistance());
 
-    // Recursive find for the next
-    return findClosestAvailablePosition(entity, target.getNeighbours().get(0));
+    debug(path);
+
+    return path;
   }
 
-  public List<Vector2> computePath(PersonaEntity entity, Vector2 end) {
-    return layer1.computePath(entity, end);
-  }
-
-  private GridNetwork generate(LayeredMap mapEntity, int level) {
-    ArrayList<Tile> tiles = new ArrayList<>();
-
-    int width = (int) mapEntity.getWidth();
-    int height = (int) mapEntity.getHeight();
-
-    for (float i = 0; i < mapEntity.getWidth(); i++) {
-      for (float j = 0; j < mapEntity.getHeight(); j++) {
-        boolean collision = mapEntity.checkCollision(level, new Rectangle(i, j, 1, 1));
-        Tile t = new Tile(new Vector2(i, j), !collision);
-        tiles.add(t);
-      }
-    }
-
-    GridNetwork gridNetwork = GridNetwork.builder().width(width).height(height).tiles(tiles).build();
-    for (Tile t : gridNetwork.getTiles()) {
-      t.calculateNeighbours(gridNetwork);
-    }
-
-    return gridNetwork;
-  }
-
-  private Vector2 clampToWorld(PersonaEntity persona, Vector2 target) {
-    float personaWidth = persona.getSize().getWidth();
-    float personaHeigth = persona.getSize().getHeight();
-    target.x = MathUtils.clamp(target.x, personaWidth, layer1.getGridNetwork().getWidth() - personaWidth);
-    target.y = MathUtils.clamp(target.y, personaHeigth, layer1.getGridNetwork().getHeight() - personaHeigth);
+  private Position clampToWorld(Position target, Size size) {
+    float personaWidth = size.getWidth();
+    float personaHeigth = size.getHeight();
+    target.setX(MathUtils.round(MathUtils.clamp(target.getX(), personaWidth, map.getLayeredMap().getWidth() - personaWidth)));
+    target.setY(MathUtils.round(MathUtils.clamp(target.getY(), personaHeigth, map.getLayeredMap().getHeight() - personaHeigth)));
     return target;
   }
 
-  public void debug() {
-    log.info("layer {}: ", 1);
-    layer1.debug();
+
+  public void debug(List<Position> path) {
+    Map<Vector2, String> mapDebug = new HashMap<>();
+
+    map.getMovableObjects().forEach(obstacle -> {
+      int startX = MathUtils.floor(obstacle.getX());
+      int startY = MathUtils.floor(obstacle.getY());
+      int width = MathUtils.ceil(obstacle.getX() + obstacle.getWidth());
+      int height = MathUtils.ceil(obstacle.getY() + obstacle.getHeight());
+      for (int x = startX; x < width; x++) {
+        for (int y = startY; y < height; y++) {
+          mapDebug.put(new Vector2(x, y), "a");
+        }
+      }
+    });
+    path.forEach(p -> mapDebug.put(p.toVector(), "o"));
+    map.getLayeredMap().debugPath(mapDebug);
   }
 }

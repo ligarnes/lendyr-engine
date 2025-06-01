@@ -1,6 +1,5 @@
 package net.alteiar.lendyr.entity.action.combat.minor;
 
-import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -14,6 +13,7 @@ import net.alteiar.lendyr.entity.action.MoveActionResult;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
 import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
+import net.alteiar.lendyr.model.persona.Position;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,13 +28,13 @@ public class MoveAction implements MinorAction {
   @Getter
   private final UUID characterId;
   @Getter
-  private final List<Vector2> positions;
+  private final List<Position> positions;
 
   // Stateful variables
   PersonaEntity persona;
 
   @Builder
-  public MoveAction(@NonNull UUID characterId, @NonNull List<Vector2> positions) {
+  public MoveAction(@NonNull UUID characterId, @NonNull List<Position> positions) {
     this.characterId = characterId;
     this.positions = positions;
   }
@@ -58,8 +58,8 @@ public class MoveAction implements MinorAction {
 
     // Validate distance
     float totalDest = 0;
-    Vector2 current = persona.getPosition();
-    for (Vector2 target : positions) {
+    Position current = persona.getPosition();
+    for (Position target : positions) {
       totalDest += roundToQuarter(current.dst(target));
       current = target;
 

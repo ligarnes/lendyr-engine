@@ -1,6 +1,5 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
-import com.badlogic.gdx.math.Vector2;
 import net.alteiar.lendyr.entity.SkillResult;
 import net.alteiar.lendyr.entity.action.*;
 import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
@@ -8,6 +7,7 @@ import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
 import net.alteiar.lendyr.grpc.model.v1.generic.LendyrPosition;
+import net.alteiar.lendyr.model.persona.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -52,8 +52,9 @@ class ActionMapperTest {
     Assertions.assertEquals(dto.getMove().getPositionCount(), attackAction.getPositions().size());
 
     for (int i = 0; i < dto.getMove().getPositionCount(); i++) {
-      Assertions.assertEquals(dto.getMove().getPosition(i).getX(), attackAction.getPositions().get(i).x);
-      Assertions.assertEquals(dto.getMove().getPosition(i).getY(), attackAction.getPositions().get(i).y);
+      Assertions.assertEquals(dto.getMove().getPosition(i).getX(), attackAction.getPositions().get(i).getX());
+      Assertions.assertEquals(dto.getMove().getPosition(i).getY(), attackAction.getPositions().get(i).getY());
+      Assertions.assertEquals(dto.getMove().getPosition(i).getLayer(), attackAction.getPositions().get(i).getLayer());
     }
   }
 
@@ -78,8 +79,9 @@ class ActionMapperTest {
     Assertions.assertEquals(dto.getChargeAttack().getPathCount(), attackAction.getPositions().size());
 
     for (int i = 0; i < dto.getChargeAttack().getPathCount(); i++) {
-      Assertions.assertEquals(dto.getChargeAttack().getPath(i).getX(), attackAction.getPositions().get(i).x);
-      Assertions.assertEquals(dto.getChargeAttack().getPath(i).getY(), attackAction.getPositions().get(i).y);
+      Assertions.assertEquals(dto.getChargeAttack().getPath(i).getX(), attackAction.getPositions().get(i).getX());
+      Assertions.assertEquals(dto.getChargeAttack().getPath(i).getY(), attackAction.getPositions().get(i).getY());
+      Assertions.assertEquals(dto.getChargeAttack().getPath(i).getLayer(), attackAction.getPositions().get(i).getLayer());
     }
   }
 
@@ -145,8 +147,9 @@ class ActionMapperTest {
     Assertions.assertEquals(result.getPath().size(), dto.getPositionCount());
 
     for (int i = 0; i < result.getPath().size(); i++) {
-      Assertions.assertEquals(result.getPath().get(i).x, dto.getPosition(i).getX());
-      Assertions.assertEquals(result.getPath().get(i).y, dto.getPosition(i).getY());
+      Assertions.assertEquals(result.getPath().get(i).getX(), dto.getPosition(i).getX());
+      Assertions.assertEquals(result.getPath().get(i).getY(), dto.getPosition(i).getY());
+      Assertions.assertEquals(result.getPath().get(i).getLayer(), dto.getPosition(i).getLayer());
     }
   }
 
@@ -170,9 +173,9 @@ class ActionMapperTest {
     return MoveActionResult.builder()
         .sourceId(UUID.randomUUID())
         .path(List.of(
-            RandomProvider.INSTANCE.nextObject(Vector2.class),
-            RandomProvider.INSTANCE.nextObject(Vector2.class),
-            RandomProvider.INSTANCE.nextObject(Vector2.class)
+            RandomProvider.INSTANCE.nextObject(Position.class),
+            RandomProvider.INSTANCE.nextObject(Position.class),
+            RandomProvider.INSTANCE.nextObject(Position.class)
         ))
         .build();
   }

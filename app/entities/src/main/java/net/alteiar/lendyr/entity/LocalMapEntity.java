@@ -1,7 +1,6 @@
 package net.alteiar.lendyr.entity;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -10,6 +9,7 @@ import net.alteiar.lendyr.entity.map.MapFactory;
 import net.alteiar.lendyr.entity.map.WorldMap;
 import net.alteiar.lendyr.model.encounter.GameMap;
 import net.alteiar.lendyr.model.encounter.LocalMap;
+import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.persistence.dao.LocalMapDao;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class LocalMapEntity implements WorldMap {
   public void load(LocalMap map, LocalMapDao gameMap) {
     this.localMap = map;
     this.gameMap = gameMap.getMap();
-    this.layeredMap = new MapFactory(gameMap).load();
+    this.layeredMap = new MapFactory(gameMap.getTiledMap()).load();
     personaEntities.clear();
     personaEntities.addAll(map.getEntities().stream()
         .map(gameEntity::findById)
@@ -63,7 +63,7 @@ public class LocalMapEntity implements WorldMap {
    * @param newPosition the new position of the persona
    * @return true if the position generates a collision
    */
-  public boolean checkCollision(UUID persona, Vector2 newPosition) {
+  public boolean checkCollision(UUID persona, Position newPosition) {
     PersonaEntity source = gameEntity.findById(persona).orElseThrow(() -> new IllegalArgumentException("The persona does not exists"));
     Rectangle newPositionBox = source.getBoundingBoxAt(newPosition);
 

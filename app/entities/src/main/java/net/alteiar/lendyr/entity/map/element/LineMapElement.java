@@ -4,13 +4,15 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
-import lombok.ToString;
+import lombok.Getter;
 
 import java.util.List;
 
-@ToString
 @Builder
 public class LineMapElement implements MapElement {
+  @Getter
+  private final String name;
+
   private final List<Vector2> points;
 
   @Override
