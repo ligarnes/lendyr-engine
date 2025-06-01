@@ -2,8 +2,8 @@ package net.alteiar.lendyr.persistence;
 
 import lombok.NonNull;
 import net.alteiar.lendyr.model.encounter.GameMap;
+import net.alteiar.lendyr.model.map.tiled.TiledMap;
 import net.alteiar.lendyr.persistence.dao.LocalMapDao;
-import net.alteiar.lendyr.persistence.dao.TiledMap;
 
 import java.util.Map;
 import java.util.UUID;

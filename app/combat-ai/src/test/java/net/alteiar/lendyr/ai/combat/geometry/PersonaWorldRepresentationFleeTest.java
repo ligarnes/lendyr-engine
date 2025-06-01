@@ -1,15 +1,15 @@
 package net.alteiar.lendyr.ai.combat.geometry;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import net.alteiar.lendyr.entity.PersonaEntity;
-import net.alteiar.lendyr.entity.map.LayeredMap;
-import net.alteiar.lendyr.entity.map.MapFactory;
-import net.alteiar.lendyr.entity.map.WorldMap;
+import net.alteiar.lendyr.model.map.DynamicBlockingObject;
+import net.alteiar.lendyr.model.map.LayeredMap;
+import net.alteiar.lendyr.model.map.LayeredMapWithMovable;
+import net.alteiar.lendyr.model.map.MapFactory;
+import net.alteiar.lendyr.model.map.tiled.TiledMap;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.model.persona.Size;
-import net.alteiar.lendyr.persistence.dao.TiledMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +23,8 @@ import java.util.stream.Stream;
 
 class PersonaWorldRepresentationFleeTest {
 
-  static WorldMap worldMap;
-  static List<Rectangle> obstacles;
+  static LayeredMapWithMovable layeredMapWithMovable;
+  static List<DynamicBlockingObject> obstacles;
 
   @BeforeAll
   static void beforeAll() throws IOException {
@@ -36,14 +36,14 @@ class PersonaWorldRepresentationFleeTest {
 
     LayeredMap layeredMap = mapFactory.load();
     obstacles = new ArrayList<>();
-    worldMap = new WorldMap() {
+    layeredMapWithMovable = new LayeredMapWithMovable() {
       @Override
       public LayeredMap getLayeredMap() {
         return layeredMap;
       }
 
       @Override
-      public Stream<Rectangle> getMovableObjects() {
+      public Stream<DynamicBlockingObject> getMovableObjects() {
         return obstacles.stream();
       }
     };
@@ -56,7 +56,7 @@ class PersonaWorldRepresentationFleeTest {
 
   @Test
   void fleeFrom_direct() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(5, 5, 1));
@@ -80,7 +80,7 @@ class PersonaWorldRepresentationFleeTest {
 
   @Test
   void fleeFrom_multiLayer() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(5, 5, 1));

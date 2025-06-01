@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.model.items.Weapon;
 import net.alteiar.lendyr.model.items.WeaponType;
+import net.alteiar.lendyr.model.map.DynamicBlockingObject;
 import net.alteiar.lendyr.model.persona.*;
 import net.alteiar.lendyr.persistence.ItemRepository;
 
@@ -92,34 +93,34 @@ public class PersonaEntity {
     };
   }
 
-  public Rectangle getAttackLongBoundingBox() {
+  public DynamicBlockingObject getAttackLongBoundingBox() {
     return getBoundingBox(getAttack().getLongRange());
   }
 
-  public Rectangle getAttackNormalBoundingBox() {
+  public DynamicBlockingObject getAttackNormalBoundingBox() {
     return getBoundingBox(getAttack().getNormalRange());
   }
 
-  public Rectangle getDefenceBoundingBox() {
+  public DynamicBlockingObject getDefenceBoundingBox() {
     return getBoundingBox(0);
   }
 
-  public Rectangle getBoundingBoxAt(Position nextPosition) {
+  public DynamicBlockingObject getBoundingBoxAt(Position nextPosition) {
     float sourceX = nextPosition.getX();
     float sourceY = nextPosition.getY();
     float sourceWidth = persona.getSize().getWidth();
     float sourceHeight = persona.getSize().getHeight();
 
-    return new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight);
+    return new DynamicBlockingObject(new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight), nextPosition.getLayer());
   }
 
-  private Rectangle getBoundingBox(float extension) {
+  private DynamicBlockingObject getBoundingBox(float extension) {
     float sourceX = persona.getPosition().getX() - extension;
     float sourceY = persona.getPosition().getY() - extension;
     float sourceWidth = persona.getSize().getWidth() + extension * 2;
     float sourceHeight = persona.getSize().getHeight() + extension * 2;
 
-    return new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight);
+    return new DynamicBlockingObject(new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight), persona.getPosition().getLayer());
   }
 
   public int getDefense() {

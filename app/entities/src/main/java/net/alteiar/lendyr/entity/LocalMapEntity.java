@@ -4,21 +4,23 @@ import com.badlogic.gdx.math.Rectangle;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import net.alteiar.lendyr.entity.map.LayeredMap;
-import net.alteiar.lendyr.entity.map.MapFactory;
-import net.alteiar.lendyr.entity.map.WorldMap;
 import net.alteiar.lendyr.model.encounter.GameMap;
 import net.alteiar.lendyr.model.encounter.LocalMap;
+import net.alteiar.lendyr.model.map.DynamicBlockingObject;
+import net.alteiar.lendyr.model.map.LayeredMap;
+import net.alteiar.lendyr.model.map.LayeredMapWithMovable;
+import net.alteiar.lendyr.model.map.MapFactory;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.persistence.dao.LocalMapDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 @Log4j2
-public class LocalMapEntity implements WorldMap {
+public class LocalMapEntity implements LayeredMapWithMovable {
   private final GameEntity gameEntity;
 
   private LocalMap localMap;
@@ -52,7 +54,8 @@ public class LocalMapEntity implements WorldMap {
         .toList());
   }
 
-  public Stream<Rectangle> getMovableObjects() {
+  @Override
+  public Stream<DynamicBlockingObject> getMovableObjects() {
     return personaEntities.stream().map(PersonaEntity::getDefenceBoundingBox);
   }
 
@@ -65,7 +68,7 @@ public class LocalMapEntity implements WorldMap {
    */
   public boolean checkCollision(UUID persona, Position newPosition) {
     PersonaEntity source = gameEntity.findById(persona).orElseThrow(() -> new IllegalArgumentException("The persona does not exists"));
-    Rectangle newPositionBox = source.getBoundingBoxAt(newPosition);
+    DynamicBlockingObject newPositionBox = source.getBoundingBoxAt(newPosition);
 
     return checkCollision(newPositionBox);
   }
@@ -76,21 +79,24 @@ public class LocalMapEntity implements WorldMap {
    * @param newPositionBox the desired position bounding box
    * @return true if the position generates a collision
    */
-  public boolean checkCollision(Rectangle newPositionBox) {
+  public boolean checkCollision(DynamicBlockingObject newPositionBox) {
     return isOutOfMap(newPositionBox)
         || checkCollisionWithOtherEntities(newPositionBox)
-        || layeredMap.checkCollision(1, newPositionBox);
+        || layeredMap.checkCollision(newPositionBox.getLayer(), newPositionBox.getRectangle());
   }
 
-  private boolean isOutOfMap(Rectangle newPositionBox) {
-    return newPositionBox.x + newPositionBox.width > gameMap.getWorldWidth()
-        || newPositionBox.x < newPositionBox.width
-        || newPositionBox.y + newPositionBox.height > gameMap.getWorldHeight()
-        || newPositionBox.y < newPositionBox.height;
+  private boolean isOutOfMap(DynamicBlockingObject newPositionBox) {
+    return newPositionBox.getRectangle().x + newPositionBox.getRectangle().width > gameMap.getWorldWidth()
+        || newPositionBox.getRectangle().x < newPositionBox.getRectangle().width
+        || newPositionBox.getRectangle().y + newPositionBox.getRectangle().height > gameMap.getWorldHeight()
+        || newPositionBox.getRectangle().y < newPositionBox.getRectangle().height;
   }
 
-  private boolean checkCollisionWithOtherEntities(Rectangle newPositionBox) {
-    return getMovableObjects().anyMatch(newPositionBox::overlaps);
+  private boolean checkCollisionWithOtherEntities(DynamicBlockingObject newPositionBox) {
+    return getMovableObjects()
+        .filter(d -> Objects.equals(newPositionBox.getLayer(), d.getLayer()))
+        .map(DynamicBlockingObject::getRectangle)
+        .anyMatch(r -> newPositionBox.getRectangle().overlaps(r));
   }
 
   public LocalMap toModel() {
@@ -102,7 +108,7 @@ public class LocalMapEntity implements WorldMap {
     for (int y = gameMap.getWorldHeight(); y >= 0; y--) {
       StringBuilder builder = new StringBuilder();
       for (int x = 0; x < gameMap.getWorldWidth(); x++) {
-        builder.append(checkCollision(new Rectangle(x, y, 1, 1)) ? "x" : "_").append(" ");
+        builder.append(checkCollision(new DynamicBlockingObject(new Rectangle(x, y, 1, 1), 1)) ? "x" : "_").append(" ");
       }
       log.info(builder.toString());
     }
@@ -111,10 +117,9 @@ public class LocalMapEntity implements WorldMap {
     for (int y = gameMap.getWorldHeight(); y >= 0; y--) {
       StringBuilder builder = new StringBuilder();
       for (int x = 0; x < gameMap.getWorldWidth(); x++) {
-        builder.append(checkCollision(new Rectangle(x, y, 1, 2)) ? "x" : "_").append(" ");
+        builder.append(checkCollision(new DynamicBlockingObject(new Rectangle(x, y, 1, 2), 2)) ? "x" : "_").append(" ");
       }
       log.info(builder.toString());
     }
   }
-
 }

@@ -85,9 +85,9 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
     }
 
     // Check if they are in range
-    Rectangle attackRange = personaSource.getAttackLongBoundingBox();
+    Rectangle attackRange = personaSource.getAttackLongBoundingBox().getRectangle();
     attackRange.setPosition(positions.getLast().getX(), positions.getLast().getY());
-    Rectangle target = personaTarget.getDefenceBoundingBox();
+    Rectangle target = personaTarget.getDefenceBoundingBox().getRectangle();
 
     if (!attackRange.overlaps(target)) {
       throw new NotAllowedException("Target is out of range");

@@ -1,7 +1,6 @@
 module lendyr.game.persistence {
   exports net.alteiar.lendyr.persistence;
   exports net.alteiar.lendyr.persistence.dao;
-  exports net.alteiar.lendyr.persistence.dao.tiled.object;
 
   requires static lombok;
 

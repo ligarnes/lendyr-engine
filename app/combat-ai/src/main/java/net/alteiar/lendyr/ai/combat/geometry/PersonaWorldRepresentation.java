@@ -3,9 +3,11 @@ package net.alteiar.lendyr.ai.combat.geometry;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lombok.extern.log4j.Log4j2;
-import net.alteiar.lendyr.algorithm.battlemap.MultiLayerNetwork;
+import net.alteiar.lendyr.algorithm.movement.Pathfinding;
+import net.alteiar.lendyr.algorithm.representation.MultiLayerNetwork;
+import net.alteiar.lendyr.algorithm.representation.MultiLayerNetworkFactory;
 import net.alteiar.lendyr.entity.PersonaEntity;
-import net.alteiar.lendyr.entity.map.WorldMap;
+import net.alteiar.lendyr.model.map.LayeredMapWithMovable;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.model.persona.Size;
 
@@ -15,10 +17,10 @@ import java.util.Map;
 
 @Log4j2
 public class PersonaWorldRepresentation {
-  private final WorldMap map;
+  private final LayeredMapWithMovable map;
   private Pathfinding pathfinding;
 
-  public PersonaWorldRepresentation(WorldMap map) {
+  public PersonaWorldRepresentation(LayeredMapWithMovable map) {
     this.map = map;
   }
 
@@ -37,13 +39,13 @@ public class PersonaWorldRepresentation {
     if (map.getLayeredMap() != null) {
       pathfinding.getMultiLayerNetwork().reset();
       this.map.getMovableObjects().forEach(rectangle -> {
-        int startX = MathUtils.floor(rectangle.getX());
-        int startY = MathUtils.floor(rectangle.getY());
-        int width = MathUtils.ceil(rectangle.getX() + rectangle.getWidth());
-        int height = MathUtils.ceil(rectangle.getY() + rectangle.getHeight());
+        int startX = MathUtils.floor(rectangle.getRectangle().getX());
+        int startY = MathUtils.floor(rectangle.getRectangle().getY());
+        int width = MathUtils.ceil(rectangle.getRectangle().getX() + rectangle.getRectangle().getWidth());
+        int height = MathUtils.ceil(rectangle.getRectangle().getY() + rectangle.getRectangle().getHeight());
         for (int x = startX; x < width; x++) {
           for (int y = startY; y < height; y++) {
-            pathfinding.getMultiLayerNetwork().addObstacle(x, y);
+            pathfinding.getMultiLayerNetwork().addObstacle(x, y, rectangle.getLayer());
           }
         }
       });
@@ -78,10 +80,10 @@ public class PersonaWorldRepresentation {
     Map<Vector2, String> mapDebug = new HashMap<>();
 
     map.getMovableObjects().forEach(obstacle -> {
-      int startX = MathUtils.floor(obstacle.getX());
-      int startY = MathUtils.floor(obstacle.getY());
-      int width = MathUtils.ceil(obstacle.getX() + obstacle.getWidth());
-      int height = MathUtils.ceil(obstacle.getY() + obstacle.getHeight());
+      int startX = MathUtils.floor(obstacle.getRectangle().getX());
+      int startY = MathUtils.floor(obstacle.getRectangle().getY());
+      int width = MathUtils.ceil(obstacle.getRectangle().getX() + obstacle.getRectangle().getWidth());
+      int height = MathUtils.ceil(obstacle.getRectangle().getY() + obstacle.getRectangle().getHeight());
       for (int x = startX; x < width; x++) {
         for (int y = startY; y < height; y++) {
           mapDebug.put(new Vector2(x, y), "a");

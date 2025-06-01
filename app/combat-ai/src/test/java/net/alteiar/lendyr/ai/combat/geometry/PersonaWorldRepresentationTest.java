@@ -4,12 +4,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import net.alteiar.lendyr.entity.PersonaEntity;
-import net.alteiar.lendyr.entity.map.LayeredMap;
-import net.alteiar.lendyr.entity.map.MapFactory;
-import net.alteiar.lendyr.entity.map.WorldMap;
+import net.alteiar.lendyr.model.map.DynamicBlockingObject;
+import net.alteiar.lendyr.model.map.LayeredMap;
+import net.alteiar.lendyr.model.map.LayeredMapWithMovable;
+import net.alteiar.lendyr.model.map.MapFactory;
+import net.alteiar.lendyr.model.map.tiled.TiledMap;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.model.persona.Size;
-import net.alteiar.lendyr.persistence.dao.TiledMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +24,8 @@ import java.util.stream.Stream;
 
 class PersonaWorldRepresentationTest {
 
-  static WorldMap worldMap;
-  static List<Rectangle> obstacles;
+  static LayeredMapWithMovable layeredMapWithMovable;
+  static List<DynamicBlockingObject> obstacles;
 
   @BeforeAll
   static void beforeAll() throws IOException {
@@ -36,14 +37,14 @@ class PersonaWorldRepresentationTest {
 
     LayeredMap layeredMap = mapFactory.load();
     obstacles = new ArrayList<>();
-    worldMap = new WorldMap() {
+    layeredMapWithMovable = new LayeredMapWithMovable() {
       @Override
       public LayeredMap getLayeredMap() {
         return layeredMap;
       }
 
       @Override
-      public Stream<Rectangle> getMovableObjects() {
+      public Stream<DynamicBlockingObject> getMovableObjects() {
         return obstacles.stream();
       }
     };
@@ -56,7 +57,7 @@ class PersonaWorldRepresentationTest {
 
   @Test
   void pathTo_withSimpleObstacle() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(1, 1, 1));
@@ -80,7 +81,7 @@ class PersonaWorldRepresentationTest {
 
   @Test
   void pathTo_withLimitedSpeed() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(1, 1, 1));
@@ -105,7 +106,7 @@ class PersonaWorldRepresentationTest {
 
   @Test
   void pathTo_changingLayer() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(4, 8, 1));
@@ -133,7 +134,7 @@ class PersonaWorldRepresentationTest {
 
   @Test
   void pathTo_changing2Layer() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(5, 8, 1));
@@ -169,7 +170,7 @@ class PersonaWorldRepresentationTest {
 
   @Test
   void pathTo_changingComplex() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(2, 2, 1));
@@ -211,17 +212,17 @@ class PersonaWorldRepresentationTest {
 
   @Test
   void pathTo_withObstacles_changingComplex() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(2, 2, 1));
     Mockito.when(persona.getMoveDistance()).thenReturn(1000f);
     Mockito.when(persona.getSize()).thenReturn(Size.builder().width(1).height(1).build());
 
-    obstacles.add(new Rectangle(1, 4, 9, 3));
-    obstacles.add(new Rectangle(1, 7, 1, 8));
-    obstacles.add(new Rectangle(10, 6, 2, 1));
-    obstacles.add(new Rectangle(13, 6, 2, 1));
+    obstacles.add(new DynamicBlockingObject(new Rectangle(1, 4, 9, 3), 1));
+    obstacles.add(new DynamicBlockingObject(new Rectangle(1, 7, 1, 8), 1));
+    obstacles.add(new DynamicBlockingObject(new Rectangle(10, 6, 2, 1), 1));
+    obstacles.add(new DynamicBlockingObject(new Rectangle(13, 6, 2, 1), 1));
 
     // When
     personaWorldRepresentation.update();
@@ -268,14 +269,14 @@ class PersonaWorldRepresentationTest {
 
   @Test
   void pathToObstacle_withObstacles_changingComplex() {
-    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(worldMap);
+    PersonaWorldRepresentation personaWorldRepresentation = new PersonaWorldRepresentation(layeredMapWithMovable);
 
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getPosition()).thenReturn(new Position(2, 2, 1));
     Mockito.when(persona.getMoveDistance()).thenReturn(1000f);
     Mockito.when(persona.getSize()).thenReturn(Size.builder().width(1).height(1).build());
 
-    obstacles.add(new Rectangle(1, 4, 9, 3));
+    obstacles.add(new DynamicBlockingObject(new Rectangle(1, 4, 9, 3), 1));
 
     // When
     personaWorldRepresentation.update();

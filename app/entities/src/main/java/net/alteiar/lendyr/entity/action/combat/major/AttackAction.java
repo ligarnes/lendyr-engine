@@ -46,8 +46,8 @@ public class AttackAction extends BaseAction implements MajorAction {
         .orElseThrow(() -> new NotFoundException(String.format("the persona with id [%s] does not exists", targetId)));
 
     // Check if they are in range
-    Rectangle attackRange = personaSource.getAttackLongBoundingBox();
-    Rectangle target = personaTarget.getDefenceBoundingBox();
+    Rectangle attackRange = personaSource.getAttackLongBoundingBox().getRectangle();
+    Rectangle target = personaTarget.getDefenceBoundingBox().getRectangle();
 
     if (!attackRange.overlaps(target)) {
       throw new NotAllowedException("Target is out of range");
@@ -59,11 +59,11 @@ public class AttackAction extends BaseAction implements MajorAction {
     log.info("{} attack {}", personaSource.getName(), personaTarget.getName());
 
     Attack attack = personaSource.getAttack();
-    Rectangle target = personaTarget.getDefenceBoundingBox();
+    Rectangle target = personaTarget.getDefenceBoundingBox().getRectangle();
     int rangeMalus = 0;
     if (AttackType.RANGE.equals(attack.getAttackType())) {
       rangeMalus = -2;
-      Rectangle shortRange = personaSource.getAttackNormalBoundingBox();
+      Rectangle shortRange = personaSource.getAttackNormalBoundingBox().getRectangle();
       if (shortRange.overlaps(target)) {
         rangeMalus = 0;
       }
