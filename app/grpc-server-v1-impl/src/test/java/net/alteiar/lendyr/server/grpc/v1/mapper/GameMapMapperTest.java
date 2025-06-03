@@ -16,9 +16,6 @@ class GameMapMapperTest {
     LendyrMap map = WorldMapMapper.INSTANCE.mapToDto(gameMap);
 
     Assertions.assertEquals(gameMap.getPath(), map.getPath());
-    Assertions.assertEquals(gameMap.getScale(), map.getScale());
-    Assertions.assertEquals(gameMap.getWorldWidth(), map.getWorldWidth());
-    Assertions.assertEquals(gameMap.getWorldHeight(), map.getWorldHeight());
   }
 
   @Test

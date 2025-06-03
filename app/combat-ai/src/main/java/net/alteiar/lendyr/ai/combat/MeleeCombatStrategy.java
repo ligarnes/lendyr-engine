@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.ai.combat.geometry.PersonaWorldRepresentation;
-import net.alteiar.lendyr.entity.GameEntity;
+import net.alteiar.lendyr.entity.GameEntityImpl;
 import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.MajorAction;
@@ -17,11 +17,11 @@ import java.util.List;
 @Log4j2
 public class MeleeCombatStrategy implements CombatAiActor {
 
-  private final GameEntity game;
+  private final GameEntityImpl game;
   private final PersonaWorldRepresentation worldRepresentation;
 
 
-  MeleeCombatStrategy(@NonNull GameEntity game, @NonNull PersonaWorldRepresentation worldRepresentation) {
+  MeleeCombatStrategy(@NonNull GameEntityImpl game, @NonNull PersonaWorldRepresentation worldRepresentation) {
     this.game = game;
     this.worldRepresentation = worldRepresentation;
   }

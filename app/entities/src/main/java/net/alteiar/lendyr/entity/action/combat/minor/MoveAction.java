@@ -65,6 +65,7 @@ public class MoveAction implements MinorAction {
 
       // Validate no collision.
       if (context.getMap().checkCollision(characterId, target)) {
+        log.warn("Collision of {} at {} from {}", persona.getName(), current, persona.getPosition());
         throw new NotAllowedException("the move is illegal because of obstacle");
       }
     }
@@ -72,7 +73,7 @@ public class MoveAction implements MinorAction {
     if (totalDest > persona.getMoveDistance()) {
       log.info("Invalid distance: {} < {} for {}", persona.getMoveDistance(), totalDest, positions);
       throw new NotAllowedException(
-          String.format("the persona with id [%s] cannot move this far; distance: %.1f ; max distance: %.1f ", characterId, persona.getMoveDistance(), totalDest));
+          String.format("the persona with id [%s] cannot move this far; distance: %.1f ; max distance: %.1f ", characterId, totalDest, persona.getMoveDistance()));
     }
   }
 

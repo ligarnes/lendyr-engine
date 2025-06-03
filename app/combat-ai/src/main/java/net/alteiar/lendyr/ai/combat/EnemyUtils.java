@@ -1,7 +1,7 @@
 package net.alteiar.lendyr.ai.combat;
 
 import lombok.experimental.UtilityClass;
-import net.alteiar.lendyr.entity.GameEntity;
+import net.alteiar.lendyr.entity.GameEntityImpl;
 import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.model.encounter.CombatActor;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 @UtilityClass
 public class EnemyUtils {
 
-  public static List<Enemy> listEnemies(GameEntity gameEntity, PersonaEntity persona) {
+  public static List<Enemy> listEnemies(GameEntityImpl gameEntity, PersonaEntity persona) {
     int team = gameEntity.getEncounter().getPersonaTeam(persona.getId());
     List<CombatActor> enemies = gameEntity.getEncounter().getOpponents(team);
 

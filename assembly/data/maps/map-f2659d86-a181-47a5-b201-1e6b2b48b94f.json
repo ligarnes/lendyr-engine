@@ -1,17 +1,4 @@
 {
   "mapId": "f2659d86-a181-47a5-b201-1e6b2b48b94f",
-  "path": "tiled/sample.tmx",
-  "worldWidth": 30,
-  "worldHeight": 20,
-  "scale": 0.03125,
-  "layers": [
-    {
-      "layerId": 1,
-      "layerName": "obstacles-layer-1"
-    },
-    {
-      "layerId": 2,
-      "layerName": "obstacles-layer-2"
-    }
-  ]
+  "path": "tiled/sample.tmx"
 }

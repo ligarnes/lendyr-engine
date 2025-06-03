@@ -44,13 +44,7 @@ public class StaticMapLayer {
     if (!isInLayer(rect)) {
       return true;
     }
-    return mapElements.stream().anyMatch(mapElement -> {
-      boolean collision = mapElement.checkCollision(rect);
-      if (collision) {
-        //log.info("Collision with {} at {}", mapElement.getName(), rect);
-      }
-      return collision;
-    });
+    return mapElements.stream().anyMatch(mapElement -> mapElement.checkCollision(rect));
   }
 
   public boolean isInLayer(Vector2 position) {

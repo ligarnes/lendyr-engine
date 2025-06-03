@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 
@@ -16,9 +15,4 @@ import java.util.UUID;
 public class GameMap {
   UUID mapId;
   String path;
-  int worldWidth;
-  int worldHeight;
-  float scale;
-
-  List<MapLayer> layers;
 }

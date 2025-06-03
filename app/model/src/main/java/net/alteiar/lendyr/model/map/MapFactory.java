@@ -66,7 +66,7 @@ public class MapFactory {
         .flatMap(List::stream)
         .forEach(o -> {
           int layer = o.getIntProperty("layer");
-          obstaclesPerLayer.compute(layer, (_, mapElements) -> acccumulateElement(mapElements, o));
+          obstaclesPerLayer.compute(layer, (idx, mapElements) -> acccumulateElement(mapElements, o));
         });
 
     map.getByName("activation")
@@ -75,7 +75,7 @@ public class MapFactory {
         .flatMap(List::stream)
         .forEach(o -> {
           int layer = o.getIntProperty("layer");
-          activationsPerLayer.compute(layer, (_, mapElements) -> acccumulateElement(mapElements, o));
+          activationsPerLayer.compute(layer, (idx, mapElements) -> acccumulateElement(mapElements, o));
         });
 
     map.getByName("bridges")

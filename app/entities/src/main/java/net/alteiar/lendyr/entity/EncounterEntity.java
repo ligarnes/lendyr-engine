@@ -11,11 +11,11 @@ import java.util.UUID;
 
 @Log4j2
 public final class EncounterEntity {
-  private final GameEntity gameEntity;
+  private final GameEntityImpl gameEntity;
   @Setter
   private Encounter encounter;
 
-  EncounterEntity(@NonNull GameEntity gameEntity) {
+  EncounterEntity(@NonNull GameEntityImpl gameEntity) {
     this.gameEntity = gameEntity;
   }
 

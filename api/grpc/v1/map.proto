@@ -15,7 +15,4 @@ message LendyrWorld {
 
 message LendyrMap {
   string path = 1;
-  int32 worldWidth = 2;
-  int32 worldHeight = 3;
-  float scale = 4;
 }

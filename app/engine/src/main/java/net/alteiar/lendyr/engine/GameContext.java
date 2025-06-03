@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import net.alteiar.lendyr.engine.random.DiceEngineImpl;
 import net.alteiar.lendyr.entity.DiceEngine;
-import net.alteiar.lendyr.entity.GameEntity;
+import net.alteiar.lendyr.entity.GameEntityImpl;
 import net.alteiar.lendyr.entity.action.ActionResult;
 import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.exception.ActionException;
@@ -18,7 +18,7 @@ import net.alteiar.lendyr.persistence.SaveRepository;
 
 public class GameContext {
   @Getter
-  private final GameEntity game;
+  private final GameEntityImpl game;
 
   @Setter
   private GameContextListener listener;
@@ -29,7 +29,7 @@ public class GameContext {
   @Builder
   GameContext(@NonNull RepositoryFactory repositoryFactory) {
     this.saveRepository = repositoryFactory.getSaveRepository();
-    this.game = GameEntity.builder().repositoryFactory(repositoryFactory).build();
+    this.game = GameEntityImpl.builder().repositoryFactory(repositoryFactory).build();
     this.diceEngine = new DiceEngineImpl();
     this.gameEngine = GameEngine.builder().gameContext(this).build();
   }

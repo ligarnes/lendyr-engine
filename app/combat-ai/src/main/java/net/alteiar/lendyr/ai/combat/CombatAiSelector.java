@@ -2,7 +2,7 @@ package net.alteiar.lendyr.ai.combat;
 
 import lombok.Builder;
 import net.alteiar.lendyr.ai.combat.geometry.PersonaWorldRepresentation;
-import net.alteiar.lendyr.entity.GameEntity;
+import net.alteiar.lendyr.entity.GameEntityImpl;
 import net.alteiar.lendyr.entity.PersonaEntity;
 
 public class CombatAiSelector implements CombatAiActor {
@@ -12,7 +12,7 @@ public class CombatAiSelector implements CombatAiActor {
   private final RangeCombatStrategy rangeStrategy;
 
   @Builder
-  CombatAiSelector(GameEntity game) {
+  CombatAiSelector(GameEntityImpl game) {
     personaWorldRepresentation = new PersonaWorldRepresentation(game.getMap());
     meleeStrategy = new MeleeCombatStrategy(game, personaWorldRepresentation);
     rangeStrategy = new RangeCombatStrategy(game, personaWorldRepresentation);

@@ -50,9 +50,6 @@ public class ServerApiTest {
 
     // Then
     Assertions.assertEquals("tiled/sample.tmx", map.getPath());
-    Assertions.assertEquals(30, map.getWorldWidth());
-    Assertions.assertEquals(20, map.getWorldHeight());
-    Assertions.assertEquals(0.03125f, map.getScale());
   }
 
   @Test

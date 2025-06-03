@@ -1,5 +1,6 @@
 package net.alteiar.lendyr.model.map.tiled;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class TiledMap {
   public static TiledMap load(File file) {
     try {
       XmlMapper mapper = new XmlMapper();
+      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
       return mapper.readValue(file, TiledMap.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
