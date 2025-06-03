@@ -74,10 +74,10 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
       }
     }
 
-    double halfSpeed = Math.ceil(personaSource.getSpeed() / 2d);
-    if (totalDest > halfSpeed) {
+    double maxDistance = personaSource.getChargeDistance();
+    if (totalDest > maxDistance) {
       throw new NotAllowedException(
-          String.format("the persona with id [%s] cannot move this far; distance: %.0f ; max distance: %.0f ", personaSource.getId(), halfSpeed, totalDest));
+          String.format("the persona with id [%s] cannot move this far; distance: %.0f ; max distance: %.0f ", personaSource.getId(), maxDistance, totalDest));
     }
 
     if (!AttackType.MELEE.equals(personaSource.getAttack().getAttackType())) {

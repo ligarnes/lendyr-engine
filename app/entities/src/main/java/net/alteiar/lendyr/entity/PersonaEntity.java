@@ -57,8 +57,11 @@ public class PersonaEntity {
   }
 
   public float getMoveDistance() {
-    double halfSpeed = Math.ceil(persona.getSpeed() / 2d);
-    return (float) halfSpeed;
+    return persona.getSpeed() / 2f;
+  }
+
+  public float getChargeDistance() {
+    return getMoveDistance() / 2f;
   }
 
   public int getSpeed() {
