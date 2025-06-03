@@ -4,15 +4,21 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
+@Getter
+@AllArgsConstructor
 public class PolygonMapElement implements MapElement {
-  @Getter
   private final String name;
-
   private final Polygon polygon;
+
+  @Override
+  public Rectangle getBoundingBox() {
+    return polygon.getBoundingRectangle();
+  }
 
   /// Four cases:
   ///

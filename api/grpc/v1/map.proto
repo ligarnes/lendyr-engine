@@ -15,4 +15,60 @@ message LendyrWorld {
 
 message LendyrMap {
   string path = 1;
+  LendyrLayeredMap map = 2;
+}
+
+message LendyrLayeredMap {
+  float width = 1;
+  float height = 2;
+  repeated LendyrMapBridge bridges = 4;
+  map<int32, LendyrStaticLayer> layers = 5;
+}
+
+message LendyrStaticLayer {
+  float width = 1;
+  float height = 2;
+  LendyrShape shape = 3;
+  repeated LendyrStaticMapElement mapElements = 4;
+  repeated LendyrStaticMapElement activations = 5;
+}
+
+message LendyrMapBridge {
+  int32 lower = 1;
+  int32 upper = 2;
+  LendyrStaticMapElement region = 3;
+}
+
+message LendyrStaticMapElement {
+  string name = 1;
+  LendyrShape shape = 2;
+}
+
+message LendyrShape {
+  oneof shape {
+    LendyrShapePolygon polygon = 2;
+    LendyrShapeRectangle rectangle = 3;
+    LendyrShapeLine line = 4;
+  }
+}
+
+message LendyrShapePolygon {
+  float x = 1;
+  float y = 2;
+  // a list of 2d point
+  repeated float vertices = 3;
+}
+
+message LendyrShapeRectangle {
+  float x = 1;
+  float y = 2;
+  float width = 3;
+  float height = 4;
+}
+
+message LendyrShapeLine {
+  float x = 1;
+  float y = 2;
+  // a list of 2d point
+  repeated float vertices = 3;
 }

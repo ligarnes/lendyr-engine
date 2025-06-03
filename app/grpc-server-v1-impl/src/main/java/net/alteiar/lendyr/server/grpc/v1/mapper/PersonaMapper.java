@@ -29,6 +29,7 @@ public interface PersonaMapper {
 
   LendyrAbilities abilitiesToDto(Abilities abilities);
 
+  @Mapping(source = "primary", target = "isPrimary")
   @Mapping(source = "focuses", target = "focusesList")
   LendyrAbilityValue abilityValueToDto(AbilityStat ability);
 }

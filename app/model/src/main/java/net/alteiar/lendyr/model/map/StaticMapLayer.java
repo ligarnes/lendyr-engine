@@ -20,7 +20,7 @@ public class StaticMapLayer {
   List<MapElement> mapElements;
   List<MapElement> activations;
 
-  StaticMapLayer(float width, float height, Shape2D shape, List<MapElement> mapElements, List<MapElement> activations) {
+  public StaticMapLayer(float width, float height, Shape2D shape, List<MapElement> mapElements, List<MapElement> activations) {
     this.width = width;
     this.height = height;
     this.shape = shape;
@@ -56,9 +56,9 @@ public class StaticMapLayer {
   }
 
   public boolean isInLayer(Rectangle rect) {
-    return shape.contains(rect.x + 0.1f, rect.y + 0.1f)
-        && shape.contains(rect.x + 0.1f, rect.y + rect.height - 0.1f)
-        && shape.contains(rect.x + rect.width - 0.1f, rect.y + rect.height - 0.1f)
-        && shape.contains(rect.x + rect.width - 0.1f, rect.y + 0.1f);
+    return shape.contains(rect.x + 0.01f, rect.y + 0.1f)
+        && shape.contains(rect.x + 0.01f, rect.y + rect.height - 0.01f)
+        && shape.contains(rect.x + rect.width - 0.01f, rect.y + rect.height - 0.01f)
+        && shape.contains(rect.x + rect.width - 0.01f, rect.y + 0.01f);
   }
 }

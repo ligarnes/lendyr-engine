@@ -34,7 +34,7 @@ public class MapFactory {
     scaleY = map.getScaleY();
   }
 
-  private List<MapElement> acccumulateElement(List<MapElement> mapElements, TiledObject o) {
+  private List<MapElement> accumulateElement(List<MapElement> mapElements, TiledObject o) {
     List<MapElement> elements = mapElements;
     if (elements == null) {
       elements = new ArrayList<>();
@@ -54,10 +54,9 @@ public class MapFactory {
    * @return the layeredMap
    */
   public LayeredMap load() {
-    LayeredMap layerMap = new LayeredMap(map.getWidth(), map.getHeight());
-
     Map<Integer, List<MapElement>> obstaclesPerLayer = new HashMap<>();
     Map<Integer, List<MapElement>> activationsPerLayer = new HashMap<>();
+    Map<Integer, StaticMapLayer> layers = new HashMap<>();
     List<Bridge> bridges = new ArrayList<>();
 
     map.getByName("obstacles")
@@ -66,7 +65,7 @@ public class MapFactory {
         .flatMap(List::stream)
         .forEach(o -> {
           int layer = o.getIntProperty("layer");
-          obstaclesPerLayer.compute(layer, (idx, mapElements) -> acccumulateElement(mapElements, o));
+          obstaclesPerLayer.compute(layer, (idx, mapElements) -> accumulateElement(mapElements, o));
         });
 
     map.getByName("activation")
@@ -75,7 +74,7 @@ public class MapFactory {
         .flatMap(List::stream)
         .forEach(o -> {
           int layer = o.getIntProperty("layer");
-          activationsPerLayer.compute(layer, (idx, mapElements) -> acccumulateElement(mapElements, o));
+          activationsPerLayer.compute(layer, (idx, mapElements) -> accumulateElement(mapElements, o));
         });
 
     map.getByName("bridges")
@@ -88,7 +87,6 @@ public class MapFactory {
           MapElement element = createMapElement(o);
           bridges.add(Bridge.builder().lower(lower).upper(upper).region(element).build());
         });
-    layerMap.getBridges().addAll(bridges);
 
     map.getByName("layers")
         .map(TiledObjectGroup::getObject)
@@ -99,10 +97,10 @@ public class MapFactory {
           Shape2D layerShape = convertToWorldCoordinate(o.getShape());
           List<MapElement> obstacles = obstaclesPerLayer.getOrDefault(layerId, new ArrayList<>());
           List<MapElement> activations = activationsPerLayer.getOrDefault(layerId, new ArrayList<>());
-          layerMap.getLayers().put(layerId, new StaticMapLayer(worldWidth, worldHeight, layerShape, obstacles, activations));
+          layers.put(layerId, new StaticMapLayer(worldWidth, worldHeight, layerShape, obstacles, activations));
         });
 
-    return layerMap;
+    return new LayeredMap(map.getWidth(), map.getHeight(), layers, bridges);
   }
 
   private MapElement createMapElement(TiledObject object) {

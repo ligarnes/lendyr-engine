@@ -17,6 +17,9 @@ import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrActionResult;
 import net.alteiar.lendyr.grpc.model.v1.game.*;
 import net.alteiar.lendyr.grpc.model.v1.item.LendyrItem;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
+import net.alteiar.lendyr.model.map.LayeredMap;
+import net.alteiar.lendyr.model.map.MapFactory;
+import net.alteiar.lendyr.persistence.dao.LocalMapDao;
 import net.alteiar.lendyr.server.grpc.v1.mapper.ActionMapper;
 import net.alteiar.lendyr.server.grpc.v1.mapper.GenericMapper;
 import net.alteiar.lendyr.server.grpc.v1.mapper.ItemMapper;
@@ -197,8 +200,11 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
     Timer.time("getMaps",
         () -> {
           UUID id = GenericMapper.INSTANCE.convertBytesToUUID(request.getId());
+          LocalMapDao dao = gameContext.getGame().getMapRepository().findMapById(id);
+          MapFactory mapFactory = new MapFactory(dao.getTiledMap());
+          LayeredMap layeredMap = mapFactory.load();
 
-          responseObserver.onNext(WorldMapMapper.INSTANCE.mapToDto(gameContext.getGame().getMapRepository().findMapById(id).getMap()));
+          responseObserver.onNext(WorldMapMapper.INSTANCE.mapToDto(dao.getMap(), layeredMap));
           responseObserver.onCompleted();
         }
     );

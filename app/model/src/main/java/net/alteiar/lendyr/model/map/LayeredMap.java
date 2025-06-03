@@ -5,7 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Value
 @Log4j2
@@ -15,11 +18,11 @@ public class LayeredMap {
   Map<Integer, StaticMapLayer> layers;
   List<Bridge> bridges;
 
-  LayeredMap(float width, float height) {
+  public LayeredMap(float width, float height, Map<Integer, StaticMapLayer> layers, List<Bridge> bridges) {
     this.width = width;
     this.height = height;
-    this.bridges = new ArrayList<>();
-    layers = new HashMap<>();
+    this.bridges = Collections.unmodifiableList(bridges);
+    this.layers = Collections.unmodifiableMap(layers);
   }
 
   public boolean checkCollision(int layer, Rectangle rect) {
