@@ -20,8 +20,6 @@ public class RectangleMapElement implements MapElement {
 
   @Override
   public boolean checkCollision(Rectangle rect) {
-    return rectangle.overlaps(rect)
-        || rect.contains(rectangle)
-        || rectangle.contains(rect);
+    return rectangle.overlaps(rect);
   }
 }

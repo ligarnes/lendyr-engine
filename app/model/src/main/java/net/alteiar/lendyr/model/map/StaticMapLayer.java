@@ -3,7 +3,6 @@ package net.alteiar.lendyr.model.map;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
-import com.badlogic.gdx.math.Vector2;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.model.map.element.MapElement;
@@ -47,18 +46,14 @@ public class StaticMapLayer {
     return mapElements.stream().anyMatch(mapElement -> mapElement.checkCollision(rect));
   }
 
-  public boolean isInLayer(Vector2 position) {
-    return shape.contains(position);
-  }
-
   public boolean isInLayer(float x, float y) {
     return shape.contains(x, y);
   }
 
   public boolean isInLayer(Rectangle rect) {
-    return shape.contains(rect.x + 0.01f, rect.y + 0.1f)
-        && shape.contains(rect.x + 0.01f, rect.y + rect.height - 0.01f)
-        && shape.contains(rect.x + rect.width - 0.01f, rect.y + rect.height - 0.01f)
-        && shape.contains(rect.x + rect.width - 0.01f, rect.y + 0.01f);
+    return isInLayer(rect.x + 0.01f, rect.y + 0.1f)
+        && isInLayer(rect.x + 0.01f, rect.y + rect.height - 0.01f)
+        && isInLayer(rect.x + rect.width - 0.01f, rect.y + rect.height - 0.01f)
+        && isInLayer(rect.x + rect.width - 0.01f, rect.y + 0.01f);
   }
 }

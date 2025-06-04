@@ -53,9 +53,7 @@ public interface GeometryMapper {
     if (polygon == null) {
       return null;
     }
-    LendyrShapePolygon.Builder builder = LendyrShapePolygon.newBuilder()
-        .setX(polygon.getX())
-        .setY(polygon.getY());
+    LendyrShapePolygon.Builder builder = LendyrShapePolygon.newBuilder();
     for (float vertice : polygon.getTransformedVertices()) {
       builder.addVertices(vertice);
     }

@@ -57,7 +57,7 @@ public class PersonaEntity {
   }
 
   public float getMoveDistance() {
-    return persona.getSpeed() / 2f;
+    return persona.getSpeed();
   }
 
   public float getChargeDistance() {

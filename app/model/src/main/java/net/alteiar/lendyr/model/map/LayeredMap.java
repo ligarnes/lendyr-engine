@@ -5,10 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Value
 @Log4j2
@@ -23,6 +20,46 @@ public class LayeredMap {
     this.height = height;
     this.bridges = Collections.unmodifiableList(bridges);
     this.layers = Collections.unmodifiableMap(layers);
+  }
+
+  public boolean moveTo(DynamicBlockingObject initial, DynamicBlockingObject target) {
+    if (!isAdjacent(initial.getRectangle(), target.getRectangle())) {
+      return false;
+    }
+
+    // Find layer to check
+    int layer = initial.getLayer();
+    boolean sameLayer = Objects.equals(initial.getLayer(), target.getLayer());
+    if (!sameLayer) {
+      Optional<Bridge> bridgeInitial = getBridge(initial.getRectangle());
+      if (bridgeInitial.isPresent() && (bridgeInitial.get().getLower() == target.getLayer() || bridgeInitial.get().getUpper() == target.getLayer())) {
+        layer = target.getLayer();
+      } else if (bridgeInitial.isEmpty()) {
+        Optional<Bridge> bridgeTarget = getBridge(target.getRectangle());
+        if (bridgeTarget.isEmpty() || (bridgeTarget.get().getLower() != target.getLayer() && bridgeTarget.get().getUpper() != target.getLayer())) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
+
+    return checkCollision(layer, target.getRectangle());
+  }
+
+  private boolean isAdjacent(Rectangle initial, Rectangle target) {
+    // Both positions need to overlap with a 0.1f margin.
+    return initial.overlaps(new Rectangle(target.getX() - 0.1f, target.getY() - 0.1f, target.getWidth() + 0.2f, target.getHeight() + 0.2f));
+  }
+
+  public List<Integer> getLayersAt(float x, float y) {
+    List<Integer> inLayer = new ArrayList<>();
+    layers.forEach((layer, map) -> {
+      if (map.isInLayer(x, y)) {
+        inLayer.add(layer);
+      }
+    });
+    return inLayer;
   }
 
   public boolean checkCollision(int layer, Rectangle rect) {

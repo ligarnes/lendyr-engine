@@ -12,19 +12,19 @@ import java.util.Map;
 @UtilityClass
 public class MultiLayerNetworkFactory {
 
-  public static MultiLayerNetwork generate(LayeredMap mapEntity) {
+  public static MultiLayerNetwork generate(LayeredMap layeredMap) {
     ArrayList<Tile> tiles = new ArrayList<>();
 
-    mapEntity.getLayers().entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
+    layeredMap.getLayers().entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
       int layer = entry.getKey();
       StaticMapLayer map = entry.getValue();
       for (float x = 0; x < map.getWidth(); x++) {
         for (float y = 0; y < map.getHeight(); y++) {
           Rectangle square = new Rectangle(x, y, 1, 1);
           if (map.isInLayer(square)) {
-            boolean collision = mapEntity.checkCollision(layer, square);
+            boolean collision = layeredMap.checkCollision(layer, square);
             if (!collision) {
-              int[] layers = mapEntity.getBridge(square).map(b -> new int[]{b.getLower(), b.getUpper()}).orElse(new int[]{layer});
+              int[] layers = layeredMap.getBridge(square).map(b -> new int[]{b.getLower(), b.getUpper()}).orElse(new int[]{layer});
               Tile t = new Tile(new Vector2(x, y), layers, true);
               tiles.add(t);
             }

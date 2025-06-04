@@ -53,8 +53,6 @@ message LendyrShape {
 }
 
 message LendyrShapePolygon {
-  float x = 1;
-  float y = 2;
   // a list of 2d point
   repeated float vertices = 3;
 }

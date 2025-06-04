@@ -79,8 +79,6 @@ class GeometryMapperTest {
     LendyrShape dto = GeometryMapper.INSTANCE.shapePolygonToDto(polygon);
 
     // Then
-    Assertions.assertEquals(polygon.getX(), dto.getPolygon().getX());
-    Assertions.assertEquals(polygon.getY(), dto.getPolygon().getY());
     Assertions.assertEquals(polygon.getTransformedVertices().length, dto.getPolygon().getVerticesCount());
     for (int i = 0; i < polygon.getTransformedVertices().length; i++) {
       Assertions.assertEquals(polygon.getTransformedVertices()[i], dto.getPolygon().getVertices(i));

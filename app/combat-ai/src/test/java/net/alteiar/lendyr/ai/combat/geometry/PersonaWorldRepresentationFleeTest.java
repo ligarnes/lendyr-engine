@@ -68,7 +68,6 @@ class PersonaWorldRepresentationFleeTest {
     List<Position> path = personaWorldRepresentation.fleeFrom(persona, new Position(4, 5, 1));
 
     // Then
-    personaWorldRepresentation.debug(path);
     Assertions.assertEquals(List.of(
         new Position(6, 4, 1),
         new Position(7, 3, 1),
@@ -92,7 +91,6 @@ class PersonaWorldRepresentationFleeTest {
     List<Position> path = personaWorldRepresentation.fleeFrom(persona, new Position(4, 4, 1));
 
     // Then
-    personaWorldRepresentation.debug(path);
     Assertions.assertEquals(List.of(
         new Position(6, 6, 1),
         new Position(7, 7, 1),

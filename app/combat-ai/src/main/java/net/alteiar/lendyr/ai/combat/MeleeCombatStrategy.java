@@ -41,7 +41,15 @@ public class MeleeCombatStrategy implements CombatAiActor {
     } else {
       log.info("Enemy is too far, just move (dist: {} vs attack range: {})", enemy.distance(), persona.getAttack().getNormalRange());
       majorAction = null;
-      minorAction = moveTo(persona, enemy);
+      MoveAction moveAction = moveTo(persona, enemy);
+      minorAction = moveAction;
+
+      if (moveAction != null) {
+        Position lastPosition = moveAction.getPositions().getLast();
+        if (enemy.personaTarget().getPosition().dst(lastPosition) <= persona.getAttack().getNormalRange()) {
+          majorAction = AttackAction.builder().sourceId(persona.getId()).targetId(enemy.personaTarget().getId()).build();
+        }
+      }
       log.info("Move to action is completed");
     }
 

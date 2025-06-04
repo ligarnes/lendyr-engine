@@ -61,13 +61,12 @@ public class MoveAction implements MinorAction {
     Position current = persona.getPosition();
     for (Position target : positions) {
       totalDest += roundToQuarter(current.dst(target));
-      current = target;
-
       // Validate no collision.
       if (context.getMap().checkCollision(characterId, target)) {
         log.warn("Collision of {} at {} from {}", persona.getName(), current, persona.getPosition());
         throw new NotAllowedException("the move is illegal because of obstacle");
       }
+      current = target;
     }
 
     if (totalDest > persona.getMoveDistance()) {
