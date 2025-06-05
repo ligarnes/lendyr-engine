@@ -43,7 +43,11 @@ public class StaticMapLayer {
     if (!isInLayer(rect)) {
       return true;
     }
-    return mapElements.stream().anyMatch(mapElement -> mapElement.checkCollision(rect));
+    return checkCollisionImpl(rect);
+  }
+
+  private boolean checkCollisionImpl(Rectangle rectangle) {
+    return mapElements.stream().anyMatch(mapElement -> mapElement.checkCollision(rectangle));
   }
 
   public boolean isInLayer(float x, float y) {

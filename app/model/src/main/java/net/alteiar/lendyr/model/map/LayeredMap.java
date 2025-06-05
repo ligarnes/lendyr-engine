@@ -55,7 +55,7 @@ public class LayeredMap {
   public List<Integer> getLayersAt(float x, float y) {
     List<Integer> inLayer = new ArrayList<>();
     layers.forEach((layer, map) -> {
-      if (map.isInLayer(x, y)) {
+      if (map.isInLayer(x, y) && !map.checkCollision(new Rectangle(x, y, 1, 1))) {
         inLayer.add(layer);
       }
     });
