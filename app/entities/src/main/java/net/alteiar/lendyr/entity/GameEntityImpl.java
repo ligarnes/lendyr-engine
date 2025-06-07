@@ -11,10 +11,7 @@ import net.alteiar.lendyr.persistence.ItemRepository;
 import net.alteiar.lendyr.persistence.MapRepository;
 import net.alteiar.lendyr.persistence.RepositoryFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class GameEntityImpl implements GameEntity {
   private final Map<UUID, PersonaEntity> personas;
@@ -42,6 +39,10 @@ public class GameEntityImpl implements GameEntity {
     itemRepository = repositoryFactory.getItemRepository();
     mapRepository = repositoryFactory.getMapRepository();
     map = LocalMapEntity.builder().gameEntity(this).build();
+  }
+
+  public boolean isGameOver() {
+    return player.getControlledPersonaIds().stream().map(personas::get).filter(Objects::nonNull).allMatch(PersonaEntity::isDefeated);
   }
 
   public void pause() {

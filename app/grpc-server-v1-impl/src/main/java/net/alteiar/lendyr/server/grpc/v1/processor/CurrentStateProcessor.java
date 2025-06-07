@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import net.alteiar.lendyr.engine.GameContext;
 import net.alteiar.lendyr.engine.GameContextListener;
-import net.alteiar.lendyr.entity.action.ActionResult;
-import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrActionResult;
+import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrGameEvent;
 import net.alteiar.lendyr.grpc.model.v1.game.LendyrGameState;
 import net.alteiar.lendyr.server.grpc.v1.mapper.ActionMapper;
 import net.alteiar.lendyr.server.grpc.v1.mapper.GameStateMapper;
@@ -20,7 +20,7 @@ public class CurrentStateProcessor implements GameContextListener {
   private final AtomicBoolean hasChanged;
 
   private final Object waitActionToken;
-  private final LinkedList<LendyrActionResult> actions;
+  private final LinkedList<LendyrGameEvent> actions;
 
   @Builder
   CurrentStateProcessor(@NonNull GameContext gameContext) {
@@ -33,9 +33,9 @@ public class CurrentStateProcessor implements GameContextListener {
   }
 
   @Override
-  public void newAction(ActionResult action) {
+  public void newAction(GameEvent action) {
     synchronized (waitActionToken) {
-      LendyrActionResult result = ActionMapper.INSTANCE.actionResultToDto(action);
+      LendyrGameEvent result = ActionMapper.INSTANCE.actionResultToDto(action);
       actions.add(result);
       waitActionToken.notifyAll();
     }
@@ -53,7 +53,7 @@ public class CurrentStateProcessor implements GameContextListener {
     return false;
   }
 
-  public Optional<LendyrActionResult> awaitNewAction(long timeoutMillis) throws InterruptedException {
+  public Optional<LendyrGameEvent> awaitNewAction(long timeoutMillis) throws InterruptedException {
     synchronized (waitActionToken) {
       if (actions.isEmpty()) {
         waitActionToken.wait(timeoutMillis);

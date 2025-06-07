@@ -11,6 +11,7 @@ import "combat.proto";
 import "player.proto";
 import "item.proto";
 import "map.proto";
+import "events.proto";
 
 service LendyrGameService {
   // Load a new game
@@ -35,8 +36,8 @@ service LendyrGameService {
   // register to all the game updates
   rpc registerCurrentState(EmptyResponse) returns (stream LendyrGameState);
 
-  // register to all the actions
-  rpc registerActions(EmptyResponse)returns (stream model.combat.LendyrActionResult);
+  // register to all the world events
+  rpc registerActions(EmptyResponse)returns (stream model.events.LendyrGameEvent);
 
   // send an action
   rpc act(combat.LendyrAction) returns (LendyrActionResponse);
@@ -65,14 +66,7 @@ message LendyrGameState {
   repeated model.persona.LendyrPersona persona = 3;
   model.player.LendyrPlayer players = 4;
   model.map.LendyrWorld map = 5;
-  LendyrPlayState playState = 6;
-}
-
-enum LendyrPlayState {
-  COMBAT = 0;
-  TURN_BASE = 1;
-  REAL_TIME = 2;
-  PAUSE = 3;
+  model.events.LendyrGameMode playState = 6;
 }
 
 message LendyrActionResponse {

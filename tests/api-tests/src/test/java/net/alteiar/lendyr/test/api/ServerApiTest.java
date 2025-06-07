@@ -4,6 +4,7 @@ import io.grpc.Grpc;
 import io.grpc.InsecureChannelCredentials;
 import io.grpc.ManagedChannel;
 import net.alteiar.lendyr.app.LendyrGameServer;
+import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrGameMode;
 import net.alteiar.lendyr.grpc.model.v1.game.*;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
 import net.alteiar.lendyr.server.grpc.v1.mapper.GenericMapper;
@@ -63,7 +64,7 @@ public class ServerApiTest {
     // Then
     Assertions.assertEquals(3, state.getPersonaCount());
     Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(mapId), state.getMap().getMapId());
-    Assertions.assertEquals(LendyrPlayState.PAUSE, state.getPlayState());
+    Assertions.assertEquals(LendyrGameMode.PAUSE, state.getPlayState());
     Assertions.assertEquals(3, state.getEncounter().getInitiativeOrderCount());
     Assertions.assertEquals("Ulfrik", state.getPersona(0).getName());
     Assertions.assertEquals(12, state.getPersona(0).getPosition().getX());

@@ -14,7 +14,7 @@ public class GameEngine {
   private final GameContext gameContext;
   private final long maxThinkingTimeInMs;
   private final AtomicBoolean isRunning;
-  private final PersonaEngine personaEngine;
+  private final CombatPersonaEngine combatPersonaEngine;
   private Thread gameEngineThread;
 
   @Builder
@@ -22,7 +22,7 @@ public class GameEngine {
     maxThinkingTimeInMs = 33L;
     this.gameContext = gameContext;
     this.isRunning = new AtomicBoolean(false);
-    this.personaEngine = PersonaEngine.builder().gameContext(gameContext).build();
+    this.combatPersonaEngine = CombatPersonaEngine.builder().gameContext(gameContext).build();
   }
 
   public void start() {
@@ -60,13 +60,24 @@ public class GameEngine {
   }
 
   private void update() {
+    if (gameContext.getGame().isGameOver()) {
+      gameContext.notifyGameOver();
+    }
+
     PlayState playState = gameContext.getGame().getPlayState();
     switch (playState) {
       case COMBAT -> updateCombat();
-      case PAUSE -> {
+      case REAL_TIME -> updateRealTime();
+      case GAME_OVER, PAUSE -> {
+        // Nothing to do.
       }
       default -> throw new IllegalStateException("Play state %s is not supported yet".formatted(playState));
     }
+  }
+
+  private void updateRealTime() {
+    // Do nothing yet.
+    // The World doesn't move
   }
 
   private void updateCombat() {
@@ -78,7 +89,7 @@ public class GameEngine {
     CombatActor actor = gameContext.getGame().getEncounter().getCurrentPersona();
     if (!gameContext.getGame().getPlayer().getControlledPersonaIds().contains(actor.getPersonaId())) {
       // Play only entities that player does not control
-      gameContext.getGame().findById(actor.getPersonaId()).ifPresent(personaEngine::playTurn);
+      gameContext.getGame().findById(actor.getPersonaId()).ifPresent(combatPersonaEngine::playTurn);
     }
   }
 }

@@ -1,7 +1,7 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
+import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrGameMode;
 import net.alteiar.lendyr.grpc.model.v1.game.LendyrGameState;
-import net.alteiar.lendyr.grpc.model.v1.game.LendyrPlayState;
 import net.alteiar.lendyr.model.Game;
 import net.alteiar.lendyr.model.PlayState;
 import org.mapstruct.Mapper;
@@ -27,5 +27,5 @@ public interface GameStateMapper {
     return builder.build();
   }
 
-  LendyrPlayState playStateToDto(PlayState playState);
+  LendyrGameMode playStateToDto(PlayState playState);
 }

@@ -27,6 +27,10 @@ public final class EncounterEntity {
     return encounter.getCurrentPersona().isMinorActionUsed();
   }
 
+  public int getTurn() {
+    return encounter.getTurn();
+  }
+
   public int getPersonaTeam(UUID personaId) {
     return encounter.getInitiative().stream().filter(c -> personaId.equals(c.getPersonaId())).mapToInt(CombatActor::getTeam).findFirst()
         .orElseThrow(() -> new IllegalArgumentException("No team found"));

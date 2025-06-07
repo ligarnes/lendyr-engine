@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+option java_package = "net.alteiar.lendyr.grpc.model.v1.encounter";
+option java_multiple_files = true;
+option optimize_for = SPEED;
+
+package model.events;
+
+import "generic.proto";
+
+// Action Result
+message LendyrGameEvent {
+  oneof actions {
+    // Overall actions
+    LendyrGameModeChanged gameModeChanged = 1;
+    LendyrGameSaved saved = 6;
+
+    // Other events
+    LendyrError error = 7;
+
+    // Combat actions
+    LendyrNextCombatPersona nextCombatPersona = 20;
+
+    // actions
+    LendyrAttackActionResult attack = 30;
+    LendyrMoveActionResult move = 31;
+    LendyrChargeActionResult charge = 32;
+  }
+}
+
+message LendyrError {
+  string description = 1;
+}
+
+message LendyrGameModeChanged {
+  LendyrGameMode newMode = 1;
+}
+
+message LendyrGameSaved {
+}
+
+
+// Combat event
+message LendyrNextCombatPersona {
+  int32 currentTurn = 1;
+  bytes newPlayerId = 2;
+}
+
+message LendyrChargeActionResult {
+  bytes sourceId = 1;
+  bytes targetId = 2;
+  repeated model.generic.LendyrPosition position = 3;
+  LendyrSkillResult attackResult = 4;
+  int32 mitigatedDamage = 5;
+  int32 rawDamage = 6;
+  bool hit = 7;
+  int32 targetRemainingHp = 8;
+}
+
+message LendyrMoveActionResult {
+  bytes sourceId = 1;
+  repeated model.generic.LendyrPosition position = 2;
+}
+
+message LendyrAttackActionResult {
+  bytes sourceId = 4;
+  bytes targetId = 5;
+  bool hit = 6;
+  LendyrSkillResult attackResult = 1;
+  int32 mitigatedDamage = 2;
+  int32 rawDamage = 3;
+  int32 targetRemainingHp = 7;
+}
+
+message LendyrSkillResult {
+  int32 dice1 = 1;
+  int32 dice2 = 2 ;
+  int32 stunDie = 3;
+  int32 bonus = 4;
+}
+
+enum LendyrGameMode {
+  COMBAT = 0;
+  TURN_BASE = 1;
+  REAL_TIME = 2;
+  PAUSE = 3;
+  GAME_OVER = 4;
+}

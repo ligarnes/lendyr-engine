@@ -1,10 +1,11 @@
 package net.alteiar.lendyr.entity.action.combat;
 
 import net.alteiar.lendyr.entity.DiceEngine;
+import net.alteiar.lendyr.entity.EncounterEntity;
 import net.alteiar.lendyr.entity.GameEntity;
-import net.alteiar.lendyr.entity.action.ActionResult;
 import net.alteiar.lendyr.entity.action.GameAction;
-import net.alteiar.lendyr.entity.action.GenericActionResult;
+import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.entity.event.combat.NextCombatPersonaGameEvent;
 
 public class EndTurnAction implements GameAction {
 
@@ -14,8 +15,9 @@ public class EndTurnAction implements GameAction {
   }
 
   @Override
-  public ActionResult apply(GameEntity gameEntity, DiceEngine diceEngine) {
-    gameEntity.getEncounter().endPlayerTurn();
-    return GenericActionResult.builder().build();
+  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+    EncounterEntity encounter = gameEntity.getEncounter();
+    encounter.endPlayerTurn();
+    return new NextCombatPersonaGameEvent(encounter.getTurn(), encounter.getCurrentPersona().getPersonaId());
   }
 }

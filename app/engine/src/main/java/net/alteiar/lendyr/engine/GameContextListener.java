@@ -1,6 +1,6 @@
 package net.alteiar.lendyr.engine;
 
-import net.alteiar.lendyr.entity.action.ActionResult;
+import net.alteiar.lendyr.entity.event.GameEvent;
 
 public interface GameContextListener {
 
@@ -8,5 +8,5 @@ public interface GameContextListener {
   void gameChanged();
 
   /// A new action is published
-  void newAction(ActionResult action);
+  void newAction(GameEvent action);
 }

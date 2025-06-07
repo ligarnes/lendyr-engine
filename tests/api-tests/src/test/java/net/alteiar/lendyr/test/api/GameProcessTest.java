@@ -4,7 +4,11 @@ import io.grpc.Grpc;
 import io.grpc.InsecureChannelCredentials;
 import io.grpc.ManagedChannel;
 import net.alteiar.lendyr.app.LendyrGameServer;
-import net.alteiar.lendyr.grpc.model.v1.game.*;
+import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrGameMode;
+import net.alteiar.lendyr.grpc.model.v1.game.EmptyResponse;
+import net.alteiar.lendyr.grpc.model.v1.game.LendyrGameServiceGrpc;
+import net.alteiar.lendyr.grpc.model.v1.game.LendyrGameState;
+import net.alteiar.lendyr.grpc.model.v1.game.LendyrLoadGameRequest;
 import net.alteiar.lendyr.server.grpc.v1.mapper.GenericMapper;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.*;
@@ -53,7 +57,7 @@ public class GameProcessTest {
       LendyrGameState state = blockingStub.currentState(EmptyResponse.newBuilder().build());
       Assertions.assertEquals(3, state.getPersonaCount());
       Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(mapId), state.getMap().getMapId());
-      Assertions.assertEquals(LendyrPlayState.COMBAT, state.getPlayState());
+      Assertions.assertEquals(LendyrGameMode.COMBAT, state.getPlayState());
       Assertions.assertEquals(3, state.getEncounter().getInitiativeOrderCount());
     });
   }

@@ -10,12 +10,12 @@ import net.alteiar.lendyr.entity.DiceEngine;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.entity.SkillResult;
-import net.alteiar.lendyr.entity.action.ActionResult;
 import net.alteiar.lendyr.entity.action.BaseAction;
-import net.alteiar.lendyr.entity.action.ChargeAttackActionResult;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
 import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
+import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.entity.event.combat.ChargeAttackGameEvent;
 import net.alteiar.lendyr.model.persona.Attack;
 import net.alteiar.lendyr.model.persona.AttackType;
 import net.alteiar.lendyr.model.persona.Position;
@@ -95,7 +95,7 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
   }
 
   @Override
-  public ActionResult apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
     log.info("{} attack {}", personaSource.getName(), personaTarget.getName());
 
     personaSource.setPosition(positions.getLast());
@@ -122,13 +122,15 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
     }
     gameEntity.getEncounter().useMajorAction();
 
-    return ChargeAttackActionResult.builder()
+    return ChargeAttackGameEvent.builder()
         .sourceId(sourceId)
         .targetId(targetId)
         .path(positions)
         .attackResult(result)
         .rawDamage(totalDamage)
         .mitigatedDamage(mitigatedDamage)
+        .hit(attackHit)
+        .targetRemainingHp(personaTarget.getCurrentHealthPoint())
         .build();
   }
 

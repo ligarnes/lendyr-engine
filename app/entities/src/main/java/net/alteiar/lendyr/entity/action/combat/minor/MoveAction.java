@@ -8,11 +8,11 @@ import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.entity.DiceEngine;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.PersonaEntity;
-import net.alteiar.lendyr.entity.action.ActionResult;
-import net.alteiar.lendyr.entity.action.MoveActionResult;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
 import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
+import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.entity.event.combat.MoveGameEvent;
 import net.alteiar.lendyr.model.persona.Position;
 
 import java.util.List;
@@ -77,13 +77,13 @@ public class MoveAction implements MinorAction {
   }
 
   @Override
-  public ActionResult apply(GameEntity context, DiceEngine diceEngine) {
+  public GameEvent apply(GameEntity context, DiceEngine diceEngine) {
     // Move to last position
     log.info("Move {} to {}", characterId, positions);
     persona.setPosition(positions.getLast());
     context.getEncounter().useMinorAction();
 
-    return MoveActionResult.builder()
+    return MoveGameEvent.builder()
         .sourceId(characterId)
         .path(positions)
         .build();

@@ -3,6 +3,7 @@ package net.alteiar.lendyr.entity.action;
 import net.alteiar.lendyr.entity.DiceEngine;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
+import net.alteiar.lendyr.entity.event.GameEvent;
 
 /**
  * Actions are not thread safe.
@@ -20,7 +21,7 @@ public interface GameAction {
    * @param gameEntity the game entity
    * @return the result of the action
    */
-  default ActionResult apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  default GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
     throw new NotSupportedException("Action is not supported yet");
   }
 }

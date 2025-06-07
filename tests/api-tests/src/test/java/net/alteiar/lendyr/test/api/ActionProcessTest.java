@@ -6,7 +6,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.StatusException;
 import io.grpc.stub.BlockingClientCall;
 import net.alteiar.lendyr.app.LendyrGameServer;
-import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrActionResult;
+import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrGameEvent;
 import net.alteiar.lendyr.grpc.model.v1.game.EmptyResponse;
 import net.alteiar.lendyr.grpc.model.v1.game.LendyrGameServiceGrpc;
 import net.alteiar.lendyr.grpc.model.v1.game.LendyrLoadGameRequest;
@@ -35,7 +35,7 @@ public class ActionProcessTest {
 
   private LendyrGameServiceGrpc.LendyrGameServiceBlockingV2Stub blockingStub;
   private boolean terminate;
-  private AtomicReference<LendyrActionResult> reference;
+  private AtomicReference<LendyrGameEvent> reference;
 
   @BeforeEach
   void beforeEach() {
@@ -58,7 +58,7 @@ public class ActionProcessTest {
 
     // Then
     Awaitility.await().untilAsserted(() -> {
-      LendyrActionResult result = reference.get();
+      LendyrGameEvent result = reference.get();
       Assertions.assertNotNull(result);
     });
     terminate = true;
@@ -66,10 +66,10 @@ public class ActionProcessTest {
   }
 
   private void run() {
-    BlockingClientCall<?, LendyrActionResult> clientCall = blockingStub.registerActions(EmptyResponse.newBuilder().build());
+    BlockingClientCall<?, LendyrGameEvent> clientCall = blockingStub.registerActions(EmptyResponse.newBuilder().build());
     while (!terminate) {
       try {
-        LendyrActionResult action = clientCall.read();
+        LendyrGameEvent action = clientCall.read();
         reference.set(action);
       } catch (InterruptedException | StatusException e) {
         e.printStackTrace();

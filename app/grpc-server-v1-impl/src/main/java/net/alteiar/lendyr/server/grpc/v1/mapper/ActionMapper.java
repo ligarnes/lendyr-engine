@@ -1,11 +1,18 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
-import net.alteiar.lendyr.entity.action.*;
+import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
 import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
 import net.alteiar.lendyr.entity.action.exception.ProcessingException;
+import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.entity.event.GameModeChanged;
+import net.alteiar.lendyr.entity.event.GameSaved;
+import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
+import net.alteiar.lendyr.entity.event.combat.ChargeAttackGameEvent;
+import net.alteiar.lendyr.entity.event.combat.MoveGameEvent;
+import net.alteiar.lendyr.entity.event.combat.NextCombatPersonaGameEvent;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
 import net.alteiar.lendyr.model.persona.Position;
 import org.mapstruct.CollectionMappingStrategy;
@@ -52,25 +59,33 @@ public interface ActionMapper {
     throw new NotSupportedException(String.format("The action %s is not supported yet.", action.getActionsCase().name()));
   }
 
-  default LendyrActionResult actionResultToDto(ActionResult actionResult) {
-    if (actionResult instanceof GenericActionResult) {
-      return LendyrActionResult.newBuilder().build();
-    } else if (actionResult instanceof AttackActionResult attackActionResult) {
-      return LendyrActionResult.newBuilder().setAttack(attackResultToDto(attackActionResult)).build();
-    } else if (actionResult instanceof MoveActionResult attackActionResult) {
-      return LendyrActionResult.newBuilder().setMove(moveResultToDto(attackActionResult)).build();
-    } else if (actionResult instanceof ChargeAttackActionResult attackActionResult) {
-      return LendyrActionResult.newBuilder().setCharge(chargeAttackResultToDto(attackActionResult)).build();
-    }
+  default LendyrGameEvent actionResultToDto(GameEvent gameEvent) {
 
-    throw new ProcessingException(String.format("Cannot map the action result of type %s", actionResult.getClass().getSimpleName()));
+
+    return switch (gameEvent) {
+      case AttackGameEvent attackGameEvent -> LendyrGameEvent.newBuilder().setAttack(attackResultToDto(attackGameEvent)).build();
+      case MoveGameEvent moveGameEvent -> LendyrGameEvent.newBuilder().setMove(moveResultToDto(moveGameEvent)).build();
+      case ChargeAttackGameEvent chargeAttackGameEvent -> LendyrGameEvent.newBuilder().setCharge(chargeAttackResultToDto(chargeAttackGameEvent)).build();
+      case NextCombatPersonaGameEvent nextCombatPersona -> LendyrGameEvent.newBuilder().setNextCombatPersona(nextCombatPersonToDto(nextCombatPersona)).build();
+
+      case GameSaved gameSaved -> LendyrGameEvent.newBuilder().setSaved(savedToDto(gameSaved)).build();
+      case GameModeChanged gameModeChanged -> LendyrGameEvent.newBuilder().setGameModeChanged(gameModeChangedToDto(gameModeChanged)).build();
+
+      default -> throw new ProcessingException(String.format("Cannot map the action result of type %s", gameEvent.getClass().getSimpleName()));
+    };
   }
 
-  LendyrAttackActionResult attackResultToDto(AttackActionResult attackActionResult);
+  LendyrNextCombatPersona nextCombatPersonToDto(NextCombatPersonaGameEvent nextCombatPersonaGameEvent);
+
+  LendyrGameSaved savedToDto(GameSaved saved);
+
+  LendyrGameModeChanged gameModeChangedToDto(GameModeChanged gameModeChanged);
+
+  LendyrAttackActionResult attackResultToDto(AttackGameEvent attackActionResult);
 
   @Mapping(source = "path", target = "positionList")
-  LendyrMoveActionResult moveResultToDto(MoveActionResult moveActionResult);
+  LendyrMoveActionResult moveResultToDto(MoveGameEvent moveActionResult);
 
   @Mapping(source = "path", target = "positionList")
-  LendyrChargeActionResult chargeAttackResultToDto(ChargeAttackActionResult moveActionResult);
+  LendyrChargeActionResult chargeAttackResultToDto(ChargeAttackGameEvent moveActionResult);
 }

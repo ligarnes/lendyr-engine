@@ -1,6 +1,6 @@
-package net.alteiar.lendyr.entity.action;
+package net.alteiar.lendyr.entity.event;
 
-public interface ActionResult {
+public interface GameEvent {
   ///  Define if the world has changed.
   ///
   /// @return true, if anything in the world state changed.

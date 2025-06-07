@@ -8,11 +8,14 @@ import lombok.Setter;
 import net.alteiar.lendyr.engine.random.DiceEngineImpl;
 import net.alteiar.lendyr.entity.DiceEngine;
 import net.alteiar.lendyr.entity.GameEntityImpl;
-import net.alteiar.lendyr.entity.action.ActionResult;
 import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.exception.ActionException;
 import net.alteiar.lendyr.entity.action.exception.ProcessingException;
+import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.entity.event.GameModeChanged;
+import net.alteiar.lendyr.entity.event.GameSaved;
 import net.alteiar.lendyr.model.Game;
+import net.alteiar.lendyr.model.PlayState;
 import net.alteiar.lendyr.persistence.RepositoryFactory;
 import net.alteiar.lendyr.persistence.SaveRepository;
 
@@ -48,22 +51,30 @@ public class GameContext {
 
   public void save(String saveName) {
     saveRepository.save(saveName, game.toModel());
+    listener.newAction(new GameSaved(saveName));
   }
 
   public void resume() {
     this.game.resume();
+    listener.newAction(new GameModeChanged(this.game.getPlayState()));
     listener.gameChanged();
   }
 
   public void pause() {
     this.game.pause();
+    listener.newAction(new GameModeChanged(this.game.getPlayState()));
     listener.gameChanged();
+  }
+
+  public void notifyGameOver() {
+    this.game.setPlayState(PlayState.GAME_OVER);
+    listener.newAction(new GameModeChanged(this.game.getPlayState()));
   }
 
   public void act(GameAction action) {
     try {
       action.ensureAllowed(this.game);
-      ActionResult result = action.apply(this.game, diceEngine);
+      GameEvent result = action.apply(this.game, diceEngine);
       if (result.hasWorldChanged()) {
         listener.gameChanged();
       }

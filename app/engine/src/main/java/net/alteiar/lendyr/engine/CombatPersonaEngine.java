@@ -10,12 +10,12 @@ import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.combat.EndTurnAction;
 
 @Log4j2
-public class PersonaEngine {
+public class CombatPersonaEngine {
   private final CombatAiSelector combatAiSelector;
   private final GameContext gameContext;
 
   @Builder
-  PersonaEngine(@NonNull GameContext gameContext) {
+  CombatPersonaEngine(@NonNull GameContext gameContext) {
     this.gameContext = gameContext;
     combatAiSelector = CombatAiSelector.builder().game(gameContext.getGame()).build();
   }

@@ -13,7 +13,7 @@ import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
 import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
 import net.alteiar.lendyr.entity.action.exception.ProcessingException;
 import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrAction;
-import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrActionResult;
+import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrGameEvent;
 import net.alteiar.lendyr.grpc.model.v1.game.*;
 import net.alteiar.lendyr.grpc.model.v1.item.LendyrItem;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
@@ -87,7 +87,7 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   }
 
   @Override
-  public void registerActions(EmptyResponse request, StreamObserver<LendyrActionResult> responseObserver) {
+  public void registerActions(EmptyResponse request, StreamObserver<LendyrGameEvent> responseObserver) {
     log.info("Request actions");
     try {
       while (!currentStateProcessor.isCompleted()) {

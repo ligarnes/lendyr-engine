@@ -1,12 +1,17 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
 import net.alteiar.lendyr.entity.SkillResult;
-import net.alteiar.lendyr.entity.action.*;
+import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
+import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.entity.event.GameModeChanged;
+import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
+import net.alteiar.lendyr.entity.event.combat.MoveGameEvent;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
 import net.alteiar.lendyr.grpc.model.v1.generic.LendyrPosition;
+import net.alteiar.lendyr.model.PlayState;
 import net.alteiar.lendyr.model.persona.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -84,41 +89,31 @@ class ActionMapperTest {
       Assertions.assertEquals(dto.getChargeAttack().getPath(i).getLayer(), attackAction.getPositions().get(i).getLayer());
     }
   }
-
-  @Test
-  void actionResultToDto_generic() {
-    // Given
-    GenericActionResult result = GenericActionResult.builder().build();
-    // When
-    LendyrActionResult dto = ActionMapper.INSTANCE.actionResultToDto(result);
-    // Then
-    Assertions.assertEquals(LendyrActionResult.ActionsCase.ACTIONS_NOT_SET, dto.getActionsCase());
-  }
-
+  
   @Test
   void actionResultToDto_attackResult() {
     // Given
-    AttackActionResult result = newAttackResult();
+    AttackGameEvent result = newAttackResult();
     // When
-    LendyrActionResult dto = ActionMapper.INSTANCE.actionResultToDto(result);
+    LendyrGameEvent dto = ActionMapper.INSTANCE.actionResultToDto(result);
     // Then
-    Assertions.assertEquals(LendyrActionResult.ActionsCase.ATTACK, dto.getActionsCase());
+    Assertions.assertEquals(LendyrGameEvent.ActionsCase.ATTACK, dto.getActionsCase());
   }
 
   @Test
   void actionResultToDto_moveResult() {
     // Given
-    ActionResult result = newMoveAction();
+    GameEvent result = newMoveAction();
     // When
-    LendyrActionResult dto = ActionMapper.INSTANCE.actionResultToDto(result);
+    LendyrGameEvent dto = ActionMapper.INSTANCE.actionResultToDto(result);
     // Then
-    Assertions.assertEquals(LendyrActionResult.ActionsCase.MOVE, dto.getActionsCase());
+    Assertions.assertEquals(LendyrGameEvent.ActionsCase.MOVE, dto.getActionsCase());
   }
 
   @Test
   void attackResultToDto() {
     // Given
-    AttackActionResult result = newAttackResult();
+    AttackGameEvent result = newAttackResult();
 
     // When
     LendyrAttackActionResult dto = ActionMapper.INSTANCE.attackResultToDto(result);
@@ -137,7 +132,7 @@ class ActionMapperTest {
   @Test
   void moveResultToDto() {
     // Given
-    MoveActionResult result = newMoveAction();
+    MoveGameEvent result = newMoveAction();
 
     // When
     LendyrMoveActionResult dto = ActionMapper.INSTANCE.moveResultToDto(result);
@@ -153,14 +148,26 @@ class ActionMapperTest {
     }
   }
 
-  private AttackActionResult newAttackResult() {
+  @Test
+  void gameStateToDto() {
+    // Given
+    GameModeChanged result = new GameModeChanged(PlayState.GAME_OVER);
+
+    // When
+    LendyrGameModeChanged dto = ActionMapper.INSTANCE.gameModeChangedToDto(result);
+
+    // Then
+    Assertions.assertEquals(LendyrGameMode.GAME_OVER, dto.getNewMode());
+  }
+
+  private AttackGameEvent newAttackResult() {
     SkillResult skillResult = SkillResult.builder()
         .bonus(1)
         .dice1(2)
         .dice2(3)
         .stunDie(4)
         .build();
-    return AttackActionResult.builder()
+    return AttackGameEvent.builder()
         .attackResult(skillResult)
         .sourceId(UUID.randomUUID())
         .targetId(UUID.randomUUID())
@@ -169,8 +176,8 @@ class ActionMapperTest {
         .build();
   }
 
-  private MoveActionResult newMoveAction() {
-    return MoveActionResult.builder()
+  private MoveGameEvent newMoveAction() {
+    return MoveGameEvent.builder()
         .sourceId(UUID.randomUUID())
         .path(List.of(
             RandomProvider.INSTANCE.nextObject(Position.class),

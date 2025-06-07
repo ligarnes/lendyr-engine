@@ -10,11 +10,11 @@ import net.alteiar.lendyr.entity.DiceEngine;
 import net.alteiar.lendyr.entity.GameEntity;
 import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.entity.SkillResult;
-import net.alteiar.lendyr.entity.action.ActionResult;
-import net.alteiar.lendyr.entity.action.AttackActionResult;
 import net.alteiar.lendyr.entity.action.BaseAction;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
+import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
 import net.alteiar.lendyr.model.persona.Attack;
 import net.alteiar.lendyr.model.persona.AttackType;
 
@@ -55,7 +55,7 @@ public class AttackAction extends BaseAction implements MajorAction {
   }
 
   @Override
-  public ActionResult apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
     log.info("{} attack {}", personaSource.getName(), personaTarget.getName());
 
     Attack attack = personaSource.getAttack();
@@ -89,12 +89,14 @@ public class AttackAction extends BaseAction implements MajorAction {
     }
     gameEntity.getEncounter().useMajorAction();
 
-    return AttackActionResult.builder()
+    return AttackGameEvent.builder()
         .sourceId(sourceId)
         .targetId(targetId)
         .attackResult(result)
         .rawDamage(totalDamage)
         .mitigatedDamage(mitigatedDamage)
+        .hit(attackHit)
+        .targetRemainingHp(personaTarget.getCurrentHealthPoint())
         .build();
   }
 }

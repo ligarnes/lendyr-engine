@@ -58,42 +58,4 @@ message LendyrMoveAction {
   repeated model.generic.LendyrPosition position = 2;
 }
 
-// Action Result
-message LendyrActionResult {
-  oneof actions {
-    LendyrAttackActionResult attack = 3;
-    LendyrMoveActionResult move = 4;
-    LendyrChargeActionResult charge = 5;
-  }
-}
-
-message LendyrChargeActionResult {
-  bytes sourceId = 1;
-  bytes targetId = 2;
-  repeated model.generic.LendyrPosition position = 3;
-  LendyrSkillResult attackResult = 4;
-  int32 mitigatedDamage = 5;
-  int32 rawDamage = 6;
-}
-
-message LendyrMoveActionResult {
-  bytes sourceId = 1;
-  repeated model.generic.LendyrPosition position = 2;
-}
-
-message LendyrAttackActionResult {
-  bytes sourceId = 4;
-  bytes targetId = 5;
-  LendyrSkillResult attackResult = 1;
-  int32 mitigatedDamage = 2;
-  int32 rawDamage = 3;
-}
-
-message LendyrSkillResult {
-  int32 dice1 = 1;
-  int32 dice2 = 2 ;
-  int32 stunDie = 3;
-  int32 bonus = 4;
-}
-
 // Generic
