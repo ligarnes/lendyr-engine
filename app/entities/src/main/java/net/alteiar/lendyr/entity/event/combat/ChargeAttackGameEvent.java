@@ -26,6 +26,9 @@ public class ChargeAttackGameEvent implements GameEvent {
   boolean hit;
   int targetRemainingHp;
 
+  boolean minorActionUsed;
+  boolean majorActionUsed;
+
   @Override
   public boolean hasWorldChanged() {
     return mitigatedDamage != 0 || !path.isEmpty();

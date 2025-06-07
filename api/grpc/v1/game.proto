@@ -33,9 +33,6 @@ service LendyrGameService {
   // Retrieve current state
   rpc currentState(EmptyResponse) returns (LendyrGameState);
 
-  // register to all the game updates
-  rpc registerCurrentState(EmptyResponse) returns (stream LendyrGameState);
-
   // register to all the world events
   rpc registerActions(EmptyResponse)returns (stream model.events.LendyrGameEvent);
 

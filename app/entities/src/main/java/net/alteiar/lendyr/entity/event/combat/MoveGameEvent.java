@@ -16,4 +16,7 @@ public class MoveGameEvent implements GameEvent {
   UUID sourceId;
   @NonNull
   List<Position> path;
+
+  boolean minorActionUsed;
+  boolean majorActionUsed;
 }

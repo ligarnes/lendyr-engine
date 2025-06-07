@@ -131,6 +131,8 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
         .mitigatedDamage(mitigatedDamage)
         .hit(attackHit)
         .targetRemainingHp(personaTarget.getCurrentHealthPoint())
+        .minorActionUsed(gameEntity.getEncounter().isMinorActionUsed())
+        .majorActionUsed(gameEntity.getEncounter().isMajorActionUsed())
         .build();
   }
 

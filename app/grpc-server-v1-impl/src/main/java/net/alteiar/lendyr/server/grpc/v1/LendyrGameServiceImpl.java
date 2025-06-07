@@ -110,30 +110,6 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   }
 
   @Override
-  public void registerCurrentState(EmptyResponse request, StreamObserver<LendyrGameState> responseObserver) {
-    log.info("Request current state");
-    // Publish current state first
-    try {
-      while (!currentStateProcessor.isCompleted()) {
-        try {
-          currentStateProcessor.awaitNewState(1000).ifPresent(currentState -> {
-            log.info("Publish new state");
-            responseObserver.onNext(currentState);
-          });
-        } catch (InterruptedException e) {
-          log.warn("Interrupted while waiting for current state", e);
-        }
-      }
-    } catch (RuntimeException e) {
-      log.warn(e);
-      Status status = Status.INTERNAL.withDescription(e.getMessage());
-      responseObserver.onError(status.asRuntimeException());
-      return;
-    }
-    responseObserver.onCompleted();
-  }
-
-  @Override
   public void currentState(EmptyResponse request, StreamObserver<LendyrGameState> responseObserver) {
     Timer.time("currentState",
         () -> {

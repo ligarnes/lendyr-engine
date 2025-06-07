@@ -55,11 +55,19 @@ message LendyrChargeActionResult {
   int32 rawDamage = 6;
   bool hit = 7;
   int32 targetRemainingHp = 8;
+
+  // combat action specific
+  bool minorActionUsed = 20;
+  bool majorActionUsed = 21;
 }
 
 message LendyrMoveActionResult {
   bytes sourceId = 1;
   repeated model.generic.LendyrPosition position = 2;
+
+  // combat action specific
+  bool minorActionUsed = 20;
+  bool majorActionUsed = 21;
 }
 
 message LendyrAttackActionResult {
@@ -70,6 +78,10 @@ message LendyrAttackActionResult {
   int32 mitigatedDamage = 2;
   int32 rawDamage = 3;
   int32 targetRemainingHp = 7;
+
+  // combat action specific
+  bool minorActionUsed = 20;
+  bool majorActionUsed = 21;
 }
 
 message LendyrSkillResult {

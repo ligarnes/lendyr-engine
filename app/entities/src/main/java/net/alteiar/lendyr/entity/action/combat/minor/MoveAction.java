@@ -77,15 +77,17 @@ public class MoveAction implements MinorAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity context, DiceEngine diceEngine) {
+  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
     // Move to last position
     log.info("Move {} to {}", characterId, positions);
     persona.setPosition(positions.getLast());
-    context.getEncounter().useMinorAction();
+    gameEntity.getEncounter().useMinorAction();
 
     return MoveGameEvent.builder()
         .sourceId(characterId)
         .path(positions)
+        .minorActionUsed(gameEntity.getEncounter().isMinorActionUsed())
+        .majorActionUsed(gameEntity.getEncounter().isMajorActionUsed())
         .build();
   }
 
