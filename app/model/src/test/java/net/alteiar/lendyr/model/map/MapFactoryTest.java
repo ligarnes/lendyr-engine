@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 class MapFactoryTest {
-  
+
   @Test
   void singleLayer() throws IOException {
     XmlMapper mapper = new XmlMapper();
@@ -34,8 +34,8 @@ class MapFactoryTest {
 
     LayeredMap layeredMap = mapFactory.load();
 
-    System.out.println(Arrays.toString(((Polygon) layeredMap.getLayers().get(1).getShape()).getTransformedVertices()));
-    System.out.println(layeredMap.getLayers().get(2).getShape());
+    System.out.println(Arrays.toString(((Polygon) layeredMap.getLayer(1).getShape()).getTransformedVertices()));
+    System.out.println(layeredMap.getLayer(2).getShape());
 
     layeredMap.debug();
   }

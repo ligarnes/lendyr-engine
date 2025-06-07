@@ -12,6 +12,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,19 +35,22 @@ public interface WorldMapMapper {
     if (map == null) {
       return null;
     }
+    List<Integer> layersIdx = map.getLayers();
+    Map<Integer, LendyrStaticLayer> layers = new HashMap<>(layersIdx.size());
+    for (Integer layerIdx : layersIdx) {
+      layers.put(layerIdx, layerToDto(map.getLayer(layerIdx)));
+    }
 
     return LendyrLayeredMap.newBuilder()
         .setWidth(map.getWidth())
         .setHeight(map.getHeight())
         .addAllBridges(bridgeListToDto(map.getBridges()))
-        .putAllLayers(layerMapToDto(map.getLayers()))
+        .putAllLayers(layers)
         .build();
   }
 
   List<LendyrMapBridge> bridgeListToDto(List<Bridge> bridges);
-
-  Map<Integer, LendyrStaticLayer> layerMapToDto(Map<Integer, StaticMapLayer> mapLayers);
-
+  
   default LendyrStaticLayer layerToDto(StaticMapLayer map) {
     if (map == null) {
       return null;

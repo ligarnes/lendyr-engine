@@ -47,8 +47,8 @@ class WorldMapMapperTest {
       Assertions.assertEquals(GeometryMapper.INSTANCE.mapElementToDto(layeredMap.getBridges().get(i).getRegion()), dto.getBridges(i).getRegion());
     }
     Assertions.assertEquals(layeredMap.getLayers().size(), dto.getLayersMap().size());
-    for (Integer layer : layeredMap.getLayers().keySet()) {
-      Assertions.assertEquals(WorldMapMapper.INSTANCE.layerToDto(layeredMap.getLayers().get(layer)), dto.getLayersMap().get(layer));
+    for (Integer layer : layeredMap.getLayers()) {
+      Assertions.assertEquals(WorldMapMapper.INSTANCE.layerToDto(layeredMap.getLayer(layer)), dto.getLayersMap().get(layer));
     }
   }
 

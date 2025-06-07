@@ -2,20 +2,22 @@ package net.alteiar.lendyr.model.map;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import lombok.Value;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
 
-@Value
 @Log4j2
 public class LayeredMap {
-  float width;
-  float height;
-  Map<Integer, StaticMapLayer> layers;
-  List<Bridge> bridges;
+  @Getter
+  private final int width;
+  @Getter
+  private final int height;
+  private final Map<Integer, StaticMapLayer> layers;
+  @Getter
+  private final List<Bridge> bridges;
 
-  public LayeredMap(float width, float height, Map<Integer, StaticMapLayer> layers, List<Bridge> bridges) {
+  public LayeredMap(int width, int height, Map<Integer, StaticMapLayer> layers, List<Bridge> bridges) {
     this.width = width;
     this.height = height;
     this.bridges = Collections.unmodifiableList(bridges);
@@ -54,8 +56,9 @@ public class LayeredMap {
 
   public List<Integer> getLayersAt(float x, float y) {
     List<Integer> inLayer = new ArrayList<>();
+    Rectangle square = createCollisionRectangle(x, y, 1, 1);
     layers.forEach((layer, map) -> {
-      if (map.isInLayer(x, y) && !map.checkCollision(new Rectangle(x, y, 1, 1))) {
+      if (map.isInLayer(square) && !map.checkCollision(square)) {
         inLayer.add(layer);
       }
     });
@@ -63,7 +66,42 @@ public class LayeredMap {
   }
 
   public boolean checkCollision(int layer, Rectangle rect) {
-    return layers.get(layer).checkCollision(rect);
+    return layers.get(layer).checkCollision(createCollisionRectangle(rect));
+  }
+
+  public boolean isInLayer(int layer, Rectangle rect) {
+    return layers.get(layer).isInLayer(createCollisionRectangle(rect));
+  }
+
+  public List<Integer> getLayers() {
+    return layers.keySet().stream().toList();
+  }
+
+  /// This method should be avoided.
+  /// Use directly the layered map.
+  /// It is used for copy/DTO mapping
+  public StaticMapLayer getLayer(int layer) {
+    return layers.get(layer);
+  }
+
+  public int getLayerWidth(int layer) {
+    return layers.get(layer).getWidth();
+  }
+
+  public int getLayerHeight(int layer) {
+    return layers.get(layer).getHeight();
+  }
+
+  ///  Create the collision rectangle.
+  /// Since touching rectangle generates collision, we want to reduce the collision rectangle by minimal margin to avoid limit/marginal collision.
+  private Rectangle createCollisionRectangle(Rectangle rectangle) {
+    return createCollisionRectangle(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+  }
+
+  ///  Create the collision rectangle.
+  /// Since touching rectangle generates collision, we want to reduce the collision rectangle by minimal margin to avoid limit/marginal collision.
+  private Rectangle createCollisionRectangle(float x, float y, float width, float height) {
+    return new Rectangle(x + 0.01f, y + 0.01f, width - 0.02f, height - 0.02f);
   }
 
   public Optional<Bridge> getBridge(Rectangle position) {
@@ -90,9 +128,9 @@ public class LayeredMap {
       StringBuilder stringBuilder = new StringBuilder();
       for (int x = (int) rect.getX() - 1; x < rect.getX() + rect.getWidth() + 1; x++) {
         Rectangle square = new Rectangle(x, y, squareSize, squareSize);
-        if (currentLayer.isInLayer(square)) {
+        if (isInLayer(layer, square)) {
           Optional<Bridge> bridge = getBridge(square);
-          if (currentLayer.checkCollision(square)) {
+          if (checkCollision(layer, square)) {
             stringBuilder.append("x");
           } else if (path.containsKey(new Vector2(x, y))) {
             stringBuilder.append(path.get(new Vector2(x, y)));
@@ -115,5 +153,9 @@ public class LayeredMap {
 
   public void debug() {
     debugPath(Collections.emptyMap());
+  }
+
+  public void debug(int layer) {
+    debugPathLayer(layer, 1, Collections.emptyMap());
   }
 }

@@ -13,13 +13,13 @@ import java.util.Optional;
 @Log4j2
 @Value
 public class StaticMapLayer {
-  float width;
-  float height;
+  int width;
+  int height;
   Shape2D shape;
   List<MapElement> mapElements;
   List<MapElement> activations;
 
-  public StaticMapLayer(float width, float height, Shape2D shape, List<MapElement> mapElements, List<MapElement> activations) {
+  public StaticMapLayer(int width, int height, Shape2D shape, List<MapElement> mapElements, List<MapElement> activations) {
     this.width = width;
     this.height = height;
     this.shape = shape;
@@ -43,11 +43,7 @@ public class StaticMapLayer {
     if (!isInLayer(rect)) {
       return true;
     }
-    return checkCollisionImpl(rect);
-  }
-
-  private boolean checkCollisionImpl(Rectangle rectangle) {
-    return mapElements.stream().anyMatch(mapElement -> mapElement.checkCollision(rectangle));
+    return mapElements.stream().anyMatch(mapElement -> mapElement.checkCollision(rect));
   }
 
   public boolean isInLayer(float x, float y) {

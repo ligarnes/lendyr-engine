@@ -56,11 +56,8 @@ public class DynamicPathfinding {
   public List<Position> pathTo(Position source, Position end, Size size, float distance) {
     clampToWorld(end, size);
 
-    debug(List.of());
+    log.info("Move from {} to {}", source, end);
     List<Position> path = pathfinding.computePath(source, end, distance);
-
-    debug(path);
-
     return path;
   }
 

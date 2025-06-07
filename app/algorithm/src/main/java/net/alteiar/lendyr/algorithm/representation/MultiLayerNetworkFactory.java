@@ -4,10 +4,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import lombok.experimental.UtilityClass;
 import net.alteiar.lendyr.model.map.LayeredMap;
-import net.alteiar.lendyr.model.map.StaticMapLayer;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 @UtilityClass
 public class MultiLayerNetworkFactory {
@@ -15,19 +13,14 @@ public class MultiLayerNetworkFactory {
   public static MultiLayerNetwork generate(LayeredMap layeredMap) {
     ArrayList<Tile> tiles = new ArrayList<>();
 
-    layeredMap.getLayers().entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
-      int layer = entry.getKey();
-      StaticMapLayer map = entry.getValue();
-      for (float x = 0; x < map.getWidth(); x++) {
-        for (float y = 0; y < map.getHeight(); y++) {
+    layeredMap.getLayers().stream().sorted().forEach(layer -> {
+      for (int x = 0; x < layeredMap.getWidth(); x++) {
+        for (int y = 0; y < layeredMap.getHeight(); y++) {
           Rectangle square = new Rectangle(x, y, 1, 1);
-          if (map.isInLayer(square)) {
-            boolean collision = layeredMap.checkCollision(layer, square);
-            if (!collision) {
-              int[] layers = layeredMap.getBridge(square).map(b -> new int[]{b.getLower(), b.getUpper()}).orElse(new int[]{layer});
-              Tile t = new Tile(new Vector2(x, y), layers, true);
-              tiles.add(t);
-            }
+          if (layeredMap.isInLayer(layer, square) && !layeredMap.checkCollision(layer, square)) {
+            int[] layers = layeredMap.getBridge(square).map(b -> new int[]{b.getLower(), b.getUpper()}).orElse(new int[]{layer});
+            Tile t = new Tile(new Vector2(x, y), layers, true);
+            tiles.add(t);
           }
         }
       }
@@ -37,5 +30,4 @@ public class MultiLayerNetworkFactory {
     multiLayerNetwork.getTiles().forEach(t -> t.calculateNeighbours(multiLayerNetwork));
     return multiLayerNetwork;
   }
-
 }
