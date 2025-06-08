@@ -19,6 +19,12 @@ public class Position {
     this.layer = layer;
   }
 
+  public void setPosition(float x, float y, int layer) {
+    this.x = x;
+    this.y = y;
+    this.layer = layer;
+  }
+
   public Position cpy() {
     return new Position(x, y, layer);
   }

@@ -64,8 +64,8 @@ public class DynamicPathfinding {
   private Position clampToWorld(Position target, Size size) {
     float personaWidth = size.getWidth();
     float personaHeigth = size.getHeight();
-    target.setX(MathUtils.round(MathUtils.clamp(target.getX(), personaWidth, map.getLayeredMap().getWidth() - personaWidth)));
-    target.setY(MathUtils.round(MathUtils.clamp(target.getY(), personaHeigth, map.getLayeredMap().getHeight() - personaHeigth)));
+    target.setX(MathUtils.round(MathUtils.clamp(target.getX(), 0, map.getLayeredMap().getWidth() - personaWidth)));
+    target.setY(MathUtils.round(MathUtils.clamp(target.getY(), 0, map.getLayeredMap().getHeight() - personaHeigth)));
     return target;
   }
 
