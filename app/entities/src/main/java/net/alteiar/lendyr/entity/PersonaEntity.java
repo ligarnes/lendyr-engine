@@ -2,7 +2,9 @@ package net.alteiar.lendyr.entity;
 
 import com.badlogic.gdx.math.Rectangle;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.model.items.Weapon;
 import net.alteiar.lendyr.model.items.WeaponType;
@@ -13,18 +15,28 @@ import net.alteiar.lendyr.persistence.ItemRepository;
 import java.util.UUID;
 
 @Log4j2
-@Builder
 public class PersonaEntity {
-  private static Weapon BARE_HAND = Weapon.builder().attackType(WeaponType.MELEE)
+  private static final Weapon BARE_HAND = Weapon.builder().attackType(WeaponType.MELEE)
       .ability(Ability.ACCURACY).focus(AbilityFocus.BRAWLING).cost(0)
       .damageDice(1).damageFixed(-3)
       .damageAbility(Ability.PERCEPTION)
       .normalRange(1).longRange(1).penetrating(false).build();
 
-  @NonNull
   private final ItemRepository itemRepository;
-  @NonNull
   private final Persona persona;
+
+  @Setter
+  @Getter
+  private Position targetPosition;
+  @Setter
+  @Getter
+  private Position nextPosition;
+
+  @Builder
+  public PersonaEntity(@NonNull ItemRepository itemRepository, @NonNull Persona persona) {
+    this.itemRepository = itemRepository;
+    this.persona = persona;
+  }
 
   public UUID getId() {
     return persona.getId();
@@ -51,9 +63,11 @@ public class PersonaEntity {
   }
 
   public void setPosition(Position position) {
-    persona.getPosition().setX(position.getX());
-    persona.getPosition().setY(position.getY());
-    persona.getPosition().setLayer(position.getLayer());
+    persona.getPosition().setPosition(position);
+  }
+
+  public void setPosition(float x, float y, int layer) {
+    persona.getPosition().setPosition(x, y, layer);
   }
 
   public float getMoveDistance() {

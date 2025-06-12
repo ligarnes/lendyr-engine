@@ -13,6 +13,8 @@ module lendyr.game.entities {
   exports net.alteiar.lendyr.entity.action.combat;
   exports net.alteiar.lendyr.entity.action.combat.major;
   exports net.alteiar.lendyr.entity.action.combat.minor;
+  exports net.alteiar.lendyr.entity.action.exploration;
   exports net.alteiar.lendyr.entity.event;
   exports net.alteiar.lendyr.entity.event.combat;
+  exports net.alteiar.lendyr.entity.event.exploration;
 }

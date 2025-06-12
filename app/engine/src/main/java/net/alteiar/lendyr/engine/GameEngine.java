@@ -17,12 +17,15 @@ public class GameEngine {
   private final CombatPersonaEngine combatPersonaEngine;
   private Thread gameEngineThread;
 
+  private final RealTimeEngine realTimeEngine;
+
   @Builder
   GameEngine(@NonNull GameContext gameContext) {
     maxThinkingTimeInMs = 33L;
     this.gameContext = gameContext;
     this.isRunning = new AtomicBoolean(false);
     this.combatPersonaEngine = CombatPersonaEngine.builder().gameContext(gameContext).build();
+    this.realTimeEngine = new RealTimeEngine(gameContext);
   }
 
   public void start() {
@@ -41,9 +44,11 @@ public class GameEngine {
   }
 
   private void run() {
+    long lastTimestamp = 0;
     while (isRunning.get()) {
       long before = System.currentTimeMillis();
-      update();
+      update((System.currentTimeMillis() - lastTimestamp) / 1000f);
+      lastTimestamp = before;
       long duration = System.currentTimeMillis() - before;
       if (duration > maxThinkingTimeInMs) {
         log.warn("Update was too long; took {}ms", duration);
@@ -59,7 +64,7 @@ public class GameEngine {
     }
   }
 
-  private void update() {
+  private void update(float delta) {
     if (gameContext.getGame().isGameOver()) {
       gameContext.notifyGameOver();
     }
@@ -67,17 +72,12 @@ public class GameEngine {
     PlayState playState = gameContext.getGame().getPlayState();
     switch (playState) {
       case COMBAT -> updateCombat();
-      case REAL_TIME -> updateRealTime();
+      case REAL_TIME -> realTimeEngine.update(delta);
       case GAME_OVER, PAUSE -> {
         // Nothing to do.
       }
       default -> throw new IllegalStateException("Play state %s is not supported yet".formatted(playState));
     }
-  }
-
-  private void updateRealTime() {
-    // Do nothing yet.
-    // The World doesn't move
   }
 
   private void updateCombat() {

@@ -5,19 +5,11 @@ import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
 import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
-import net.alteiar.lendyr.entity.action.exception.ProcessingException;
-import net.alteiar.lendyr.entity.event.GameEvent;
-import net.alteiar.lendyr.entity.event.GameModeChanged;
-import net.alteiar.lendyr.entity.event.GameSaved;
-import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
-import net.alteiar.lendyr.entity.event.combat.ChargeAttackGameEvent;
-import net.alteiar.lendyr.entity.event.combat.MoveGameEvent;
-import net.alteiar.lendyr.entity.event.combat.NextCombatPersonaGameEvent;
+import net.alteiar.lendyr.entity.action.exploration.MoveToTargetAction;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
 import net.alteiar.lendyr.model.persona.Position;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
@@ -55,37 +47,13 @@ public interface ActionMapper {
       List<Position> positions = charge.getPathList().stream().map(GenericMapper.INSTANCE::convertPositionFromDto).toList();
       return ChargeAttackAction.builder().sourceId(sourceId).targetId(targetId).positions(positions).build();
     }
+    if (action.hasMoveTo()) {
+      LendyrMoveToAction moveTo = action.getMoveTo();
+      UUID sourceId = GenericMapper.INSTANCE.convertBytesToUUID(moveTo.getSourceId());
+      Position targetPosition = GenericMapper.INSTANCE.convertPositionFromDto(moveTo.getPosition());
+      return MoveToTargetAction.builder().characterId(sourceId).targetPosition(targetPosition).build();
+    }
 
     throw new NotSupportedException(String.format("The action %s is not supported yet.", action.getActionsCase().name()));
   }
-
-  default LendyrGameEvent actionResultToDto(GameEvent gameEvent) {
-
-
-    return switch (gameEvent) {
-      case AttackGameEvent attackGameEvent -> LendyrGameEvent.newBuilder().setAttack(attackResultToDto(attackGameEvent)).build();
-      case MoveGameEvent moveGameEvent -> LendyrGameEvent.newBuilder().setMove(moveResultToDto(moveGameEvent)).build();
-      case ChargeAttackGameEvent chargeAttackGameEvent -> LendyrGameEvent.newBuilder().setCharge(chargeAttackResultToDto(chargeAttackGameEvent)).build();
-      case NextCombatPersonaGameEvent nextCombatPersona -> LendyrGameEvent.newBuilder().setNextCombatPersona(nextCombatPersonToDto(nextCombatPersona)).build();
-
-      case GameSaved gameSaved -> LendyrGameEvent.newBuilder().setSaved(savedToDto(gameSaved)).build();
-      case GameModeChanged gameModeChanged -> LendyrGameEvent.newBuilder().setGameModeChanged(gameModeChangedToDto(gameModeChanged)).build();
-
-      default -> throw new ProcessingException(String.format("Cannot map the action result of type %s", gameEvent.getClass().getSimpleName()));
-    };
-  }
-
-  LendyrNextCombatPersona nextCombatPersonToDto(NextCombatPersonaGameEvent nextCombatPersonaGameEvent);
-
-  LendyrGameSaved savedToDto(GameSaved saved);
-
-  LendyrGameModeChanged gameModeChangedToDto(GameModeChanged gameModeChanged);
-
-  LendyrAttackActionResult attackResultToDto(AttackGameEvent attackActionResult);
-
-  @Mapping(source = "path", target = "positionList")
-  LendyrMoveActionResult moveResultToDto(MoveGameEvent moveActionResult);
-
-  @Mapping(source = "path", target = "positionList")
-  LendyrChargeActionResult chargeAttackResultToDto(ChargeAttackGameEvent moveActionResult);
 }

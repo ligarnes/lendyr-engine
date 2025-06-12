@@ -36,7 +36,7 @@ service LendyrGameService {
   // register to all the world events
   rpc registerActions(EmptyResponse)returns (stream model.events.LendyrGameEvent);
 
-  // send an action
+  // Combat
   rpc act(combat.LendyrAction) returns (LendyrActionResponse);
 
   // End the turn

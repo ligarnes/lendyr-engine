@@ -92,10 +92,8 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
     try {
       while (!currentStateProcessor.isCompleted()) {
         try {
-          currentStateProcessor.awaitNewAction(1000).ifPresent(nextAction -> {
-            log.info("Publish new actions");
-            responseObserver.onNext(nextAction);
-          });
+          //log.info("Publish new actions");
+          currentStateProcessor.awaitNewAction(1000).ifPresent(responseObserver::onNext);
         } catch (InterruptedException e) {
           log.warn("Interrupted while waiting for current state", e);
         }

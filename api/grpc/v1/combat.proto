@@ -35,6 +35,9 @@ message LendyrAction {
 
     // Minor action
     LendyrMoveAction move = 3;
+
+    // Exploration
+    LendyrMoveToAction moveTo = 4;
   }
 }
 
@@ -59,3 +62,7 @@ message LendyrMoveAction {
 }
 
 // Generic
+message LendyrMoveToAction {
+  bytes sourceId = 1;
+  model.generic.LendyrPosition position = 2;
+}

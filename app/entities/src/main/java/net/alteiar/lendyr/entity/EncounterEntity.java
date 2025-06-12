@@ -47,6 +47,10 @@ public final class EncounterEntity {
   }
 
   public boolean isEncounterComplete() {
+    if (encounter == null) {
+      return true;
+    }
+
     List<Integer> remainingTeams = encounter.getInitiative().stream()
         .filter(p -> !gameEntity.findById(p.getPersonaId()).map(PersonaEntity::isDefeated).orElse(true))
         .map(CombatActor::getTeam)

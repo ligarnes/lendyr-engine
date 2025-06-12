@@ -57,8 +57,7 @@ public class DynamicPathfinding {
     clampToWorld(end, size);
 
     log.info("Move from {} to {}", source, end);
-    List<Position> path = pathfinding.computePath(source, end, distance);
-    return path;
+    return pathfinding.computePath(source, end, distance);
   }
 
   private Position clampToWorld(Position target, Size size) {

@@ -75,15 +75,21 @@ public class GameContext {
     try {
       action.ensureAllowed(this.game);
       GameEvent result = action.apply(this.game, diceEngine);
-      if (result.hasWorldChanged()) {
-        listener.gameChanged();
+      if (result != null) {
+        if (result.hasWorldChanged()) {
+          listener.gameChanged();
+        }
+        listener.newAction(result);
       }
-      listener.newAction(result);
     } catch (ActionException e) {
       throw e;
     } catch (RuntimeException e) {
       throw new ProcessingException("Unexpected exception", e);
     }
+  }
+
+  public void notifyEvent(GameEvent event) {
+    listener.newAction(event);
   }
 
   public Game toModel() {

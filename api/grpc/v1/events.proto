@@ -19,6 +19,9 @@ message LendyrGameEvent {
     // Other events
     LendyrError error = 7;
 
+    // Exploration
+    LendyrRealTimeUpdate realtimeUpdate = 10;
+
     // Combat actions
     LendyrNextCombatPersona nextCombatPersona = 20;
 
@@ -39,7 +42,6 @@ message LendyrGameModeChanged {
 
 message LendyrGameSaved {
 }
-
 
 message LendyrCombatStarted{
   repeated model.combat.LendyrCombatActor initiativeOrder = 1;
@@ -102,4 +104,16 @@ enum LendyrGameMode {
   REAL_TIME = 2;
   PAUSE = 3;
   GAME_OVER = 4;
+}
+
+// Exploration
+message LendyrRealTimeUpdate {
+  repeated LendyrPersonaPositionChanged positions = 1;
+}
+
+message LendyrPersonaPositionChanged {
+  bytes sourceId = 1;
+  model.generic.LendyrPosition position = 2;
+  bool hasNextPosition = 3;
+  model.generic.LendyrPosition nextPosition = 4;
 }

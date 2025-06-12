@@ -7,7 +7,7 @@ import net.alteiar.lendyr.engine.GameContextListener;
 import net.alteiar.lendyr.entity.event.GameEvent;
 import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrGameEvent;
 import net.alteiar.lendyr.grpc.model.v1.game.LendyrGameState;
-import net.alteiar.lendyr.server.grpc.v1.mapper.ActionMapper;
+import net.alteiar.lendyr.server.grpc.v1.mapper.EventMapper;
 import net.alteiar.lendyr.server.grpc.v1.mapper.GameStateMapper;
 
 import java.util.LinkedList;
@@ -35,7 +35,7 @@ public class CurrentStateProcessor implements GameContextListener {
   @Override
   public void newAction(GameEvent action) {
     synchronized (waitActionToken) {
-      LendyrGameEvent result = ActionMapper.INSTANCE.actionResultToDto(action);
+      LendyrGameEvent result = EventMapper.INSTANCE.eventResultToDto(action);
       actions.add(result);
       waitActionToken.notifyAll();
     }

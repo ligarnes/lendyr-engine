@@ -17,6 +17,7 @@ public class LocalMapEntity implements LayeredMapWithMovable {
   private final GameEntity gameEntity;
 
   private LocalMap localMap;
+  @Getter
   private final List<PersonaEntity> personaEntities;
   @Getter
   private LayeredMap layeredMap;

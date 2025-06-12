@@ -15,8 +15,11 @@ public interface GameStateMapper {
 
   default LendyrGameState businessToDto(Game game) {
 
-    LendyrGameState.Builder builder = LendyrGameState.newBuilder()
-        .setEncounter(EncounterMapper.INSTANCE.businessToDto(game.getEncounter()));
+    LendyrGameState.Builder builder = LendyrGameState.newBuilder();
+
+    if (game.getEncounter() != null) {
+      builder.setEncounter(EncounterMapper.INSTANCE.businessToDto(game.getEncounter()));
+    }
 
     game.getPersonas().stream().map(PersonaMapper.INSTANCE::personaToDto).forEach(builder::addPersona);
 

@@ -8,11 +8,9 @@
   },
   "localMap": {
     "name": "Les ruines",
-    "mapId": "f2659d86-a181-47a5-b201-1e6b2b48b94f",
+    "mapId": "f2659d86-a181-47a5-b201-1e6b2b48b940",
     "entities": [
-      "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79",
-      "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
-      "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81"
+      "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80"
     ]
   },
   "personas": [
@@ -263,30 +261,5 @@
       }
     }
   ],
-  "encounter": {
-    "turn": 1,
-    "initiative": [
-      {
-        "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79",
-        "initiative": 12,
-        "team": 1
-      },
-      {
-        "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
-        "initiative": 11,
-        "team": 2
-      },
-      {
-        "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81",
-        "initiative": 8,
-        "team": 2
-      }
-    ],
-    "currentPersona": {
-      "initiativeIdx": 0,
-      "majorActionUsed": false,
-      "minorActionUsed": false
-    }
-  },
-  "playState": "COMBAT"
+  "playState": "REAL_TIME"
 }
