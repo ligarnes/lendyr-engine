@@ -12,21 +12,16 @@ import net.alteiar.lendyr.server.grpc.v1.mapper.GameStateMapper;
 
 import java.util.LinkedList;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CurrentStateProcessor implements GameContextListener {
-  private final Object waitToken;
   private final GameContext gameContext;
-  private final AtomicBoolean hasChanged;
 
   private final Object waitActionToken;
   private final LinkedList<LendyrGameEvent> actions;
 
   @Builder
   CurrentStateProcessor(@NonNull GameContext gameContext) {
-    waitToken = new Object();
     this.gameContext = gameContext;
-    this.hasChanged = new AtomicBoolean(true);
 
     this.waitActionToken = new Object();
     this.actions = new LinkedList<>();
@@ -41,18 +36,6 @@ public class CurrentStateProcessor implements GameContextListener {
     }
   }
 
-  @Override
-  public void gameChanged() {
-    hasChanged.set(true);
-    synchronized (waitToken) {
-      waitToken.notifyAll();
-    }
-  }
-
-  public boolean isCompleted() {
-    return false;
-  }
-
   public Optional<LendyrGameEvent> awaitNewAction(long timeoutMillis) throws InterruptedException {
     synchronized (waitActionToken) {
       if (actions.isEmpty()) {
@@ -60,19 +43,6 @@ public class CurrentStateProcessor implements GameContextListener {
       }
       if (!actions.isEmpty()) {
         return Optional.of(actions.pop());
-      }
-      return Optional.empty();
-    }
-  }
-
-  public Optional<LendyrGameState> awaitNewState(long timeoutMillis) throws InterruptedException {
-    synchronized (waitToken) {
-      if (!hasChanged.get()) {
-        waitToken.wait(timeoutMillis);
-      }
-      if (hasChanged.get()) {
-        hasChanged.set(false);
-        return Optional.of(currentGameState());
       }
       return Optional.empty();
     }

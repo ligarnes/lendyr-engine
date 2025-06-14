@@ -41,7 +41,7 @@ public class LocalMapEntity implements LayeredMapWithMovable {
 
   @Override
   public Stream<DynamicBlockingObject> getMovableObjects() {
-    return personaEntities.stream().map(PersonaEntity::getDefenceBoundingBox);
+    return personaEntities.stream().filter(p -> !p.isDefeated()).map(PersonaEntity::getDefenceBoundingBox);
   }
 
   /**

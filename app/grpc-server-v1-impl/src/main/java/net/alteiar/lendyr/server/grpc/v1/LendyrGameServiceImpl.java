@@ -90,7 +90,8 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   public void registerActions(EmptyResponse request, StreamObserver<LendyrGameEvent> responseObserver) {
     log.info("Request actions");
     try {
-      while (!currentStateProcessor.isCompleted()) {
+      boolean isCompleted = false;
+      while (!isCompleted) {
         try {
           //log.info("Publish new actions");
           currentStateProcessor.awaitNewAction(1000).ifPresent(responseObserver::onNext);

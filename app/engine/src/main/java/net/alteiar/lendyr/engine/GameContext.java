@@ -57,17 +57,20 @@ public class GameContext {
   public void resume() {
     this.game.resume();
     listener.newAction(new GameModeChanged(this.game.getPlayState()));
-    listener.gameChanged();
   }
 
   public void pause() {
     this.game.pause();
     listener.newAction(new GameModeChanged(this.game.getPlayState()));
-    listener.gameChanged();
   }
 
   public void notifyGameOver() {
     this.game.setPlayState(PlayState.GAME_OVER);
+    listener.newAction(new GameModeChanged(this.game.getPlayState()));
+  }
+
+  public void changeGameStateChanged(PlayState playState) {
+    this.game.setPlayState(playState);
     listener.newAction(new GameModeChanged(this.game.getPlayState()));
   }
 
@@ -76,9 +79,6 @@ public class GameContext {
       action.ensureAllowed(this.game);
       GameEvent result = action.apply(this.game, diceEngine);
       if (result != null) {
-        if (result.hasWorldChanged()) {
-          listener.gameChanged();
-        }
         listener.newAction(result);
       }
     } catch (ActionException e) {
