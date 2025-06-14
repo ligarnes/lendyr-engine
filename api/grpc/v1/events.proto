@@ -44,7 +44,7 @@ message LendyrGameSaved {
 }
 
 message LendyrCombatStarted{
-  repeated model.combat.LendyrCombatActor initiativeOrder = 1;
+  repeated model.combat.LendyrEncounter encounter = 1;
 }
 
 // Combat event

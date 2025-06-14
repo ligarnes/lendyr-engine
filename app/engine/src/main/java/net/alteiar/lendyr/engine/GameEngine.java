@@ -3,6 +3,7 @@ package net.alteiar.lendyr.engine;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import net.alteiar.lendyr.entity.event.GameModeChanged;
 import net.alteiar.lendyr.model.PlayState;
 import net.alteiar.lendyr.model.encounter.CombatActor;
 
@@ -83,6 +84,7 @@ public class GameEngine {
   private void updateCombat() {
     if (gameContext.getGame().getEncounter().isEncounterComplete()) {
       gameContext.getGame().setPlayState(PlayState.REAL_TIME);
+      gameContext.notifyEvent(new GameModeChanged(PlayState.REAL_TIME));
       return;
     }
 
