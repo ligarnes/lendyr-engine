@@ -8,6 +8,7 @@ import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
 import net.alteiar.lendyr.entity.event.combat.ChargeAttackGameEvent;
 import net.alteiar.lendyr.entity.event.combat.MoveGameEvent;
 import net.alteiar.lendyr.entity.event.combat.NextCombatPersonaGameEvent;
+import net.alteiar.lendyr.entity.event.exploration.PersonaChangedEvent;
 import net.alteiar.lendyr.entity.event.exploration.PersonaPositionChanged;
 import net.alteiar.lendyr.entity.event.exploration.RealtimeUpdateEvent;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
@@ -37,6 +38,10 @@ public interface EventMapper {
       // Exploration
       case RealtimeUpdateEvent realtimeUpdateEvent -> LendyrGameEvent.newBuilder().setRealtimeUpdate(reatimeUpdateToDto(realtimeUpdateEvent)).build();
 
+      case PersonaChangedEvent personaChangedEvent -> LendyrGameEvent.newBuilder().setPersonaUpdated(
+          LendyrPersonaChanged.newBuilder().setUpdatedPersona(PersonaMapper.INSTANCE.personaToDto(personaChangedEvent.getPersona()))).build();
+
+      //
       case GameSaved gameSaved -> LendyrGameEvent.newBuilder().setSaved(savedToDto(gameSaved)).build();
       case GameModeChanged gameModeChanged -> LendyrGameEvent.newBuilder().setGameModeChanged(gameModeChangedToDto(gameModeChanged)).build();
 

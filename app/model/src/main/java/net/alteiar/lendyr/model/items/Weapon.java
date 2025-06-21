@@ -19,6 +19,9 @@ public class Weapon implements Item {
   private String name;
   private String description;
   private String icon;
+  private ItemRarity rarity;
+  private QuestReference quest;
+
   private String weaponGroup;
   private int damageDice;
   private int damageFixed;

@@ -7,6 +7,7 @@ import lombok.Setter;
 import net.alteiar.lendyr.model.Game;
 import net.alteiar.lendyr.model.PlayState;
 import net.alteiar.lendyr.model.Player;
+import net.alteiar.lendyr.model.items.Item;
 import net.alteiar.lendyr.persistence.ItemRepository;
 import net.alteiar.lendyr.persistence.MapRepository;
 import net.alteiar.lendyr.persistence.RepositoryFactory;
@@ -67,6 +68,11 @@ public class GameEntityImpl implements GameEntity {
 
   public Optional<PersonaEntity> findById(UUID personaId) {
     return Optional.ofNullable(personas.get(personaId));
+  }
+
+  @Override
+  public Optional<Item> getItem(UUID id) {
+    return itemRepository.findById(id);
   }
 
   public Game toModel() {

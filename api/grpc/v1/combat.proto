@@ -7,6 +7,7 @@ option optimize_for = SPEED;
 package model.combat;
 
 import "generic.proto";
+import "persona.proto";
 
 message LendyrEncounter {
   int32  currentTurn = 1;
@@ -38,8 +39,12 @@ message LendyrAction {
 
     // Exploration
     LendyrMoveToAction moveTo = 4;
+    LendyrEquip equip = 5;
+    LendyrUnequip unequip = 6;
+    // LendyrGatherEquipment gatherEquipment = 7;
   }
 }
+
 
 // Major Action
 message LendyrAttackAction {
@@ -61,8 +66,40 @@ message LendyrMoveAction {
   repeated model.generic.LendyrPosition position = 2;
 }
 
-// Generic
+// Exploration
 message LendyrMoveToAction {
   bytes sourceId = 1;
   model.generic.LendyrPosition position = 2;
+}
+
+message LendyrEquip {
+  bytes personaId = 1;
+  bytes equipmentId = 2;
+  LendyrEquippedLocation location = 3;
+}
+
+message LendyrUnequip {
+  bytes personaId = 1;
+  LendyrEquippedLocation location = 2;
+}
+
+enum LendyrEquippedLocation {
+  HAND_1 = 0;
+  HAND_2 = 1;
+  ARMOR = 2;
+  BELT = 3;
+  PANTS = 4;
+  BOOTS = 5;
+  CLOAK = 6;
+  NECKLESS = 7;
+  GLOVES = 8;
+  RING_1 = 9;
+  RING_2 = 10;
+  AMMO = 11;
+}
+
+message LendyrGatherEquipment {
+  bytes personaId = 1;
+  repeated bytes gatherId = 2;
+  repeated bytes dropId = 3;
 }

@@ -1,5 +1,6 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import net.alteiar.lendyr.grpc.model.v1.persona.*;
 import net.alteiar.lendyr.model.persona.*;
 import net.alteiar.lendyr.model.persona.Persona;
@@ -9,9 +10,13 @@ import org.junit.jupiter.api.Test;
 class PersonaMapperTest {
 
   @Test
-  void personaToDto() {
+  void personaToDto() throws JsonProcessingException {
     Persona persona = RandomProvider.INSTANCE.nextObject(Persona.class);
     persona.setPosition(new Position(4.2f, 5.3f, 1));
+
+    for (EquippedLocation location : EquippedLocation.values()) {
+      persona.getEquipped().equip(location, RandomProvider.INSTANCE.nextObject(PersonaItem.class));
+    }
 
     LendyrPersona dto = PersonaMapper.INSTANCE.personaToDto(persona);
 
@@ -48,9 +53,18 @@ class PersonaMapperTest {
   }
 
   private void assertEquipped(PersonaEquipped expected, LendyrPersonaEquipped actual) {
-    assertPersonaEquipped(expected.getLeftHand(), actual.getLeftHand());
-    assertPersonaEquipped(expected.getRightHand(), actual.getRightHand());
-    assertPersonaEquipped(expected.getTwoHanded(), actual.getTwoHanded());
+    assertPersonaEquipped(expected.get(EquippedLocation.HAND_1), actual.getRightHand());
+    assertPersonaEquipped(expected.get(EquippedLocation.HAND_2), actual.getLeftHand());
+    assertPersonaEquipped(expected.get(EquippedLocation.ARMOR), actual.getArmor());
+    assertPersonaEquipped(expected.get(EquippedLocation.BELT), actual.getBelt());
+    assertPersonaEquipped(expected.get(EquippedLocation.GLOVES), actual.getGloves());
+    assertPersonaEquipped(expected.get(EquippedLocation.NECKLESS), actual.getNeckless());
+    assertPersonaEquipped(expected.get(EquippedLocation.RING_1), actual.getRing1());
+    assertPersonaEquipped(expected.get(EquippedLocation.RING_2), actual.getRing2());
+    assertPersonaEquipped(expected.get(EquippedLocation.AMMO), actual.getAmmo());
+    assertPersonaEquipped(expected.get(EquippedLocation.BOOTS), actual.getBoots());
+    assertPersonaEquipped(expected.get(EquippedLocation.CLOAK), actual.getCloak());
+    assertPersonaEquipped(expected.get(EquippedLocation.PANTS), actual.getPants());
   }
 
   private void assertPersonaEquipped(PersonaItem expected, LendyrPersonaEquipment actual) {

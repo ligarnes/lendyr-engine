@@ -4,6 +4,7 @@ import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
+import net.alteiar.lendyr.entity.action.exploration.EquipAction;
 import net.alteiar.lendyr.entity.action.exploration.MoveToTargetAction;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
 import net.alteiar.lendyr.grpc.model.v1.generic.LendyrPosition;
@@ -13,6 +14,24 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 class ActionMapperTest {
+
+  @Test
+  void gameActionToBusiness_equip() {
+    LendyrAction dto = LendyrAction.newBuilder()
+        .setEquip(LendyrEquip.newBuilder()
+            .setPersonaId(GenericMapper.INSTANCE.convertUUIDToBytes(UUID.randomUUID()))
+            .setEquipmentId(GenericMapper.INSTANCE.convertUUIDToBytes(UUID.randomUUID()))
+            .setLocation(LendyrEquippedLocation.ARMOR))
+        .build();
+
+    GameAction action = ActionMapper.INSTANCE.gameActionToBusiness(dto);
+
+    Assertions.assertInstanceOf(EquipAction.class, action);
+    EquipAction attackAction = (EquipAction) action;
+    Assertions.assertEquals(GenericMapper.INSTANCE.convertBytesToUUID(dto.getEquip().getPersonaId()), attackAction.getCharacterId());
+    Assertions.assertEquals(GenericMapper.INSTANCE.convertBytesToUUID(dto.getEquip().getEquipmentId()), attackAction.getItemId());
+    Assertions.assertEquals(ActionMapper.INSTANCE.locationToModel(dto.getEquip().getLocation()), attackAction.getLocation());
+  }
 
   @Test
   void gameActionToBusiness_moveTo() {

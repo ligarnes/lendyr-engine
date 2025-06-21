@@ -16,9 +16,39 @@ message LendyrItem {
   int32 cost = 8;
   int32 encumbrance = 9;
 
+  LendyrQuest quest = 20;
+  LendyrItemRarity rarity = 21;
+  LendyrItemType itemType = 22;
+
   oneof properties {
     LendyrWeaponProperties weapon = 10;
+    LendyrArmorProperties armor = 11;
+    LendyrShieldProperties shield = 12;
   }
+}
+
+enum LendyrItemRarity {
+  COMMON = 0;
+  UNCOMMON = 1;
+  RARE = 2;
+  LEGENDARY = 3;
+}
+
+enum LendyrItemType {
+  WEAPON = 0;
+  ARMOR = 1;
+  BELT = 2;
+  PANTS = 3;
+  BOOTS = 4;
+  CLOAK = 5;
+  NECKLESS = 6;
+  GLOVES = 7;
+  RING = 8;
+  SHIELD = 9;
+  FOOD = 20;
+  MAGIC_ITEMS = 30;
+  AMMO = 40;
+  OTHER = 100;
 }
 
 enum LendyrWeaponType {
@@ -39,4 +69,18 @@ message LendyrWeaponProperties {
   bool penetrating = 9;
   float normalRange = 10;
   float longRange = 11;
+}
+
+message LendyrArmorProperties {
+  int32 armorRating = 1;
+  int32 armorPenalty = 2;
+}
+
+message LendyrShieldProperties {
+  int32 bonus = 1;
+}
+
+message LendyrQuest {
+  bool isQuest = 1;
+  bytes questId = 2;
 }

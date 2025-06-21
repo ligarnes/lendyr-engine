@@ -85,10 +85,12 @@
         }
       },
       "equipped": {
-        "twoHanded": {
-          "itemId": "484889ca-df2e-4a78-b5e1-fbe2eea8a796",
-          "status": "READY",
-          "quantity": 20
+        "equippedLocations": {
+          "HAND_1": {
+            "itemId": "484889ca-df2e-4a78-b5e1-fbe2eea8a796",
+            "status": "READY",
+            "quantity": 20
+          }
         }
       },
       "inventory": {
@@ -169,10 +171,12 @@
         }
       },
       "equipped": {
-        "leftHand": {
-          "itemId": "79370ee4-049f-4681-95e1-256fe11aa8c6",
-          "status": "READY",
-          "quantity": 1
+        "equippedLocations": {
+          "HAND_1": {
+            "itemId": "79370ee4-049f-4681-95e1-256fe11aa8c6",
+            "status": "READY",
+            "quantity": 1
+          }
         }
       },
       "inventory": {
@@ -253,10 +257,12 @@
         }
       },
       "equipped": {
-        "rightHand": {
-          "itemId": "79370ee4-049f-4681-95e1-256fe11aa8c6",
-          "status": "READY",
-          "quantity": 1
+        "equippedLocations": {
+          "HAND_2": {
+            "itemId": "79370ee4-049f-4681-95e1-256fe11aa8c6",
+            "status": "READY",
+            "quantity": 1
+          }
         }
       }
     }

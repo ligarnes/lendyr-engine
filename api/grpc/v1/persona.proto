@@ -39,9 +39,14 @@ message LendyrPersonaEquipped {
   LendyrPersonaEquipment shoes = 4;
   LendyrPersonaEquipment neckless = 5;
   LendyrPersonaEquipment ring1 = 6;
+  LendyrPersonaEquipment ring2 = 9;
+  LendyrPersonaEquipment ammo = 10;
+  LendyrPersonaEquipment helmet = 11;
+  LendyrPersonaEquipment boots = 12;
+  LendyrPersonaEquipment cloak = 13;
+  LendyrPersonaEquipment pants = 14;
   LendyrPersonaEquipment leftHand = 7;
   LendyrPersonaEquipment rightHand = 8;
-  LendyrPersonaEquipment twoHanded = 9;
 }
 
 enum EquipmentStatus {
@@ -60,6 +65,9 @@ message LendyrPersonaEquipment {
 
 message LendyrPersonaInventory {
   repeated LendyrPersonaEquipment backpack = 10;
+  int32 gold = 1;
+  int32 silver = 2;
+  int32 copper = 3;
 }
 
 message LendyrAbilities {

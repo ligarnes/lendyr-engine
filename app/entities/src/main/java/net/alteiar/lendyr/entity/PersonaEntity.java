@@ -187,6 +187,14 @@ public class PersonaEntity {
     };
   }
 
+  public PersonaEquipped getEquipped() {
+    return persona.getEquipped();
+  }
+
+  public Inventory getInventory() {
+    return persona.getInventory();
+  }
+  
   public Persona toModel() {
     return this.persona;
   }

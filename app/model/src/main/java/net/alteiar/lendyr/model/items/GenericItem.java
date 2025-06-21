@@ -19,4 +19,7 @@ public class GenericItem implements Item {
   private String icon;
   private int cost;
   private int encumbrance;
+
+  private ItemRarity rarity;
+  private QuestReference quest;
 }

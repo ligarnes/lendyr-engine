@@ -5,12 +5,13 @@ import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.ChargeAttackAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
 import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
+import net.alteiar.lendyr.entity.action.exploration.EquipAction;
 import net.alteiar.lendyr.entity.action.exploration.MoveToTargetAction;
+import net.alteiar.lendyr.entity.action.exploration.UnEquipmentAction;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
+import net.alteiar.lendyr.model.persona.EquippedLocation;
 import net.alteiar.lendyr.model.persona.Position;
-import org.mapstruct.CollectionMappingStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -53,7 +54,23 @@ public interface ActionMapper {
       Position targetPosition = GenericMapper.INSTANCE.convertPositionFromDto(moveTo.getPosition());
       return MoveToTargetAction.builder().characterId(sourceId).targetPosition(targetPosition).build();
     }
+    if (action.hasEquip()) {
+      LendyrEquip equip = action.getEquip();
+      UUID personaId = GenericMapper.INSTANCE.convertBytesToUUID(equip.getPersonaId());
+      UUID equipmentId = GenericMapper.INSTANCE.convertBytesToUUID(equip.getEquipmentId());
+      EquippedLocation location = locationToModel(equip.getLocation());
+      return new EquipAction(personaId, location, equipmentId);
+    }
+    if (action.hasUnequip()) {
+      LendyrUnequip equip = action.getUnequip();
+      UUID personaId = GenericMapper.INSTANCE.convertBytesToUUID(equip.getPersonaId());
+      EquippedLocation location = locationToModel(equip.getLocation());
+      return new UnEquipmentAction(personaId, location);
+    }
 
     throw new NotSupportedException(String.format("The action %s is not supported yet.", action.getActionsCase().name()));
   }
+
+  @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
+  EquippedLocation locationToModel(LendyrEquippedLocation equipped);
 }

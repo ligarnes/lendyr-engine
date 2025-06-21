@@ -11,6 +11,7 @@ import net.alteiar.lendyr.model.persona.Size;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Log4j2
 public class DynamicPathfinding {
@@ -56,6 +57,9 @@ public class DynamicPathfinding {
   public List<Position> pathTo(Position source, Position end, Size size, float distance) {
     clampToWorld(end, size);
 
+    if (Objects.equals(source, end)) {
+      return List.of();
+    }
     log.info("Move from {} to {}", source, end);
     return pathfinding.computePath(source, end, distance);
   }

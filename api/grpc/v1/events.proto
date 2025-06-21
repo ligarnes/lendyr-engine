@@ -8,6 +8,7 @@ package model.events;
 
 import "generic.proto";
 import "combat.proto";
+import "persona.proto";
 
 // Action Result
 message LendyrGameEvent {
@@ -18,6 +19,9 @@ message LendyrGameEvent {
 
     // Other events
     LendyrError error = 7;
+
+    // Generic actions
+    LendyrPersonaChanged personaUpdated = 11;
 
     // Exploration
     LendyrRealTimeUpdate realtimeUpdate = 10;
@@ -43,6 +47,11 @@ message LendyrGameModeChanged {
 message LendyrGameSaved {
 }
 
+message LendyrPersonaChanged {
+  model.persona.LendyrPersona updatedPersona = 1;
+}
+
+// Generic Action
 message LendyrCombatStarted{
   repeated model.combat.LendyrEncounter encounter = 1;
 }

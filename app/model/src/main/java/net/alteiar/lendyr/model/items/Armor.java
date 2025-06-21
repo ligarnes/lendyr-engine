@@ -19,4 +19,10 @@ public class Armor implements Item {
   private String icon;
   private int cost;
   private int encumbrance;
+
+  private ItemRarity rarity;
+  private QuestReference quest;
+
+  private int armorRating;
+  private int armorPenalty;
 }

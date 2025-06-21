@@ -61,7 +61,8 @@ public class RealTimeEngine {
     if (!positions.isEmpty()) {
       personaEntity.setNextPosition(positions.getFirst());
     } else {
-      log.info("No path found");
+      personaEntity.setNextPosition(null);
+      personaEntity.setTargetPosition(null);
     }
   }
 
