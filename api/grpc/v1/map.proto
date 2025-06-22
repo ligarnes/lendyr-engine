@@ -6,11 +6,25 @@ option optimize_for = SPEED;
 
 package model.map;
 
+import "generic.proto";
+
 message LendyrWorld {
   string name = 1;
   bytes mapId = 2;
 
   repeated bytes entity = 3;
+  repeated LendyrItemContainer itemContainer = 4;
+}
+
+message LendyrItemContainer {
+  bytes id = 1;
+  string name = 2;
+  model.generic.LendyrPosition position = 3;
+  model.generic.LendyrSize size = 4;
+  repeated bytes item = 5;
+  string icon = 6;
+  string opening = 7;
+  string closing = 8;
 }
 
 message LendyrMap {

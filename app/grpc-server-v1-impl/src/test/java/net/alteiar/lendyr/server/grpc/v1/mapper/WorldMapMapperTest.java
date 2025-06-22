@@ -1,10 +1,8 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
-import net.alteiar.lendyr.grpc.model.v1.map.LendyrLayeredMap;
-import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
-import net.alteiar.lendyr.grpc.model.v1.map.LendyrStaticLayer;
-import net.alteiar.lendyr.grpc.model.v1.map.LendyrWorld;
+import net.alteiar.lendyr.grpc.model.v1.map.*;
 import net.alteiar.lendyr.model.encounter.GameMap;
+import net.alteiar.lendyr.model.map.ItemContainer;
 import net.alteiar.lendyr.model.map.LocalMap;
 import net.alteiar.lendyr.model.map.layered.Bridge;
 import net.alteiar.lendyr.model.map.layered.LayeredMap;
@@ -83,6 +81,25 @@ class WorldMapMapperTest {
     Assertions.assertEquals(gameMap.getEntities().size(), map.getEntityList().size());
     for (int i = 0; i < gameMap.getEntities().size(); i++) {
       Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(gameMap.getEntities().get(i)), map.getEntity(i));
+    }
+
+    Assertions.assertEquals(gameMap.getItemContainers().size(), map.getItemContainerList().size());
+    for (int i = 0; i < gameMap.getItemContainers().size(); i++) {
+      ItemContainer expected = gameMap.getItemContainers().get(i);
+      LendyrItemContainer actual = map.getItemContainer(i);
+
+      Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(expected.getId()), actual.getId());
+      Assertions.assertEquals(expected.getName(), actual.getName());
+      Assertions.assertEquals(expected.getIcon(), actual.getIcon());
+      Assertions.assertEquals(expected.getOpening(), actual.getOpening());
+      Assertions.assertEquals(expected.getClosing(), actual.getClosing());
+      Assertions.assertEquals(expected.getPosition().getX(), actual.getPosition().getX());
+      Assertions.assertEquals(expected.getPosition().getY(), actual.getPosition().getY());
+      Assertions.assertEquals(expected.getPosition().getLayer(), actual.getPosition().getLayer());
+      Assertions.assertEquals(expected.getSize().getWidth(), actual.getSize().getWidth());
+      Assertions.assertEquals(expected.getSize().getHeight(), actual.getSize().getHeight());
+
+      Assertions.assertEquals(expected.getItems().size(), actual.getItemCount());
     }
   }
 

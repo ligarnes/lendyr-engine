@@ -11,6 +11,29 @@
     "mapId": "f2659d86-a181-47a5-b201-1e6b2b48b940",
     "entities": [
       "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80"
+    ],
+    "itemContainers": [
+      {
+        "id": "ef1136c3-dc83-4c15-9155-d4fd4d75c5c3",
+        "name": "epic-chest",
+        "icon": "container/wooden-chest-scheme2-opening.png",
+        "opening": "container/wooden-chest-scheme2-opening.png",
+        "closing": "container/wooden-chest-scheme2-closing.png",
+        "position": {
+          "x": 1,
+          "y": 1,
+          "layer": 1
+        },
+        "size": {
+          "width": 1,
+          "height": 1
+        },
+        "items": [
+          "6b8d8149-a13d-4935-8c52-a704566fec49",
+          "8e720d7c-ce16-43e0-a266-97c0b45694da",
+          "fa5bc29b-df16-43a0-a579-d067053086f5"
+        ]
+      }
     ]
   },
   "personas": [

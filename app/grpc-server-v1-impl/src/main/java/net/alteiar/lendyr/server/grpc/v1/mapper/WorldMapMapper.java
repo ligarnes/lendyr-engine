@@ -2,6 +2,7 @@ package net.alteiar.lendyr.server.grpc.v1.mapper;
 
 import net.alteiar.lendyr.grpc.model.v1.map.*;
 import net.alteiar.lendyr.model.encounter.GameMap;
+import net.alteiar.lendyr.model.map.ItemContainer;
 import net.alteiar.lendyr.model.map.LocalMap;
 import net.alteiar.lendyr.model.map.layered.Bridge;
 import net.alteiar.lendyr.model.map.layered.LayeredMap;
@@ -69,5 +70,9 @@ public interface WorldMapMapper {
   }
 
   @Mapping(source = "entities", target = "entityList")
+  @Mapping(source = "itemContainers", target = "itemContainerList")
   LendyrWorld worldMapToDto(LocalMap localMap);
+
+  @Mapping(source = "items", target = "itemList")
+  LendyrItemContainer itemContainerToDto(ItemContainer itemContainer);
 }

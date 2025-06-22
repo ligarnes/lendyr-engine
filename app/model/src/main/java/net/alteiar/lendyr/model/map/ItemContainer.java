@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.model.persona.Size;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ItemContainer {
   private UUID id;
@@ -21,10 +23,12 @@ public class ItemContainer {
   private Position position;
   private Size size;
   private List<UUID> items;
+  private String icon;
+  private String opening;
+  private String closing;
 
   @JsonIgnore
   private DynamicBlockingObject boundingBox;
-
 
   public DynamicBlockingObject getBoundingBox() {
     if (boundingBox == null) {
