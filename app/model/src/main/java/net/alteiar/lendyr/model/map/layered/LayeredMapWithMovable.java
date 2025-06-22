@@ -1,4 +1,4 @@
-package net.alteiar.lendyr.model.map;
+package net.alteiar.lendyr.model.map.layered;
 
 import java.util.stream.Stream;
 

@@ -7,6 +7,7 @@ import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
 import net.alteiar.lendyr.entity.action.exception.NotSupportedException;
 import net.alteiar.lendyr.entity.action.exploration.EquipAction;
 import net.alteiar.lendyr.entity.action.exploration.MoveToTargetAction;
+import net.alteiar.lendyr.entity.action.exploration.PickItemAction;
 import net.alteiar.lendyr.entity.action.exploration.UnEquipmentAction;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
 import net.alteiar.lendyr.model.persona.EquippedLocation;
@@ -66,6 +67,14 @@ public interface ActionMapper {
       UUID personaId = GenericMapper.INSTANCE.convertBytesToUUID(equip.getPersonaId());
       EquippedLocation location = locationToModel(equip.getLocation());
       return new UnEquipmentAction(personaId, location);
+    }
+    if (action.hasPickItem()) {
+      LendyrPickItem pickItem = action.getPickItem();
+      UUID personaId = GenericMapper.INSTANCE.convertBytesToUUID(pickItem.getPersonaId());
+      UUID sourceId = GenericMapper.INSTANCE.convertBytesToUUID(pickItem.getSourceId());
+      List<UUID> items = pickItem.getItemIdList().stream().map(GenericMapper.INSTANCE::convertBytesToUUID).toList();
+
+      return PickItemAction.builder().characterId(personaId).sourceId(sourceId).items(items).build();
     }
 
     throw new NotSupportedException(String.format("The action %s is not supported yet.", action.getActionsCase().name()));

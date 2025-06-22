@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrShape;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrStaticMapElement;
-import net.alteiar.lendyr.model.map.element.PolygonMapElement;
-import net.alteiar.lendyr.model.map.element.RectangleMapElement;
+import net.alteiar.lendyr.model.map.layered.element.PolygonMapElement;
+import net.alteiar.lendyr.model.map.layered.element.RectangleMapElement;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

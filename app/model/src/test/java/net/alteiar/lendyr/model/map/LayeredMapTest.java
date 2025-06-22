@@ -1,6 +1,8 @@
 package net.alteiar.lendyr.model.map;
 
 import com.badlogic.gdx.math.Rectangle;
+import net.alteiar.lendyr.model.map.layered.LayeredMap;
+import net.alteiar.lendyr.model.map.layered.MapFactory;
 import net.alteiar.lendyr.model.map.tiled.TiledMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

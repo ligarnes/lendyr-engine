@@ -3,10 +3,10 @@ package net.alteiar.lendyr.server.grpc.v1.mapper;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
-import net.alteiar.lendyr.model.map.Bridge;
-import net.alteiar.lendyr.model.map.element.MapElement;
-import net.alteiar.lendyr.model.map.element.PolygonMapElement;
-import net.alteiar.lendyr.model.map.element.RectangleMapElement;
+import net.alteiar.lendyr.model.map.layered.Bridge;
+import net.alteiar.lendyr.model.map.layered.element.MapElement;
+import net.alteiar.lendyr.model.map.layered.element.PolygonMapElement;
+import net.alteiar.lendyr.model.map.layered.element.RectangleMapElement;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 

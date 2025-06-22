@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.model.items.Weapon;
 import net.alteiar.lendyr.model.items.WeaponType;
-import net.alteiar.lendyr.model.map.DynamicBlockingObject;
+import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
 import net.alteiar.lendyr.model.persona.*;
 import net.alteiar.lendyr.persistence.ItemRepository;
 
@@ -110,6 +110,10 @@ public class PersonaEntity {
     };
   }
 
+  public DynamicBlockingObject getPickReach() {
+    return getBoundingBox(1f);
+  }
+
   public DynamicBlockingObject getAttackLongBoundingBox() {
     return getBoundingBox(getAttack().getLongRange());
   }
@@ -194,7 +198,7 @@ public class PersonaEntity {
   public Inventory getInventory() {
     return persona.getInventory();
   }
-  
+
   public Persona toModel() {
     return this.persona;
   }

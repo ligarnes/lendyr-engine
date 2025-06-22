@@ -5,10 +5,10 @@ import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrStaticLayer;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrWorld;
 import net.alteiar.lendyr.model.encounter.GameMap;
-import net.alteiar.lendyr.model.encounter.LocalMap;
-import net.alteiar.lendyr.model.map.Bridge;
-import net.alteiar.lendyr.model.map.LayeredMap;
-import net.alteiar.lendyr.model.map.StaticMapLayer;
+import net.alteiar.lendyr.model.map.LocalMap;
+import net.alteiar.lendyr.model.map.layered.Bridge;
+import net.alteiar.lendyr.model.map.layered.LayeredMap;
+import net.alteiar.lendyr.model.map.layered.StaticMapLayer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

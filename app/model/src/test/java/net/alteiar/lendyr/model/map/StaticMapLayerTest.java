@@ -2,6 +2,7 @@ package net.alteiar.lendyr.model.map;
 
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import net.alteiar.lendyr.model.map.layered.StaticMapLayer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

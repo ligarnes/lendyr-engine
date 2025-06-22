@@ -2,8 +2,8 @@ package net.alteiar.lendyr.entity;
 
 import com.badlogic.gdx.math.Rectangle;
 import net.alteiar.lendyr.model.encounter.GameMap;
-import net.alteiar.lendyr.model.encounter.LocalMap;
-import net.alteiar.lendyr.model.map.DynamicBlockingObject;
+import net.alteiar.lendyr.model.map.LocalMap;
+import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
 import net.alteiar.lendyr.model.map.tiled.TiledMap;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.persistence.dao.LocalMapDao;

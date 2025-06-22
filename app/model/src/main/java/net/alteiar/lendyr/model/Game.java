@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.alteiar.lendyr.model.encounter.Encounter;
-import net.alteiar.lendyr.model.encounter.LocalMap;
 import net.alteiar.lendyr.model.items.Item;
+import net.alteiar.lendyr.model.map.LocalMap;
 import net.alteiar.lendyr.model.persona.Persona;
 
 import java.util.List;

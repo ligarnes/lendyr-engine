@@ -3,7 +3,7 @@ package net.alteiar.lendyr.ai.combat.geometry;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.algorithm.representation.DynamicPathfinding;
 import net.alteiar.lendyr.entity.PersonaEntity;
-import net.alteiar.lendyr.model.map.LayeredMapWithMovable;
+import net.alteiar.lendyr.model.map.layered.LayeredMapWithMovable;
 import net.alteiar.lendyr.model.persona.Position;
 
 import java.util.List;

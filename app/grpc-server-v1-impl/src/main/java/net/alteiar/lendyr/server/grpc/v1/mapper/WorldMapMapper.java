@@ -2,10 +2,10 @@ package net.alteiar.lendyr.server.grpc.v1.mapper;
 
 import net.alteiar.lendyr.grpc.model.v1.map.*;
 import net.alteiar.lendyr.model.encounter.GameMap;
-import net.alteiar.lendyr.model.encounter.LocalMap;
-import net.alteiar.lendyr.model.map.Bridge;
-import net.alteiar.lendyr.model.map.LayeredMap;
-import net.alteiar.lendyr.model.map.StaticMapLayer;
+import net.alteiar.lendyr.model.map.LocalMap;
+import net.alteiar.lendyr.model.map.layered.Bridge;
+import net.alteiar.lendyr.model.map.layered.LayeredMap;
+import net.alteiar.lendyr.model.map.layered.StaticMapLayer;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -50,7 +50,7 @@ public interface WorldMapMapper {
   }
 
   List<LendyrMapBridge> bridgeListToDto(List<Bridge> bridges);
-  
+
   default LendyrStaticLayer layerToDto(StaticMapLayer map) {
     if (map == null) {
       return null;

@@ -41,7 +41,8 @@ message LendyrAction {
     LendyrMoveToAction moveTo = 4;
     LendyrEquip equip = 5;
     LendyrUnequip unequip = 6;
-    // LendyrGatherEquipment gatherEquipment = 7;
+    LendyrPickItem pickItem = 7;
+    LendyrDropItem dropItem = 8;
   }
 }
 
@@ -98,8 +99,14 @@ enum LendyrEquippedLocation {
   AMMO = 11;
 }
 
-message LendyrGatherEquipment {
+message LendyrPickItem {
   bytes personaId = 1;
-  repeated bytes gatherId = 2;
-  repeated bytes dropId = 3;
+  bytes sourceId = 2;
+  repeated bytes itemId = 3;
+}
+
+message LendyrDropItem {
+  bytes personaId = 1;
+  bytes targetId = 2;
+  repeated bytes itemId = 3;
 }

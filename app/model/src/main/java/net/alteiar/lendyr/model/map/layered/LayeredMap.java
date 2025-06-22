@@ -1,4 +1,4 @@
-package net.alteiar.lendyr.model.map;
+package net.alteiar.lendyr.model.map.layered;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;

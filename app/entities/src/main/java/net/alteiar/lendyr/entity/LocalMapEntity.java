@@ -4,8 +4,9 @@ import com.badlogic.gdx.math.Rectangle;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import net.alteiar.lendyr.model.encounter.LocalMap;
-import net.alteiar.lendyr.model.map.*;
+import net.alteiar.lendyr.model.map.ItemContainer;
+import net.alteiar.lendyr.model.map.LocalMap;
+import net.alteiar.lendyr.model.map.layered.*;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.persistence.dao.LocalMapDao;
 
@@ -21,11 +22,17 @@ public class LocalMapEntity implements LayeredMapWithMovable {
   private final List<PersonaEntity> personaEntities;
   @Getter
   private LayeredMap layeredMap;
+  @Getter
+  private List<ItemContainer> itemContainers;
 
   @Builder
   public LocalMapEntity(GameEntity gameEntity) {
     this.gameEntity = gameEntity;
     this.personaEntities = new ArrayList<>();
+  }
+
+  public Optional<ItemContainer> getItemContainerById(UUID id) {
+    return itemContainers.stream().filter(c -> Objects.equals(id, c.getId())).findFirst();
   }
 
   public void load(LocalMap map, LocalMapDao gameMap) {

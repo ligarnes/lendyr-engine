@@ -1,7 +1,7 @@
 package net.alteiar.lendyr.algorithm.representation;
 
-import net.alteiar.lendyr.model.map.LayeredMap;
-import net.alteiar.lendyr.model.map.MapFactory;
+import net.alteiar.lendyr.model.map.layered.LayeredMap;
+import net.alteiar.lendyr.model.map.layered.MapFactory;
 import net.alteiar.lendyr.model.map.tiled.TiledMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

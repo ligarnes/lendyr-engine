@@ -1,11 +1,11 @@
-package net.alteiar.lendyr.model.map;
+package net.alteiar.lendyr.model.map.layered;
 
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
-import net.alteiar.lendyr.model.map.element.MapElement;
+import net.alteiar.lendyr.model.map.layered.element.MapElement;
 
 import java.util.List;
 import java.util.Optional;

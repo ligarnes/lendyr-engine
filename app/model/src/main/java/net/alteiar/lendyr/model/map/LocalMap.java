@@ -1,4 +1,4 @@
-package net.alteiar.lendyr.model.encounter;
+package net.alteiar.lendyr.model.map;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +17,5 @@ public class LocalMap {
   String name;
   UUID mapId;
   List<UUID> entities;
+  List<ItemContainer> itemContainers;
 }

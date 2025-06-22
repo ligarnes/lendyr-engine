@@ -3,7 +3,7 @@ package net.alteiar.lendyr.algorithm.representation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import lombok.experimental.UtilityClass;
-import net.alteiar.lendyr.model.map.LayeredMap;
+import net.alteiar.lendyr.model.map.layered.LayeredMap;
 
 import java.util.ArrayList;
 

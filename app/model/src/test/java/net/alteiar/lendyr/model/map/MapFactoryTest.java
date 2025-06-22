@@ -3,6 +3,8 @@ package net.alteiar.lendyr.model.map;
 import com.badlogic.gdx.math.Polygon;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import net.alteiar.lendyr.model.map.layered.LayeredMap;
+import net.alteiar.lendyr.model.map.layered.MapFactory;
 import net.alteiar.lendyr.model.map.tiled.TiledMap;
 import org.junit.jupiter.api.Test;
 

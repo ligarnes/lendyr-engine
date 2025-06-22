@@ -12,7 +12,8 @@ module lendyr.model {
   exports net.alteiar.lendyr.model.persona;
   exports net.alteiar.lendyr.model.items;
   exports net.alteiar.lendyr.model.map;
-  exports net.alteiar.lendyr.model.map.element;
+  exports net.alteiar.lendyr.model.map.layered;
+  exports net.alteiar.lendyr.model.map.layered.element;
   exports net.alteiar.lendyr.model.map.tiled;
   exports net.alteiar.lendyr.model.map.tiled.object;
 }

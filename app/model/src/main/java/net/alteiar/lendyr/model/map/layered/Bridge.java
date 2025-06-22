@@ -1,9 +1,9 @@
-package net.alteiar.lendyr.model.map;
+package net.alteiar.lendyr.model.map.layered;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import net.alteiar.lendyr.model.map.element.MapElement;
+import net.alteiar.lendyr.model.map.layered.element.MapElement;
 
 @Value
 @Builder

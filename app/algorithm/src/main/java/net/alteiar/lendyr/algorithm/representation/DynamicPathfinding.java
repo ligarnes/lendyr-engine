@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.algorithm.movement.Pathfinding;
-import net.alteiar.lendyr.model.map.LayeredMapWithMovable;
+import net.alteiar.lendyr.model.map.layered.LayeredMapWithMovable;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.model.persona.Size;
 

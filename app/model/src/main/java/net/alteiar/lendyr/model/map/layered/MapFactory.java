@@ -1,13 +1,13 @@
-package net.alteiar.lendyr.model.map;
+package net.alteiar.lendyr.model.map.layered;
 
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import lombok.extern.log4j.Log4j2;
-import net.alteiar.lendyr.model.map.element.MapElement;
-import net.alteiar.lendyr.model.map.element.PolygonMapElement;
-import net.alteiar.lendyr.model.map.element.RectangleMapElement;
+import net.alteiar.lendyr.model.map.layered.element.MapElement;
+import net.alteiar.lendyr.model.map.layered.element.PolygonMapElement;
+import net.alteiar.lendyr.model.map.layered.element.RectangleMapElement;
 import net.alteiar.lendyr.model.map.tiled.TiledMap;
 import net.alteiar.lendyr.model.map.tiled.TiledObjectGroup;
 import net.alteiar.lendyr.model.map.tiled.object.TiledObject;
