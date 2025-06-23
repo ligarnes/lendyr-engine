@@ -19,6 +19,7 @@ message LendyrWorld {
 message LendyrItemContainer {
   bytes id = 1;
   string name = 2;
+  bool isBlocking = 9;
   model.generic.LendyrPosition position = 3;
   model.generic.LendyrSize size = 4;
   repeated bytes item = 5;

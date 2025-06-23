@@ -29,6 +29,7 @@ public class LocalMapEntity implements LayeredMapWithMovable {
   public LocalMapEntity(GameEntity gameEntity) {
     this.gameEntity = gameEntity;
     this.personaEntities = new ArrayList<>();
+    this.itemContainers = new ArrayList<>();
   }
 
   public Optional<ItemContainer> getItemContainerById(UUID id) {
@@ -44,11 +45,17 @@ public class LocalMapEntity implements LayeredMapWithMovable {
             .map(gameEntity::findById)
             .map(opt -> opt.orElseThrow(() -> new IllegalArgumentException("The persona could not be found")))
             .toList());
+    if (map.getItemContainers() != null) {
+      itemContainers.addAll(map.getItemContainers());
+    }
   }
 
   @Override
   public Stream<DynamicBlockingObject> getMovableObjects() {
-    return personaEntities.stream().filter(p -> !p.isDefeated()).map(PersonaEntity::getDefenceBoundingBox);
+    return Stream.concat(
+        personaEntities.stream().filter(p -> !p.isDefeated()).map(PersonaEntity::getDefenceBoundingBox),
+        itemContainers.stream().filter(ItemContainer::isBlocking).map(ItemContainer::getBoundingBox)
+    );
   }
 
   /**

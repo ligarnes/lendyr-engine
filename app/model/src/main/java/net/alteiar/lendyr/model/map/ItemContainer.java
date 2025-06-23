@@ -19,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ItemContainer {
   private UUID id;
+  private boolean blocking;
   private String name;
   private Position position;
   private Size size;

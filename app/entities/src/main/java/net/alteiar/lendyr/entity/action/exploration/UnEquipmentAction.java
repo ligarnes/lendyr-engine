@@ -16,6 +16,7 @@ import net.alteiar.lendyr.entity.event.exploration.PersonaChangedEvent;
 import net.alteiar.lendyr.model.persona.EquippedLocation;
 import net.alteiar.lendyr.model.persona.PersonaItem;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -50,12 +51,12 @@ public class UnEquipmentAction implements GameAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
 
     PersonaItem personaItem = persona.getEquipped().removeFrom(location);
     persona.getInventory().addToBackpack(personaItem);
 
-    return PersonaChangedEvent.builder().persona(persona.toModel()).build();
+    return List.of(PersonaChangedEvent.builder().persona(persona.toModel()).build());
   }
 
 }

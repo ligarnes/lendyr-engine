@@ -19,6 +19,8 @@ import net.alteiar.lendyr.model.PlayState;
 import net.alteiar.lendyr.persistence.RepositoryFactory;
 import net.alteiar.lendyr.persistence.SaveRepository;
 
+import java.util.List;
+
 public class GameContext {
   @Getter
   private final GameEntityImpl game;
@@ -77,9 +79,9 @@ public class GameContext {
   public void act(GameAction action) {
     try {
       action.ensureAllowed(this.game);
-      GameEvent result = action.apply(this.game, diceEngine);
+      List<GameEvent> result = action.apply(this.game, diceEngine);
       if (result != null) {
-        listener.newAction(result);
+        result.forEach(listener::newAction);
       }
     } catch (ActionException e) {
       throw e;

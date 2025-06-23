@@ -18,6 +18,7 @@ import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
 import net.alteiar.lendyr.model.persona.Attack;
 import net.alteiar.lendyr.model.persona.AttackType;
 
+import java.util.List;
 import java.util.UUID;
 
 @Log4j2
@@ -55,7 +56,7 @@ public class AttackAction extends BaseAction implements MajorAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
     log.info("{} attack {}", personaSource.getName(), personaTarget.getName());
 
     Attack attack = personaSource.getAttack();
@@ -89,16 +90,18 @@ public class AttackAction extends BaseAction implements MajorAction {
     }
     gameEntity.getEncounter().useMajorAction();
 
-    return AttackGameEvent.builder()
-        .sourceId(sourceId)
-        .targetId(targetId)
-        .attackResult(result)
-        .rawDamage(totalDamage)
-        .mitigatedDamage(mitigatedDamage)
-        .hit(attackHit)
-        .targetRemainingHp(personaTarget.getCurrentHealthPoint())
-        .minorActionUsed(gameEntity.getEncounter().isMinorActionUsed())
-        .majorActionUsed(gameEntity.getEncounter().isMajorActionUsed())
-        .build();
+    return List.of(
+        AttackGameEvent.builder()
+            .sourceId(sourceId)
+            .targetId(targetId)
+            .attackResult(result)
+            .rawDamage(totalDamage)
+            .mitigatedDamage(mitigatedDamage)
+            .hit(attackHit)
+            .targetRemainingHp(personaTarget.getCurrentHealthPoint())
+            .minorActionUsed(gameEntity.getEncounter().isMinorActionUsed())
+            .majorActionUsed(gameEntity.getEncounter().isMajorActionUsed())
+            .build()
+    );
   }
 }

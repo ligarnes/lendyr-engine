@@ -8,6 +8,7 @@ import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
 import net.alteiar.lendyr.entity.event.combat.ChargeAttackGameEvent;
 import net.alteiar.lendyr.entity.event.combat.MoveGameEvent;
 import net.alteiar.lendyr.entity.event.combat.NextCombatPersonaGameEvent;
+import net.alteiar.lendyr.entity.event.exploration.ItemContainerChangedEvent;
 import net.alteiar.lendyr.entity.event.exploration.PersonaChangedEvent;
 import net.alteiar.lendyr.entity.event.exploration.PersonaPositionChanged;
 import net.alteiar.lendyr.entity.event.exploration.RealtimeUpdateEvent;
@@ -19,7 +20,7 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(
-    uses = GenericMapper.class,
+    uses = {GenericMapper.class, WorldMapMapper.class},
     collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
 )
@@ -38,6 +39,7 @@ public interface EventMapper {
       // Exploration
       case RealtimeUpdateEvent realtimeUpdateEvent -> LendyrGameEvent.newBuilder().setRealtimeUpdate(reatimeUpdateToDto(realtimeUpdateEvent)).build();
 
+      case ItemContainerChangedEvent itemCChanged -> LendyrGameEvent.newBuilder().setItemContainerUpdated(itemContainerChangedToDto(itemCChanged)).build();
       case PersonaChangedEvent personaChangedEvent -> LendyrGameEvent.newBuilder().setPersonaUpdated(
           LendyrPersonaChanged.newBuilder().setUpdatedPersona(PersonaMapper.INSTANCE.personaToDto(personaChangedEvent.getPersona()))).build();
 
@@ -48,6 +50,9 @@ public interface EventMapper {
       default -> throw new ProcessingException(String.format("Cannot map the action result of type %s", gameEvent.getClass().getSimpleName()));
     };
   }
+
+  @Mapping(source = "itemContainer", target = "container")
+  LendyrItemContainerChanged itemContainerChangedToDto(ItemContainerChangedEvent event);
 
   @Mapping(source = "positions", target = "positionsList")
   LendyrRealTimeUpdate reatimeUpdateToDto(RealtimeUpdateEvent event);

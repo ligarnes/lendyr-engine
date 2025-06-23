@@ -12,6 +12,7 @@ import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
 import net.alteiar.lendyr.entity.event.GameEvent;
+import net.alteiar.lendyr.entity.event.exploration.ItemContainerChangedEvent;
 import net.alteiar.lendyr.entity.event.exploration.PersonaChangedEvent;
 import net.alteiar.lendyr.model.map.ItemContainer;
 import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
@@ -67,7 +68,7 @@ public class PickItemAction implements GameAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
     // Add all the items
     for (UUID itemId : items) {
       PersonaItem personaItem = PersonaItem.builder().itemId(itemId).quantity(1).status(EquipmentStatus.READY).build();
@@ -75,7 +76,10 @@ public class PickItemAction implements GameAction {
       container.getItems().remove(itemId);
     }
 
-    return PersonaChangedEvent.builder().persona(persona.toModel()).build();
+    return List.of(
+        PersonaChangedEvent.builder().persona(persona.toModel()).build(),
+        ItemContainerChangedEvent.builder().itemContainer(container).build()
+    );
   }
 
 }

@@ -51,13 +51,13 @@ public class DropItemAction implements GameAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
     // Add all the items
     for (UUID itemId : items) {
       PersonaItem personaItem = PersonaItem.builder().itemId(itemId).quantity(1).status(EquipmentStatus.READY).build();
       persona.getInventory().addToBackpack(personaItem);
     }
-    return PersonaChangedEvent.builder().persona(persona.toModel()).build();
+    return List.of(PersonaChangedEvent.builder().persona(persona.toModel()).build());
   }
 
 }

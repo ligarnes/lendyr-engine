@@ -5,6 +5,7 @@ import net.alteiar.lendyr.entity.event.GameEvent;
 import net.alteiar.lendyr.entity.event.GameModeChanged;
 import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
 import net.alteiar.lendyr.entity.event.combat.MoveGameEvent;
+import net.alteiar.lendyr.entity.event.exploration.ItemContainerChangedEvent;
 import net.alteiar.lendyr.entity.event.exploration.PersonaPositionChanged;
 import net.alteiar.lendyr.entity.event.exploration.RealtimeUpdateEvent;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
@@ -17,6 +18,16 @@ import java.util.List;
 import java.util.UUID;
 
 class EventMapperTest {
+
+  @Test
+  void actionResultToDto_ItemContainerChangedEvent() {
+    // Given
+    ItemContainerChangedEvent result = ItemContainerChangedEvent.builder().build();
+    // When
+    LendyrGameEvent dto = EventMapper.INSTANCE.eventResultToDto(result);
+    // Then
+    Assertions.assertEquals(LendyrGameEvent.ActionsCase.ITEMCONTAINERUPDATED, dto.getActionsCase());
+  }
 
   @Test
   void actionResultToDto_RealtimeUpdateEvent() {
@@ -46,6 +57,27 @@ class EventMapperTest {
     LendyrGameEvent dto = EventMapper.INSTANCE.eventResultToDto(result);
     // Then
     Assertions.assertEquals(LendyrGameEvent.ActionsCase.MOVE, dto.getActionsCase());
+  }
+
+  @Test
+  void itemContainerChangedToDto() {
+    // Given
+    ItemContainerChangedEvent result = RandomProvider.INSTANCE.nextObject(ItemContainerChangedEvent.class);
+
+    // When
+    LendyrItemContainerChanged dto = EventMapper.INSTANCE.itemContainerChangedToDto(result);
+
+    // Then
+    Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(result.getItemContainer().getId()), dto.getContainer().getId());
+    Assertions.assertEquals(result.getItemContainer().getName(), dto.getContainer().getName());
+    Assertions.assertEquals(result.getItemContainer().getSize().getWidth(), dto.getContainer().getSize().getWidth());
+    Assertions.assertEquals(result.getItemContainer().getSize().getHeight(), dto.getContainer().getSize().getHeight());
+    Assertions.assertEquals(result.getItemContainer().getPosition().getX(), dto.getContainer().getPosition().getX());
+    Assertions.assertEquals(result.getItemContainer().getPosition().getY(), dto.getContainer().getPosition().getY());
+    Assertions.assertEquals(result.getItemContainer().getPosition().getLayer(), dto.getContainer().getPosition().getLayer());
+    Assertions.assertEquals(result.getItemContainer().getClosing(), dto.getContainer().getClosing());
+    Assertions.assertEquals(result.getItemContainer().getOpening(), dto.getContainer().getOpening());
+    Assertions.assertEquals(result.getItemContainer().getItems().size(), dto.getContainer().getItemCount());
   }
 
   @Test

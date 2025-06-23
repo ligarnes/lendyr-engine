@@ -77,18 +77,20 @@ public class MoveAction implements MinorAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
     // Move to last position
     log.info("Move {} to {}", characterId, positions);
     persona.setPosition(positions.getLast());
     gameEntity.getEncounter().useMinorAction();
 
-    return MoveGameEvent.builder()
-        .sourceId(characterId)
-        .path(positions)
-        .minorActionUsed(gameEntity.getEncounter().isMinorActionUsed())
-        .majorActionUsed(gameEntity.getEncounter().isMajorActionUsed())
-        .build();
+    return List.of(
+        MoveGameEvent.builder()
+            .sourceId(characterId)
+            .path(positions)
+            .minorActionUsed(gameEntity.getEncounter().isMinorActionUsed())
+            .majorActionUsed(gameEntity.getEncounter().isMajorActionUsed())
+            .build()
+    );
   }
 
   private float roundToQuarter(float position) {

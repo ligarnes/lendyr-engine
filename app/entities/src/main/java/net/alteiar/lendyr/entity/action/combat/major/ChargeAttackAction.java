@@ -95,7 +95,7 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
     log.info("{} attack {}", personaSource.getName(), personaTarget.getName());
 
     personaSource.setPosition(positions.getLast());
@@ -122,18 +122,20 @@ public class ChargeAttackAction extends BaseAction implements MajorAction {
     }
     gameEntity.getEncounter().useMajorAction();
 
-    return ChargeAttackGameEvent.builder()
-        .sourceId(sourceId)
-        .targetId(targetId)
-        .path(positions)
-        .attackResult(result)
-        .rawDamage(totalDamage)
-        .mitigatedDamage(mitigatedDamage)
-        .hit(attackHit)
-        .targetRemainingHp(personaTarget.getCurrentHealthPoint())
-        .minorActionUsed(gameEntity.getEncounter().isMinorActionUsed())
-        .majorActionUsed(gameEntity.getEncounter().isMajorActionUsed())
-        .build();
+    return List.of(
+        ChargeAttackGameEvent.builder()
+            .sourceId(sourceId)
+            .targetId(targetId)
+            .path(positions)
+            .attackResult(result)
+            .rawDamage(totalDamage)
+            .mitigatedDamage(mitigatedDamage)
+            .hit(attackHit)
+            .targetRemainingHp(personaTarget.getCurrentHealthPoint())
+            .minorActionUsed(gameEntity.getEncounter().isMinorActionUsed())
+            .majorActionUsed(gameEntity.getEncounter().isMajorActionUsed())
+            .build()
+    );
   }
 
   private float roundToQuarter(float position) {

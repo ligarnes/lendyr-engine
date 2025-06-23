@@ -7,6 +7,8 @@ import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.event.GameEvent;
 import net.alteiar.lendyr.entity.event.combat.NextCombatPersonaGameEvent;
 
+import java.util.List;
+
 public class EndTurnAction implements GameAction {
 
   @Override
@@ -15,9 +17,9 @@ public class EndTurnAction implements GameAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
     EncounterEntity encounter = gameEntity.getEncounter();
     encounter.endPlayerTurn();
-    return new NextCombatPersonaGameEvent(encounter.getTurn(), encounter.getCurrentPersona().getPersonaId());
+    return List.of(new NextCombatPersonaGameEvent(encounter.getTurn(), encounter.getCurrentPersona().getPersonaId()));
   }
 }

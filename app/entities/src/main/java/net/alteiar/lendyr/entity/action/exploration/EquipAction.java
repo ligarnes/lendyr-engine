@@ -19,6 +19,7 @@ import net.alteiar.lendyr.model.persona.Ability;
 import net.alteiar.lendyr.model.persona.EquippedLocation;
 import net.alteiar.lendyr.model.persona.PersonaItem;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -110,13 +111,13 @@ public class EquipAction implements GameAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
     PersonaItem found = persona.getEquipped().get(location);
     persona.getEquipped().equip(location, personaItem);
     persona.getInventory().removeItem(itemId);
     if (found != null) {
       persona.getInventory().addToBackpack(found);
     }
-    return PersonaChangedEvent.builder().persona(persona.toModel()).build();
+    return List.of(PersonaChangedEvent.builder().persona(persona.toModel()).build());
   }
 }

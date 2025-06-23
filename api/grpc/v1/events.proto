@@ -9,6 +9,7 @@ package model.events;
 import "generic.proto";
 import "combat.proto";
 import "persona.proto";
+import "map.proto";
 
 // Action Result
 message LendyrGameEvent {
@@ -22,6 +23,7 @@ message LendyrGameEvent {
 
     // Generic actions
     LendyrPersonaChanged personaUpdated = 11;
+    LendyrItemContainerChanged itemContainerUpdated = 12;
 
     // Exploration
     LendyrRealTimeUpdate realtimeUpdate = 10;
@@ -116,6 +118,10 @@ enum LendyrGameMode {
 }
 
 // Exploration
+message LendyrItemContainerChanged {
+  model.map.LendyrItemContainer container = 1;
+}
+
 message LendyrRealTimeUpdate {
   repeated LendyrPersonaPositionChanged positions = 1;
 }

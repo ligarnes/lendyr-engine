@@ -14,6 +14,7 @@ import net.alteiar.lendyr.entity.action.exception.NotFoundException;
 import net.alteiar.lendyr.entity.event.GameEvent;
 import net.alteiar.lendyr.model.persona.Position;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -47,10 +48,10 @@ public class MoveToTargetAction implements GameAction {
   }
 
   @Override
-  public GameEvent apply(GameEntity gameEntity, DiceEngine diceEngine) {
+  public List<GameEvent> apply(GameEntity gameEntity, DiceEngine diceEngine) {
     // Move to last position
     log.info("Set target position to {}", targetPosition);
     persona.setTargetPosition(targetPosition);
-    return null;
+    return List.of();
   }
 }
