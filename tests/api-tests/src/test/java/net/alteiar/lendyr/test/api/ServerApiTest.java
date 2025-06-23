@@ -62,13 +62,8 @@ public class ServerApiTest {
     LendyrGameState state = blockingStub.currentState(EmptyResponse.newBuilder().build());
 
     // Then
-    Assertions.assertEquals(3, state.getPersonaCount());
     Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(mapId), state.getMap().getMapId());
     Assertions.assertEquals(LendyrGameMode.PAUSE, state.getPlayState());
     Assertions.assertEquals(3, state.getEncounter().getInitiativeOrderCount());
-    Assertions.assertEquals("Ulfrik", state.getPersona(0).getName());
-    Assertions.assertEquals(12, state.getPersona(0).getPosition().getX());
-    Assertions.assertEquals(12, state.getPersona(0).getPosition().getY());
-    Assertions.assertEquals(3, state.getPersona(0).getPosition().getLayer());
   }
 }

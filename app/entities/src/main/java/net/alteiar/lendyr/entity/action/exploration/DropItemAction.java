@@ -57,7 +57,7 @@ public class DropItemAction implements GameAction {
       PersonaItem personaItem = PersonaItem.builder().itemId(itemId).quantity(1).status(EquipmentStatus.READY).build();
       persona.getInventory().addToBackpack(personaItem);
     }
-    return List.of(PersonaChangedEvent.builder().persona(persona.toModel()).build());
+    return List.of(PersonaChangedEvent.builder().persona(persona).build());
   }
 
 }

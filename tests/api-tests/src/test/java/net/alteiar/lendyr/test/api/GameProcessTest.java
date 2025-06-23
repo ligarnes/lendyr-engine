@@ -55,7 +55,6 @@ public class GameProcessTest {
     // Then
     Awaitility.await().untilAsserted(() -> {
       LendyrGameState state = blockingStub.currentState(EmptyResponse.newBuilder().build());
-      Assertions.assertEquals(3, state.getPersonaCount());
       Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(mapId), state.getMap().getMapId());
       Assertions.assertEquals(LendyrGameMode.COMBAT, state.getPlayState());
       Assertions.assertEquals(3, state.getEncounter().getInitiativeOrderCount());

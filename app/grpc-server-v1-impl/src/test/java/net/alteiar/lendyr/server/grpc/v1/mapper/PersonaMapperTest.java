@@ -1,16 +1,18 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.grpc.model.v1.persona.*;
 import net.alteiar.lendyr.model.persona.*;
 import net.alteiar.lendyr.model.persona.Persona;
+import net.alteiar.lendyr.persistence.ItemRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class PersonaMapperTest {
 
   @Test
-  void personaToDto() throws JsonProcessingException {
+  void personaToDto() {
     Persona persona = RandomProvider.INSTANCE.nextObject(Persona.class);
     persona.setPosition(new Position(4.2f, 5.3f, 1));
 
@@ -18,38 +20,44 @@ class PersonaMapperTest {
       persona.getEquipped().equip(location, RandomProvider.INSTANCE.nextObject(PersonaItem.class));
     }
 
-    LendyrPersona dto = PersonaMapper.INSTANCE.personaToDto(persona);
+    ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
+    PersonaEntity personaEntity = PersonaEntity.builder().persona(persona).itemRepository(itemRepository).build();
 
-    Assertions.assertEquals(persona.getName(), dto.getName());
-    Assertions.assertEquals(persona.getPortraitPath(), dto.getPortraitPath());
-    Assertions.assertEquals(persona.getTokenPath(), dto.getTokenPath());
+    LendyrPersona dto = PersonaMapper.INSTANCE.personaToDto(personaEntity);
+
+    Assertions.assertEquals(personaEntity.getName(), dto.getName());
+    Assertions.assertEquals(personaEntity.getPortraitPath(), dto.getPortraitPath());
+    Assertions.assertEquals(personaEntity.getTokenPath(), dto.getTokenPath());
     Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(persona.getId()), dto.getId());
-    Assertions.assertEquals(persona.getCurrentHealthPoint(), dto.getCurrentHealthPoint());
-    Assertions.assertEquals(persona.getHealthPoint(), dto.getHealthPoint());
-    Assertions.assertEquals(persona.getDefense(), dto.getDefense());
-    Assertions.assertEquals(persona.getArmorRating(), dto.getArmorRating());
-    Assertions.assertEquals(persona.getArmorPenalty(), dto.getArmorPenalty());
-    Assertions.assertEquals(persona.getSpeed(), dto.getSpeed());
+    Assertions.assertEquals(personaEntity.getCurrentHealthPoint(), dto.getCurrentHealthPoint());
+    Assertions.assertEquals(personaEntity.getHealthPoint(), dto.getHealthPoint());
+    Assertions.assertEquals(personaEntity.getDefense(), dto.getDefense());
+    Assertions.assertEquals(personaEntity.getArmorRating(), dto.getArmorRating());
+    Assertions.assertEquals(personaEntity.getArmorPenalty(), dto.getArmorPenalty());
+    Assertions.assertEquals(personaEntity.getSpeed(), dto.getSpeed());
 
-    Assertions.assertEquals(persona.getSize().getWidth(), dto.getSize().getWidth());
-    Assertions.assertEquals(persona.getSize().getHeight(), dto.getSize().getHeight());
+    Assertions.assertEquals(personaEntity.getSize().getWidth(), dto.getSize().getWidth());
+    Assertions.assertEquals(personaEntity.getSize().getHeight(), dto.getSize().getHeight());
 
-    Assertions.assertEquals(persona.getPosition().getX(), dto.getPosition().getX());
-    Assertions.assertEquals(persona.getPosition().getY(), dto.getPosition().getY());
-    Assertions.assertEquals(persona.getPosition().getLayer(), dto.getPosition().getLayer());
+    Assertions.assertEquals(personaEntity.getPosition().getX(), dto.getPosition().getX());
+    Assertions.assertEquals(personaEntity.getPosition().getY(), dto.getPosition().getY());
+    Assertions.assertEquals(personaEntity.getPosition().getLayer(), dto.getPosition().getLayer());
 
-    assertEquals(persona.getAbilities().getAccuracy(), dto.getAbilities().getAccuracy());
-    assertEquals(persona.getAbilities().getCommunication(), dto.getAbilities().getCommunication());
-    assertEquals(persona.getAbilities().getConstitution(), dto.getAbilities().getConstitution());
-    assertEquals(persona.getAbilities().getDexterity(), dto.getAbilities().getDexterity());
-    assertEquals(persona.getAbilities().getFighting(), dto.getAbilities().getFighting());
-    assertEquals(persona.getAbilities().getIntelligence(), dto.getAbilities().getIntelligence());
-    assertEquals(persona.getAbilities().getPerception(), dto.getAbilities().getPerception());
-    assertEquals(persona.getAbilities().getStrength(), dto.getAbilities().getStrength());
-    assertEquals(persona.getAbilities().getWillpower(), dto.getAbilities().getWillpower());
+    assertEquals(personaEntity.getAbility(Ability.ACCURACY), dto.getAbilities().getAccuracy());
+    assertEquals(personaEntity.getAbility(Ability.COMMUNICATION), dto.getAbilities().getCommunication());
+    assertEquals(personaEntity.getAbility(Ability.CONSTITUTION), dto.getAbilities().getConstitution());
+    assertEquals(personaEntity.getAbility(Ability.DEXTERITY), dto.getAbilities().getDexterity());
+    assertEquals(personaEntity.getAbility(Ability.FIGHTING), dto.getAbilities().getFighting());
+    assertEquals(personaEntity.getAbility(Ability.INTELLIGENCE), dto.getAbilities().getIntelligence());
+    assertEquals(personaEntity.getAbility(Ability.PERCEPTION), dto.getAbilities().getPerception());
+    assertEquals(personaEntity.getAbility(Ability.STRENGTH), dto.getAbilities().getStrength());
+    assertEquals(personaEntity.getAbility(Ability.WILLPOWER), dto.getAbilities().getWillpower());
 
-    assertEquipped(persona.getEquipped(), dto.getEquipped());
-    assertInventory(persona.getInventory(), dto.getInventory());
+    Assertions.assertFalse(personaEntity.getEquipped().toList().isEmpty());
+    assertEquipped(personaEntity.getEquipped(), dto.getEquipped());
+
+    Assertions.assertFalse(personaEntity.getInventory().getBackpack().isEmpty());
+    assertInventory(personaEntity.getInventory(), dto.getInventory());
   }
 
   private void assertEquipped(PersonaEquipped expected, LendyrPersonaEquipped actual) {

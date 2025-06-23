@@ -10,4 +10,5 @@ module lendyr.game.persistence {
   requires com.fasterxml.jackson.annotation;
   requires gdx;
   requires com.fasterxml.jackson.dataformat.xml;
+  requires org.apache.logging.log4j;
 }

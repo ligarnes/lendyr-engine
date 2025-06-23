@@ -22,4 +22,7 @@ public class GenericItem implements Item {
 
   private ItemRarity rarity;
   private QuestReference quest;
+
+  // Defensive property
+  private int defenseBonus;
 }

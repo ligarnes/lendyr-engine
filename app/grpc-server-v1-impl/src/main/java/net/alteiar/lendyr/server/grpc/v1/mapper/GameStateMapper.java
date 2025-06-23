@@ -21,7 +21,7 @@ public interface GameStateMapper {
       builder.setEncounter(EncounterMapper.INSTANCE.businessToDto(game.getEncounter()));
     }
 
-    game.getPersonas().stream().map(PersonaMapper.INSTANCE::personaToDto).forEach(builder::addPersona);
+    // game.getPersonas().stream().map(PersonaMapper.INSTANCE::personaToDto).forEach(builder::addPersona);
 
     Optional.ofNullable(game.getLocalMap()).map(WorldMapMapper.INSTANCE::worldMapToDto).ifPresent(builder::setMap);
     Optional.ofNullable(game.getPlayer()).map(PlayerMapper.INSTANCE::businessToDto).ifPresent(builder::setPlayers);

@@ -15,15 +15,15 @@ public class Persona {
   private UUID id;
   private String name;
   private int speed;
-  private int defense;
+  //private int defense;
 
   private String portraitPath;
   private String tokenPath;
   private Position position;
   private Size size;
 
-  private int armorRating;
-  private int armorPenalty;
+  //private int armorRating;
+  //private int armorPenalty;
 
   private int healthPoint;
   private int currentHealthPoint;

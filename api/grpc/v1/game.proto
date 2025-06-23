@@ -30,6 +30,9 @@ service LendyrGameService {
   // Load maps
   rpc getMaps(LendyrGetById) returns (model.map.LendyrMap);
 
+  // Get personas
+  rpc getPersona(LendyrGetById) returns (model.persona.LendyrPersona);
+
   // Retrieve current state
   rpc currentState(EmptyResponse) returns (LendyrGameState);
 
@@ -43,9 +46,9 @@ service LendyrGameService {
   rpc endTurn(EmptyResponse) returns (EmptyResponse);
 }
 
-service LendyrCharacterService {
+service LendyrPersonaService {
 
-  rpc create(model.persona.LendyrPersona) returns (CreatedResponse);
+  //rpc create(model.persona.LendyrPersona) returns (CreatedResponse);
 
   rpc get(LendyrGetById) returns (model.persona.LendyrPersona);
 }
@@ -60,7 +63,7 @@ message LendyrSaveGameRequest {
 
 message LendyrGameState {
   model.combat.LendyrEncounter encounter = 2;
-  repeated model.persona.LendyrPersona persona = 3;
+  //repeated model.persona.LendyrPersona persona = 3;
   model.player.LendyrPlayer players = 4;
   model.map.LendyrWorld map = 5;
   model.events.LendyrGameMode playState = 6;

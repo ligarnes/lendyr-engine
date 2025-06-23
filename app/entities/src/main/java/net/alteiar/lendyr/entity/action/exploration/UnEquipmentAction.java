@@ -56,7 +56,7 @@ public class UnEquipmentAction implements GameAction {
     PersonaItem personaItem = persona.getEquipped().removeFrom(location);
     persona.getInventory().addToBackpack(personaItem);
 
-    return List.of(PersonaChangedEvent.builder().persona(persona.toModel()).build());
+    return List.of(PersonaChangedEvent.builder().persona(persona).build());
   }
 
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.engine.GameContext;
+import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.entity.action.GameAction;
 import net.alteiar.lendyr.entity.action.combat.EndTurnAction;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
@@ -17,29 +18,28 @@ import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrGameEvent;
 import net.alteiar.lendyr.grpc.model.v1.game.*;
 import net.alteiar.lendyr.grpc.model.v1.item.LendyrItem;
 import net.alteiar.lendyr.grpc.model.v1.map.LendyrMap;
+import net.alteiar.lendyr.grpc.model.v1.persona.LendyrPersona;
 import net.alteiar.lendyr.model.map.layered.LayeredMap;
 import net.alteiar.lendyr.model.map.layered.MapFactory;
 import net.alteiar.lendyr.persistence.dao.LocalMapDao;
-import net.alteiar.lendyr.server.grpc.v1.mapper.ActionMapper;
-import net.alteiar.lendyr.server.grpc.v1.mapper.GenericMapper;
-import net.alteiar.lendyr.server.grpc.v1.mapper.ItemMapper;
-import net.alteiar.lendyr.server.grpc.v1.mapper.WorldMapMapper;
-import net.alteiar.lendyr.server.grpc.v1.processor.CurrentStateProcessor;
+import net.alteiar.lendyr.server.grpc.v1.mapper.*;
+import net.alteiar.lendyr.server.grpc.v1.processor.EventProcessor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
 @Log4j2
 public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServiceImplBase {
   private final GameContext gameContext;
-  private final CurrentStateProcessor currentStateProcessor;
+  private final EventProcessor eventProcessor;
 
   @Builder
   LendyrGameServiceImpl(@NonNull GameContext gameContext) {
     this.gameContext = gameContext;
-    currentStateProcessor = CurrentStateProcessor.builder().gameContext(gameContext).build();
-    this.gameContext.setListener(currentStateProcessor);
+    eventProcessor = EventProcessor.builder().gameContext(gameContext).build();
+    this.gameContext.setListener(eventProcessor);
   }
 
   @Override
@@ -94,7 +94,7 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
       while (!isCompleted) {
         try {
           //log.info("Publish new actions");
-          currentStateProcessor.awaitNewAction(1000).ifPresent(responseObserver::onNext);
+          eventProcessor.awaitNewAction(1000).ifPresent(responseObserver::onNext);
         } catch (InterruptedException e) {
           log.warn("Interrupted while waiting for current state", e);
         }
@@ -112,7 +112,7 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   public void currentState(EmptyResponse request, StreamObserver<LendyrGameState> responseObserver) {
     Timer.time("currentState",
         () -> {
-          responseObserver.onNext(currentStateProcessor.currentGameState());
+          responseObserver.onNext(eventProcessor.currentGameState());
           responseObserver.onCompleted();
         }
     );
@@ -180,6 +180,23 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
           LayeredMap layeredMap = mapFactory.load();
 
           responseObserver.onNext(WorldMapMapper.INSTANCE.mapToDto(dao.getMap(), layeredMap));
+          responseObserver.onCompleted();
+        }
+    );
+  }
+
+  @Override
+  public void getPersona(LendyrGetById request, StreamObserver<LendyrPersona> responseObserver) {
+    Timer.time("getPersona",
+        () -> {
+          UUID id = GenericMapper.INSTANCE.convertBytesToUUID(request.getId());
+          Optional<PersonaEntity> persona = gameContext.getGame().findById(id);
+
+          if (persona.isPresent()) {
+            responseObserver.onNext(PersonaMapper.INSTANCE.personaToDto(persona.get()));
+          } else {
+            responseObserver.onError(Status.NOT_FOUND.asRuntimeException());
+          }
           responseObserver.onCompleted();
         }
     );

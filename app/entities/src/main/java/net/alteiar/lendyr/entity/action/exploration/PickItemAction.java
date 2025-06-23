@@ -77,7 +77,7 @@ public class PickItemAction implements GameAction {
     }
 
     return List.of(
-        PersonaChangedEvent.builder().persona(persona.toModel()).build(),
+        PersonaChangedEvent.builder().persona(persona).build(),
         ItemContainerChangedEvent.builder().itemContainer(container).build()
     );
   }

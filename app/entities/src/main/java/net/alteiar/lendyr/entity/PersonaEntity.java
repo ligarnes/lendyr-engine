@@ -6,12 +6,15 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import net.alteiar.lendyr.model.items.Armor;
+import net.alteiar.lendyr.model.items.GenericItem;
 import net.alteiar.lendyr.model.items.Weapon;
 import net.alteiar.lendyr.model.items.WeaponType;
 import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
 import net.alteiar.lendyr.model.persona.*;
 import net.alteiar.lendyr.persistence.ItemRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Log4j2
@@ -40,6 +43,14 @@ public class PersonaEntity {
 
   public UUID getId() {
     return persona.getId();
+  }
+
+  public String getTokenPath() {
+    return persona.getTokenPath();
+  }
+
+  public String getPortraitPath() {
+    return persona.getPortraitPath();
   }
 
   public Size getSize() {
@@ -84,6 +95,10 @@ public class PersonaEntity {
 
   public int getCurrentHealthPoint() {
     return persona.getCurrentHealthPoint();
+  }
+
+  public int getHealthPoint() {
+    return persona.getHealthPoint();
   }
 
   public Attack getAttack() {
@@ -145,7 +160,38 @@ public class PersonaEntity {
   }
 
   public int getDefense() {
-    return persona.getDefense();
+    int equipmentBonus = persona.getEquipped().toList().stream()
+        .map(item -> itemRepository.findById(item.getItemId()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .filter(GenericItem.class::isInstance)
+        .map(GenericItem.class::cast)
+        .mapToInt(GenericItem::getDefenseBonus)
+        .sum();
+
+    return 10 + getAbility(Ability.DEXTERITY).getValue() + equipmentBonus;
+  }
+
+  public int getArmorRating() {
+    return persona.getEquipped().toList().stream()
+        .map(item -> itemRepository.findById(item.getItemId()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .filter(Armor.class::isInstance)
+        .map(Armor.class::cast)
+        .mapToInt(Armor::getArmorRating)
+        .sum();
+  }
+
+  public int getArmorPenalty() {
+    return persona.getEquipped().toList().stream()
+        .map(item -> itemRepository.findById(item.getItemId()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .filter(Armor.class::isInstance)
+        .map(Armor.class::cast)
+        .mapToInt(Armor::getArmorPenalty)
+        .sum();
   }
 
   /**
@@ -155,7 +201,7 @@ public class PersonaEntity {
    * @return the mitigated damaged
    */
   public int takeDamage(int damage) {
-    int totalAr = Math.max(0, persona.getArmorRating());
+    int totalAr = Math.max(0, getArmorRating());
 
     int mitigatedDamage = damage - totalAr;
     if (mitigatedDamage <= 0) {
@@ -175,6 +221,10 @@ public class PersonaEntity {
   private void reduceHealthPoint(int damage) {
     int currentHp = persona.getCurrentHealthPoint() - damage;
     persona.setCurrentHealthPoint(currentHp);
+  }
+
+  public Abilities getAbilities() {
+    return persona.getAbilities();
   }
 
   public AbilityStat getAbility(Ability ability) {
@@ -197,10 +247,6 @@ public class PersonaEntity {
 
   public Inventory getInventory() {
     return persona.getInventory();
-  }
-
-  public Persona toModel() {
-    return this.persona;
   }
 
   @Override

@@ -13,14 +13,14 @@ import net.alteiar.lendyr.server.grpc.v1.mapper.GameStateMapper;
 import java.util.LinkedList;
 import java.util.Optional;
 
-public class CurrentStateProcessor implements GameContextListener {
+public class EventProcessor implements GameContextListener {
   private final GameContext gameContext;
 
   private final Object waitActionToken;
   private final LinkedList<LendyrGameEvent> actions;
 
   @Builder
-  CurrentStateProcessor(@NonNull GameContext gameContext) {
+  EventProcessor(@NonNull GameContext gameContext) {
     this.gameContext = gameContext;
 
     this.waitActionToken = new Object();

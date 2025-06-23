@@ -1,8 +1,8 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
+import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.grpc.model.v1.persona.*;
 import net.alteiar.lendyr.model.persona.*;
-import net.alteiar.lendyr.model.persona.Persona;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,7 +19,8 @@ import java.util.Optional;
 public interface PersonaMapper {
   PersonaMapper INSTANCE = Mappers.getMapper(PersonaMapper.class);
 
-  LendyrPersona personaToDto(Persona character);
+  @Mapping(source = "healthPoint", target = "healthPoint")
+  LendyrPersona personaToDto(PersonaEntity character);
 
   default LendyrPersonaEquipped equippedToDto(PersonaEquipped equipped) {
     LendyrPersonaEquipped.Builder builder = LendyrPersonaEquipped.newBuilder();

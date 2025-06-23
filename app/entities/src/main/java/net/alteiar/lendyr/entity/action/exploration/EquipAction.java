@@ -118,6 +118,6 @@ public class EquipAction implements GameAction {
     if (found != null) {
       persona.getInventory().addToBackpack(found);
     }
-    return List.of(PersonaChangedEvent.builder().persona(persona.toModel()).build());
+    return List.of(PersonaChangedEvent.builder().persona(persona).build());
   }
 }

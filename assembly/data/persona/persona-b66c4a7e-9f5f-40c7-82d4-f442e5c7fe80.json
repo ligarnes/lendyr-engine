@@ -1,0 +1,83 @@
+{
+  "id": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
+  "name": "Cyrilla",
+  "speed": 8,
+  "portraitPath": "portrait/cyrilla-portrait.jpeg",
+  "tokenPath": "6Crusader",
+  "position": {
+    "x": 8.0,
+    "y": 3.0,
+    "layer": 1
+  },
+  "size": {
+    "width": 1.0,
+    "height": 1.0
+  },
+  "healthPoint": 40,
+  "currentHealthPoint": 36,
+  "abilities": {
+    "accuracy": {
+      "value": 1,
+      "focuses": null,
+      "primary": false
+    },
+    "communication": {
+      "value": 2,
+      "focuses": null,
+      "primary": false
+    },
+    "constitution": {
+      "value": 1,
+      "focuses": null,
+      "primary": false
+    },
+    "dexterity": {
+      "value": 1,
+      "focuses": null,
+      "primary": false
+    },
+    "fighting": {
+      "value": 3,
+      "focuses": null,
+      "primary": false
+    },
+    "intelligence": {
+      "value": 1,
+      "focuses": null,
+      "primary": false
+    },
+    "perception": {
+      "value": 0,
+      "focuses": null,
+      "primary": false
+    },
+    "strength": {
+      "value": 1,
+      "focuses": null,
+      "primary": false
+    },
+    "willpower": {
+      "value": 1,
+      "focuses": null,
+      "primary": false
+    }
+  },
+  "equipped": {
+    "equippedLocations": {
+      "HAND_2": {
+        "itemId": "79370ee4-049f-4681-95e1-256fe11aa8c6",
+        "status": "READY",
+        "quantity": 1
+      }
+    }
+  },
+  "inventory": {
+    "backpack": [
+      {
+        "itemId": "6b8d8149-a13d-4935-8c52-a704566fec49",
+        "status": "READY",
+        "quantity": 1
+      }
+    ]
+  }
+}
