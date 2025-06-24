@@ -14,7 +14,7 @@ class RepositoryFactoryTest {
   static void beforeEach() {
     ClassLoader classLoader = RepositoryFactoryTest.class.getClassLoader();
     File root = new File(classLoader.getResource("root.txt").getFile()).getParentFile();
-    repositoryFactory = new RepositoryFactory(root);
+    repositoryFactory = RepositoryFactory.initialize(root);
   }
 
   @Test

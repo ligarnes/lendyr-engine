@@ -13,6 +13,7 @@ import net.alteiar.lendyr.model.items.WeaponType;
 import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
 import net.alteiar.lendyr.model.persona.*;
 import net.alteiar.lendyr.persistence.ItemRepository;
+import net.alteiar.lendyr.persistence.RepositoryFactory;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -65,6 +66,10 @@ public class PersonaEntity {
     return persona.getName();
   }
 
+  public boolean isAlive() {
+    return !isDefeated();
+  }
+
   public boolean isDefeated() {
     return getCurrentHealthPoint() <= 0;
   }
@@ -103,7 +108,7 @@ public class PersonaEntity {
 
   public Attack getAttack() {
     PersonaItem item = persona.getEquipped().getEquippedWeapon();
-    Weapon weapon = itemRepository.findWeaponById(item.getItemId()).orElse(BARE_HAND);
+    Weapon weapon = RepositoryFactory.get().getItemRepository().findWeaponById(item.getItemId()).orElse(BARE_HAND);
     return Attack.builder()
         .attackType(weaponToAttackType(weapon.getAttackType()))
         .attack(weapon.getAbility())

@@ -60,7 +60,7 @@ public class DynamicPathfinding {
     if (Objects.equals(source, end)) {
       return List.of();
     }
-    log.info("Move from {} to {}", source, end);
+    log.debug("Move from {} to {}", source, end);
     return pathfinding.computePath(source, end, distance);
   }
 
@@ -71,7 +71,6 @@ public class DynamicPathfinding {
     target.setY(MathUtils.round(MathUtils.clamp(target.getY(), 0, map.getLayeredMap().getHeight() - personaHeigth)));
     return target;
   }
-
 
   public void debug(List<Position> path) {
     Map<Vector2, String> mapDebug = new HashMap<>();

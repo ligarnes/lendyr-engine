@@ -24,6 +24,7 @@ class RealTimeEngineTest {
 
   RealTimeEngine realTimeEngine;
   List<PersonaEntity> personaEntities;
+  ItemRepository itemRepository;
 
   @BeforeEach
   void beforeEach() {
@@ -34,7 +35,7 @@ class RealTimeEngineTest {
 
     LocalMapEntity localMapEntity = Mockito.mock(LocalMapEntity.class);
     Mockito.when(localMapEntity.getLayeredMap()).thenReturn(layeredMap);
-    Mockito.when(localMapEntity.getPersonaEntities()).thenReturn(personaEntities);
+    Mockito.when(localMapEntity.getPcEntities()).thenReturn(personaEntities);
 
     GameEntityImpl gameEntity = Mockito.mock(GameEntityImpl.class);
     Mockito.when(gameEntity.getMap()).thenReturn(localMapEntity);
@@ -43,17 +44,17 @@ class RealTimeEngineTest {
     Mockito.when(context.getGame()).thenReturn(gameEntity);
 
     realTimeEngine = new RealTimeEngine(context);
+    itemRepository = Mockito.mock(ItemRepository.class);
   }
 
   @Test
-  void updatePersona_diagonal() {
-    ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
+  void movePersona_diagonal() {
     PersonaEntity persona = PersonaEntity.builder().persona(newPersona()).itemRepository(itemRepository).build();
     persona.setPosition(new Position(1, 1, 1));
     persona.setNextPosition(new Position(11, 11, 1));
 
     // When
-    realTimeEngine.updatePersona(0.033f, persona);
+    realTimeEngine.movePersona(0.033f, persona);
 
     // Then
     Assertions.assertEquals(1.0777818f, persona.getPosition().getX());
@@ -63,14 +64,13 @@ class RealTimeEngineTest {
 
 
   @Test
-  void updatePersona_direct() {
-    ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
+  void movePersona_direct() {
     PersonaEntity persona = PersonaEntity.builder().persona(newPersona()).itemRepository(itemRepository).build();
     persona.setPosition(new Position(1, 1, 1));
     persona.setNextPosition(new Position(1, 11, 1));
 
     // When
-    realTimeEngine.updatePersona(0.033f, persona);
+    realTimeEngine.movePersona(0.033f, persona);
 
     // Then
     Assertions.assertEquals(1f, persona.getPosition().getX());
@@ -79,15 +79,14 @@ class RealTimeEngineTest {
   }
 
   @Test
-  void updatePersona_multiple_direct_reached() {
-    ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
+  void movePersona_multiple_direct_reached() {
     PersonaEntity persona = PersonaEntity.builder().persona(newPersona()).itemRepository(itemRepository).build();
     persona.setPosition(new Position(1, 1, 1));
     persona.setNextPosition(new Position(1, 11, 1));
 
     // When
     for (int i = 0; i < 122; i++) {
-      realTimeEngine.updatePersona(0.033f, persona);
+      realTimeEngine.movePersona(0.033f, persona);
     }
 
     // Then
@@ -97,14 +96,13 @@ class RealTimeEngineTest {
   }
 
   @Test
-  void updatePersona_multipleSmallStep_equivalent() {
-    ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
+  void movePersona_multipleSmallStep_equivalent() {
     PersonaEntity persona = PersonaEntity.builder().persona(newPersona()).itemRepository(itemRepository).build();
     persona.setPosition(new Position(1, 1, 1));
     persona.setNextPosition(new Position(1, 11, 1));
 
     // When
-    realTimeEngine.updatePersona(0.033f, persona);
+    realTimeEngine.movePersona(0.033f, persona);
 
     // Then
     Assertions.assertEquals(1f, persona.getPosition().getX());
@@ -113,8 +111,7 @@ class RealTimeEngineTest {
   }
 
   @Test
-  void updatePersona_targetPosition_equivalent() {
-    ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
+  void movePersona_targetPosition_equivalent() {
     PersonaEntity persona = PersonaEntity.builder().persona(newPersona()).itemRepository(itemRepository).build();
     persona.setPosition(new Position(1, 1, 1));
     persona.setTargetPosition(new Position(1, 11, 1));

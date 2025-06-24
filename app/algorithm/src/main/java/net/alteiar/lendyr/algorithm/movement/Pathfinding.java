@@ -64,11 +64,11 @@ public class Pathfinding {
     float distance = 0;
     Position currentPosition = start;
     List<Position> path = new ArrayList<>();
-    for (int i = 0; i < foundPath.size(); i++) {
-      Position newPosition = foundPath.get(i).toPosition();
+    for (Tile tile : foundPath) {
+      Position newPosition = tile.toPosition();
       distance += currentPosition.dst(newPosition);
       if (distance > maxDistance) {
-        log.info("Move too far ({}) at {} ", distance, newPosition);
+        log.debug("Move too far ({}) at {} ", distance, newPosition);
         break;
       }
       path.add(newPosition);

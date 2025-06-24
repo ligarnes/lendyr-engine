@@ -15,7 +15,8 @@ public class LendyrGameServer {
   private GrpcServer grpcServer;
 
   public LendyrGameServer(File dataFolder) {
-    RepositoryFactory repoFactory = new RepositoryFactory(dataFolder);
+    RepositoryFactory.initialize(dataFolder);
+    RepositoryFactory repoFactory = RepositoryFactory.get();
     gameContext = GameContext.builder().repositoryFactory(repoFactory).build();
   }
 

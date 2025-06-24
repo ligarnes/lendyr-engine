@@ -46,8 +46,13 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   public void load(LendyrLoadGameRequest request, StreamObserver<EmptyResponse> responseObserver) {
     Timer.time("load",
         () -> {
-          this.gameContext.load(request.getSaveName());
-          responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          try {
+            this.gameContext.load(request.getSaveName());
+            responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          } catch (RuntimeException e) {
+            log.error("Failed to load the game", e);
+            responseObserver.onError(Status.INTERNAL.asRuntimeException());
+          }
           responseObserver.onCompleted();
         }
     );
@@ -55,10 +60,15 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
 
   @Override
   public void save(LendyrSaveGameRequest request, StreamObserver<EmptyResponse> responseObserver) {
-    Timer.time("load",
+    Timer.time("save",
         () -> {
-          this.gameContext.save(request.getSaveName());
-          responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          try {
+            this.gameContext.save(request.getSaveName());
+            responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          } catch (RuntimeException e) {
+            log.error("Failed to save the game", e);
+            responseObserver.onError(Status.INTERNAL.asRuntimeException());
+          }
           responseObserver.onCompleted();
         }
     );
@@ -68,8 +78,13 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   public void pause(EmptyResponse request, StreamObserver<EmptyResponse> responseObserver) {
     Timer.time("pause",
         () -> {
-          this.gameContext.pause();
-          responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          try {
+            this.gameContext.pause();
+            responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          } catch (RuntimeException e) {
+            log.error("Failed to pause the game", e);
+            responseObserver.onError(Status.INTERNAL.asRuntimeException());
+          }
           responseObserver.onCompleted();
         }
     );
@@ -79,8 +94,13 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   public void resume(EmptyResponse request, StreamObserver<EmptyResponse> responseObserver) {
     Timer.time("resume",
         () -> {
-          this.gameContext.resume();
-          responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          try {
+            this.gameContext.resume();
+            responseObserver.onNext(EmptyResponse.getDefaultInstance());
+          } catch (RuntimeException e) {
+            log.error("Failed to resume the game", e);
+            responseObserver.onError(Status.INTERNAL.asRuntimeException());
+          }
           responseObserver.onCompleted();
         }
     );
@@ -103,7 +123,6 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
       log.warn(e);
       Status status = Status.INTERNAL.withDescription(e.getMessage());
       responseObserver.onError(status.asRuntimeException());
-      return;
     }
     responseObserver.onCompleted();
   }
@@ -112,7 +131,12 @@ public class LendyrGameServiceImpl extends LendyrGameServiceGrpc.LendyrGameServi
   public void currentState(EmptyResponse request, StreamObserver<LendyrGameState> responseObserver) {
     Timer.time("currentState",
         () -> {
-          responseObserver.onNext(eventProcessor.currentGameState());
+          try {
+            responseObserver.onNext(eventProcessor.currentGameState());
+          } catch (RuntimeException e) {
+            log.error("Failed to retrieve current game state", e);
+            responseObserver.onError(Status.INTERNAL.asRuntimeException());
+          }
           responseObserver.onCompleted();
         }
     );

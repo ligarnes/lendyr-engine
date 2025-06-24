@@ -1,5 +1,6 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
+import com.google.protobuf.ByteString;
 import net.alteiar.lendyr.grpc.model.v1.map.*;
 import net.alteiar.lendyr.model.encounter.GameMap;
 import net.alteiar.lendyr.model.map.ItemContainer;
@@ -7,12 +8,14 @@ import net.alteiar.lendyr.model.map.LocalMap;
 import net.alteiar.lendyr.model.map.layered.Bridge;
 import net.alteiar.lendyr.model.map.layered.LayeredMap;
 import net.alteiar.lendyr.model.map.layered.StaticMapLayer;
+import net.alteiar.lendyr.model.npc.Npc;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +74,19 @@ public interface WorldMapMapper {
 
   @Mapping(source = "entities", target = "entityList")
   @Mapping(source = "itemContainers", target = "itemContainerList")
-  LendyrWorld worldMapToDto(LocalMap localMap);
+  default LendyrWorld worldMapToDto(LocalMap localMap) {
+
+    List<ByteString> entities = new ArrayList<>();
+    localMap.getEntities().stream().map(Npc::getPersonaId).map(GenericMapper.INSTANCE::convertUUIDToBytes).forEach(entities::add);
+
+    return LendyrWorld.newBuilder()
+        .setMapId(GenericMapper.INSTANCE.convertUUIDToBytes(localMap.getMapId()))
+        .setName(localMap.getName())
+        .addAllEntity(entities)
+        .addAllItemContainer(localMap.getItemContainers().stream().map(WorldMapMapper.INSTANCE::itemContainerToDto).toList())
+        .build();
+  }
+
 
   @Mapping(source = "items", target = "itemList")
   LendyrItemContainer itemContainerToDto(ItemContainer itemContainer);

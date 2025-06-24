@@ -80,7 +80,7 @@ class WorldMapMapperTest {
 
     Assertions.assertEquals(gameMap.getEntities().size(), map.getEntityList().size());
     for (int i = 0; i < gameMap.getEntities().size(); i++) {
-      Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(gameMap.getEntities().get(i)), map.getEntity(i));
+      Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(gameMap.getEntities().get(i).getPersonaId()), map.getEntity(i));
     }
 
     Assertions.assertEquals(gameMap.getItemContainers().size(), map.getItemContainerList().size());

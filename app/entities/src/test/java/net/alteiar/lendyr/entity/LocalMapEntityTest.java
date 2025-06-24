@@ -1,10 +1,12 @@
 package net.alteiar.lendyr.entity;
 
 import com.badlogic.gdx.math.Rectangle;
+import net.alteiar.lendyr.model.Player;
 import net.alteiar.lendyr.model.encounter.GameMap;
 import net.alteiar.lendyr.model.map.LocalMap;
 import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
 import net.alteiar.lendyr.model.map.tiled.TiledMap;
+import net.alteiar.lendyr.model.npc.Npc;
 import net.alteiar.lendyr.model.persona.Position;
 import net.alteiar.lendyr.persistence.dao.LocalMapDao;
 import org.junit.jupiter.api.Assertions;
@@ -19,9 +21,9 @@ import java.util.UUID;
 
 class LocalMapEntityTest {
   LocalMapEntity localMapEntity;
-  GameEntity gameEntity;
   PersonaEntity entityOnMap1;
   PersonaEntity entityOnMap2;
+  GameEntity gameEntity;
 
   @BeforeEach
   void beforeEach() {
@@ -32,11 +34,17 @@ class LocalMapEntityTest {
     entityOnMap1 = newEntityAt(new Position(4, 4, 1));
     entityOnMap2 = newEntityAt(new Position(4, 4, 2));
 
+    Player player = Mockito.mock(Player.class);
+    Mockito.when(player.getControlledPersonaIds()).thenReturn(List.of());
+
     gameEntity = Mockito.mock(GameEntity.class);
     Mockito.when(gameEntity.findById(entityOnMap1.getId())).thenReturn(Optional.of(entityOnMap1));
     Mockito.when(gameEntity.findById(entityOnMap2.getId())).thenReturn(Optional.of(entityOnMap2));
+    Mockito.when(gameEntity.getPlayer()).thenReturn(player);
 
-    LocalMap localMap = LocalMap.builder().entities(List.of(entityOnMap1.getId(), entityOnMap2.getId())).build();
+    Npc npc1 = new Npc(entityOnMap1.getId(), null, null);
+    Npc npc2 = new Npc(entityOnMap2.getId(), null, null);
+    LocalMap localMap = LocalMap.builder().entities(List.of(npc1, npc2)).build();
 
     localMapEntity = LocalMapEntity.builder().gameEntity(gameEntity).build();
     localMapEntity.load(localMap, localMapDao);
@@ -153,6 +161,7 @@ class LocalMapEntityTest {
     Mockito.when(persona.getDefenceBoundingBox()).thenReturn(boundingBox);
     Mockito.when(persona.getPosition()).thenReturn(position);
     Mockito.when(persona.getLayer()).thenReturn(position.getLayer());
+
     return persona;
   }
 }

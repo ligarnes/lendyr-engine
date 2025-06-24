@@ -17,4 +17,5 @@ module lendyr.game.entities {
   exports net.alteiar.lendyr.entity.event;
   exports net.alteiar.lendyr.entity.event.combat;
   exports net.alteiar.lendyr.entity.event.exploration;
+  exports net.alteiar.lendyr.entity.npc;
 }

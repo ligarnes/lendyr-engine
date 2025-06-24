@@ -24,6 +24,7 @@ public class GameEntityImpl implements GameEntity {
   @Getter
   private final PersonaRepository personaRepository;
 
+
   @Getter
   private Player player;
   @Setter
@@ -66,9 +67,9 @@ public class GameEntityImpl implements GameEntity {
   }
 
   public void load(@NonNull Game game) {
+    player = game.getPlayer();
     encounter.setEncounter(game.getEncounter());
     map.load(game.getLocalMap(), mapRepository.findMapById(game.getLocalMap().getMapId()));
-    player = game.getPlayer();
     playState = PlayState.PAUSE;
   }
 

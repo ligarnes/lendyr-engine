@@ -5,6 +5,7 @@ import net.alteiar.lendyr.grpc.model.v1.encounter.LendyrEncounter;
 import net.alteiar.lendyr.grpc.model.v1.game.LendyrGameState;
 import net.alteiar.lendyr.model.Game;
 import net.alteiar.lendyr.model.PlayState;
+import net.alteiar.lendyr.model.npc.NpcRelationType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -32,9 +33,10 @@ public class FullMapperTest {
     Assertions.assertEquals("Les ruines", game.getLocalMap().getName());
     Assertions.assertEquals(0, game.getLocalMap().getItemContainers().size());
     Assertions.assertEquals(3, game.getLocalMap().getEntities().size());
-    Assertions.assertEquals(UUID.fromString("b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79"), game.getLocalMap().getEntities().get(0));
-    Assertions.assertEquals(UUID.fromString("b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80"), game.getLocalMap().getEntities().get(1));
-    Assertions.assertEquals(UUID.fromString("b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81"), game.getLocalMap().getEntities().get(2));
+    Assertions.assertEquals(UUID.fromString("b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79"), game.getLocalMap().getEntities().get(0).getPersonaId());
+    Assertions.assertEquals(NpcRelationType.NEUTRAL, game.getLocalMap().getEntities().get(0).getRelationType());
+    Assertions.assertEquals(UUID.fromString("b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80"), game.getLocalMap().getEntities().get(1).getPersonaId());
+    Assertions.assertEquals(UUID.fromString("b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81"), game.getLocalMap().getEntities().get(2).getPersonaId());
   }
 
   @Test

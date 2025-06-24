@@ -10,9 +10,63 @@
     "name": "Les ruines",
     "mapId": "f2659d86-a181-47a5-b201-1e6b2b48b94f",
     "entities": [
-      "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79",
-      "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
-      "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81"
+      {
+        "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe79",
+        "relationType": "NEUTRAL",
+        "behavior": {
+          "behaviorType": "PATROL",
+          "positions": [
+            {
+              "x": 1,
+              "y": 1,
+              "layer": 1
+            },
+            {
+              "x": 2,
+              "y": 2,
+              "layer": 1
+            }
+          ]
+        }
+      },
+      {
+        "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe80",
+        "relationType": "NEUTRAL",
+        "behavior": {
+          "behaviorType": "PATROL",
+          "positions": [
+            {
+              "x": 1,
+              "y": 1,
+              "layer": 1
+            },
+            {
+              "x": 2,
+              "y": 2,
+              "layer": 1
+            }
+          ]
+        }
+      },
+      {
+        "personaId": "b66c4a7e-9f5f-40c7-82d4-f442e5c7fe81",
+        "relationType": "NEUTRAL",
+        "behavior": {
+          "behaviorType": "PATROL",
+          "positions": [
+            {
+              "x": 1,
+              "y": 1,
+              "layer": 1
+            },
+            {
+              "x": 2,
+              "y": 2,
+              "layer": 1
+            }
+          ]
+        }
+      }
     ]
   },
   "encounter": {

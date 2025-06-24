@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.alteiar.lendyr.model.npc.Npc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,6 @@ import java.util.UUID;
 public class LocalMap {
   String name;
   UUID mapId;
-  List<UUID> entities;
+  List<Npc> entities;
   List<ItemContainer> itemContainers = new ArrayList<>();
 }

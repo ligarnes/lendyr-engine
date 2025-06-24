@@ -19,7 +19,7 @@ class ItemRepositoryTest {
   static void beforeEach() {
     ClassLoader classLoader = RepositoryFactoryTest.class.getClassLoader();
     File root = new File(classLoader.getResource("root.txt").getFile()).getParentFile();
-    itemRepository = new RepositoryFactory(root).getItemRepository();
+    itemRepository = RepositoryFactory.initialize(root).getItemRepository();
   }
 
   @Test

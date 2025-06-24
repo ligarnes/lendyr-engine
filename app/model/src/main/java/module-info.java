@@ -16,4 +16,6 @@ module lendyr.model {
   exports net.alteiar.lendyr.model.map.layered.element;
   exports net.alteiar.lendyr.model.map.tiled;
   exports net.alteiar.lendyr.model.map.tiled.object;
+  exports net.alteiar.lendyr.model.npc;
+  exports net.alteiar.lendyr.model.npc.behavior;
 }

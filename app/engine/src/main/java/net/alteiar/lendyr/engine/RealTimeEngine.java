@@ -2,11 +2,14 @@ package net.alteiar.lendyr.engine;
 
 import lombok.extern.log4j.Log4j2;
 import net.alteiar.lendyr.algorithm.representation.DynamicPathfinding;
+import net.alteiar.lendyr.engine.exploration.NpcExploration;
 import net.alteiar.lendyr.entity.PersonaEntity;
 import net.alteiar.lendyr.entity.event.exploration.PersonaPositionChanged;
 import net.alteiar.lendyr.entity.event.exploration.RealtimeUpdateEvent;
+import net.alteiar.lendyr.entity.npc.NpcEntity;
 import net.alteiar.lendyr.model.persona.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,30 +18,55 @@ import java.util.Optional;
 public class RealTimeEngine {
   private final GameContext gameContext;
   private final DynamicPathfinding pathfinding;
+  private final NpcExploration npcExploration;
 
   public RealTimeEngine(GameContext gameContext) {
     this.gameContext = gameContext;
     this.pathfinding = new DynamicPathfinding(gameContext.getGame().getMap());
+    npcExploration = new NpcExploration();
   }
 
   public void update(float delta) {
     pathfinding.update();
-    List<PersonaEntity> personaEntities = gameContext.getGame().getMap().getPersonaEntities();
-    List<PersonaPositionChanged> positions = personaEntities.stream().map(personaEntity -> updatePersona(delta, personaEntity))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .toList();
+
+    // NPC play
+    gameContext.getGame().getMap().getNpcEntities().forEach(this::npcTakeDecision);
+
+    // Update the world
+    List<PersonaPositionChanged> positions = new ArrayList<>();
+    positions.addAll(updatePlayerControlled(delta));
+    positions.addAll(updateNpc(delta));
 
     RealtimeUpdateEvent.RealtimeUpdateEventBuilder eventBuilder = RealtimeUpdateEvent.builder();
     eventBuilder.positions(positions);
     gameContext.notifyEvent(eventBuilder.build());
   }
 
+  private List<PersonaPositionChanged> updatePlayerControlled(float delta) {
+    List<PersonaEntity> personaEntities = gameContext.getGame().getMap().getPcEntities();
+    return personaEntities.stream().map(personaEntity -> movePersona(delta, personaEntity))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .toList();
+  }
+
+  private void npcTakeDecision(NpcEntity npcEntity) {
+    npcExploration.npcTakeDecision(npcEntity);
+  }
+
+  private List<PersonaPositionChanged> updateNpc(float delta) {
+    List<NpcEntity> personaEntities = gameContext.getGame().getMap().getNpcEntities();
+    return personaEntities.stream().map(npc -> movePersona(delta, npc.getPersona()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .toList();
+  }
+
   private PersonaPositionChanged convertPositionChanged(PersonaEntity persona) {
     return PersonaPositionChanged.builder().sourceId(persona.getId()).position(persona.getPosition()).nextPosition(persona.getNextPosition()).build();
   }
 
-  public Optional<PersonaPositionChanged> updatePersona(float delta, PersonaEntity personaEntity) {
+  public Optional<PersonaPositionChanged> movePersona(float delta, PersonaEntity personaEntity) {
     if (personaEntity.getNextPosition() != null || personaEntity.getTargetPosition() != null) {
 
       if (personaEntity.getNextPosition() == null) {

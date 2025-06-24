@@ -1,5 +1,6 @@
 package net.alteiar.lendyr.entity;
 
+import net.alteiar.lendyr.model.Player;
 import net.alteiar.lendyr.model.items.Item;
 
 import java.util.Optional;
@@ -14,4 +15,6 @@ public interface GameEntity {
   Optional<PersonaEntity> findById(UUID personaId);
 
   Optional<Item> getItem(UUID id);
+
+  Player getPlayer();
 }
