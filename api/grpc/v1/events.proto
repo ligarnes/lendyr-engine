@@ -56,7 +56,7 @@ message LendyrPersonaChanged {
 
 // Generic Action
 message LendyrCombatStarted {
-  repeated model.combat.LendyrEncounter encounter = 1;
+  model.combat.LendyrEncounter encounter = 1;
 }
 
 // Combat event

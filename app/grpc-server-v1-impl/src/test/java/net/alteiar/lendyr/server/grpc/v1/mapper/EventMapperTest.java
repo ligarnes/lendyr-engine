@@ -1,6 +1,8 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
+import net.alteiar.lendyr.entity.EncounterEntity;
 import net.alteiar.lendyr.entity.SkillResult;
+import net.alteiar.lendyr.entity.event.CombatStartedEvent;
 import net.alteiar.lendyr.entity.event.GameEvent;
 import net.alteiar.lendyr.entity.event.GameModeChanged;
 import net.alteiar.lendyr.entity.event.combat.AttackGameEvent;
@@ -10,14 +12,29 @@ import net.alteiar.lendyr.entity.event.exploration.PersonaPositionChanged;
 import net.alteiar.lendyr.entity.event.exploration.RealtimeUpdateEvent;
 import net.alteiar.lendyr.grpc.model.v1.encounter.*;
 import net.alteiar.lendyr.model.PlayState;
+import net.alteiar.lendyr.model.encounter.Encounter;
 import net.alteiar.lendyr.model.persona.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.UUID;
 
 class EventMapperTest {
+
+  @Test
+  void actionResultToDto_CombatStartedEvent() {
+    // Given
+    Encounter encounterModel = RandomProvider.INSTANCE.nextObject(Encounter.class);
+    EncounterEntity encounter = Mockito.mock(EncounterEntity.class);
+    Mockito.when(encounter.toModel()).thenReturn(encounterModel);
+    CombatStartedEvent result = new CombatStartedEvent(encounter);
+    // When
+    LendyrGameEvent dto = EventMapper.INSTANCE.eventResultToDto(result);
+    // Then
+    Assertions.assertEquals(LendyrGameEvent.ActionsCase.COMBATSTARTED, dto.getActionsCase());
+  }
 
   @Test
   void actionResultToDto_ItemContainerChangedEvent() {
@@ -155,6 +172,31 @@ class EventMapperTest {
 
     // Then
     Assertions.assertEquals(LendyrGameMode.GAME_OVER, dto.getNewMode());
+  }
+
+  @Test
+  void CombatStartedEventToDto() {
+    // Given
+    Encounter encounterModel = RandomProvider.INSTANCE.nextObject(Encounter.class);
+    EncounterEntity encounter = Mockito.mock(EncounterEntity.class);
+    Mockito.when(encounter.toModel()).thenReturn(encounterModel);
+    CombatStartedEvent combatStartedEvent = new CombatStartedEvent(encounter);
+
+    // When
+    LendyrCombatStarted dto = EventMapper.INSTANCE.combatStartedToDto(combatStartedEvent);
+
+    // Then
+    Assertions.assertEquals(encounterModel.getTurn(), dto.getEncounter().getCurrentTurn());
+    Assertions.assertEquals(encounterModel.getCurrentPersona().getInitiativeIdx(), dto.getEncounter().getActive().getActivePersonaIdx());
+    Assertions.assertEquals(encounterModel.getCurrentPersona().isMinorActionUsed(), dto.getEncounter().getActive().getMinorActionUsed());
+    Assertions.assertEquals(encounterModel.getCurrentPersona().isMajorActionUsed(), dto.getEncounter().getActive().getMajorActionUsed());
+    Assertions.assertEquals(encounterModel.getInitiative().size(), dto.getEncounter().getInitiativeOrderCount());
+
+    for (int i = 0; i < encounterModel.getInitiative().size(); i++) {
+      Assertions.assertEquals(encounterModel.getInitiative().get(i).getInitiative(), dto.getEncounter().getInitiativeOrder(i).getInitiative());
+      Assertions.assertEquals(encounterModel.getInitiative().get(i).getTeam(), dto.getEncounter().getInitiativeOrder(i).getTeam());
+      Assertions.assertEquals(GenericMapper.INSTANCE.convertUUIDToBytes(encounterModel.getInitiative().get(i).getPersonaId()), dto.getEncounter().getInitiativeOrder(i).getPersonaId());
+    }
   }
 
   private AttackGameEvent newAttackResult() {

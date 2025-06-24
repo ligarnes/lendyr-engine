@@ -1,9 +1,6 @@
 package net.alteiar.lendyr.entity.action.combat.minor;
 
-import net.alteiar.lendyr.entity.EncounterEntity;
-import net.alteiar.lendyr.entity.GameEntity;
-import net.alteiar.lendyr.entity.LocalMapEntity;
-import net.alteiar.lendyr.entity.PersonaEntity;
+import net.alteiar.lendyr.entity.*;
 import net.alteiar.lendyr.entity.action.exception.NotAllowedException;
 import net.alteiar.lendyr.entity.action.exception.NotEnoughActionException;
 import net.alteiar.lendyr.entity.action.exception.NotFoundException;
@@ -48,7 +45,7 @@ class MoveActionTest {
     PersonaEntity persona = Mockito.mock(PersonaEntity.class);
     Mockito.when(persona.getId()).thenReturn(UUID.randomUUID());
 
-    EncounterEntity encounter = Mockito.mock(EncounterEntity.class);
+    EncounterEntity encounter = Mockito.mock(EncounterEntityImpl.class);
     Mockito.when(encounter.isMinorActionUsed()).thenReturn(true);
 
     GameEntity game = Mockito.mock(GameEntity.class);
@@ -71,7 +68,7 @@ class MoveActionTest {
 
     CombatActor combatActor = CombatActor.builder().personaId(UUID.randomUUID()).build();
 
-    EncounterEntity encounter = Mockito.mock(EncounterEntity.class);
+    EncounterEntity encounter = Mockito.mock(EncounterEntityImpl.class);
     Mockito.when(encounter.isMinorActionUsed()).thenReturn(false);
     Mockito.when(encounter.getCurrentPersona()).thenReturn(combatActor);
 
@@ -96,7 +93,7 @@ class MoveActionTest {
 
     CombatActor combatActor = CombatActor.builder().personaId(persona.getId()).build();
 
-    EncounterEntity encounter = Mockito.mock(EncounterEntity.class);
+    EncounterEntity encounter = Mockito.mock(EncounterEntityImpl.class);
     Mockito.when(encounter.isMinorActionUsed()).thenReturn(false);
     Mockito.when(encounter.getCurrentPersona()).thenReturn(combatActor);
 
@@ -126,7 +123,7 @@ class MoveActionTest {
 
     CombatActor combatActor = CombatActor.builder().personaId(persona.getId()).build();
 
-    EncounterEntity encounter = Mockito.mock(EncounterEntity.class);
+    EncounterEntity encounter = Mockito.mock(EncounterEntityImpl.class);
     Mockito.when(encounter.isMinorActionUsed()).thenReturn(false);
     Mockito.when(encounter.getCurrentPersona()).thenReturn(combatActor);
 
@@ -156,7 +153,7 @@ class MoveActionTest {
 
     CombatActor combatActor = CombatActor.builder().personaId(persona.getId()).build();
 
-    EncounterEntity encounter = Mockito.mock(EncounterEntity.class);
+    EncounterEntity encounter = Mockito.mock(EncounterEntityImpl.class);
     Mockito.when(encounter.isMinorActionUsed()).thenReturn(false);
     Mockito.when(encounter.getCurrentPersona()).thenReturn(combatActor);
 

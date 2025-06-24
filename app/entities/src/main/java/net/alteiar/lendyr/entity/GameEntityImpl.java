@@ -6,7 +6,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import net.alteiar.lendyr.model.Game;
 import net.alteiar.lendyr.model.PlayState;
-import net.alteiar.lendyr.model.Player;
 import net.alteiar.lendyr.model.items.Item;
 import net.alteiar.lendyr.model.persona.Persona;
 import net.alteiar.lendyr.persistence.ItemRepository;
@@ -14,7 +13,10 @@ import net.alteiar.lendyr.persistence.MapRepository;
 import net.alteiar.lendyr.persistence.PersonaRepository;
 import net.alteiar.lendyr.persistence.RepositoryFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 public class GameEntityImpl implements GameEntity {
   @Getter
@@ -26,7 +28,7 @@ public class GameEntityImpl implements GameEntity {
 
 
   @Getter
-  private Player player;
+  private PlayerEntity player;
   @Setter
   @Getter
   private PlayState playState;
@@ -42,7 +44,7 @@ public class GameEntityImpl implements GameEntity {
   @Builder
   public GameEntityImpl(@NonNull RepositoryFactory repositoryFactory) {
     this.personas = new HashMap<>();
-    encounter = new EncounterEntity(this);
+    encounter = new EncounterEntityImpl(this);
 
     itemRepository = repositoryFactory.getItemRepository();
     mapRepository = repositoryFactory.getMapRepository();
@@ -51,7 +53,7 @@ public class GameEntityImpl implements GameEntity {
   }
 
   public boolean isGameOver() {
-    return player.getControlledPersonaIds().stream().map(personas::get).filter(Objects::nonNull).allMatch(PersonaEntity::isDefeated);
+    return player.getControlledPersonas().stream().allMatch(PersonaEntity::isDefeated);
   }
 
   public void pause() {
@@ -67,7 +69,7 @@ public class GameEntityImpl implements GameEntity {
   }
 
   public void load(@NonNull Game game) {
-    player = game.getPlayer();
+    player = new PlayerEntity(this, game.getPlayer());
     encounter.setEncounter(game.getEncounter());
     map.load(game.getLocalMap(), mapRepository.findMapById(game.getLocalMap().getMapId()));
     playState = PlayState.PAUSE;
@@ -97,7 +99,7 @@ public class GameEntityImpl implements GameEntity {
     return Game.builder()
         .encounter(encounter.toModel())
         .localMap(map.toModel())
-        .player(player)
+        .player(player.toModel())
         .playState(playState)
         .build();
   }

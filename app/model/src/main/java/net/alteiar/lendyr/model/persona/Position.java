@@ -43,6 +43,10 @@ public class Position {
     return Vector2.dst(this.x, this.y, target.x, target.y);
   }
 
+  public boolean isSameLayer(Position target) {
+    return this.layer == target.layer;
+  }
+
   public String toString() {
     return "(%s,%s,%s)".formatted(this.x, this.y, this.layer);
   }

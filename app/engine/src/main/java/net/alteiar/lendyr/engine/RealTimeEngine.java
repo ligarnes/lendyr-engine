@@ -30,7 +30,7 @@ public class RealTimeEngine {
     pathfinding.update();
 
     // NPC play
-    gameContext.getGame().getMap().getNpcEntities().forEach(this::npcTakeDecision);
+    npcExploration.npcPlay(gameContext);
 
     // Update the world
     List<PersonaPositionChanged> positions = new ArrayList<>();
@@ -48,10 +48,6 @@ public class RealTimeEngine {
         .filter(Optional::isPresent)
         .map(Optional::get)
         .toList();
-  }
-
-  private void npcTakeDecision(NpcEntity npcEntity) {
-    npcExploration.npcTakeDecision(npcEntity);
   }
 
   private List<PersonaPositionChanged> updateNpc(float delta) {

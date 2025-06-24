@@ -87,7 +87,7 @@ public class GameEngine {
     }
 
     CombatActor actor = gameContext.getGame().getEncounter().getCurrentPersona();
-    if (!gameContext.getGame().getPlayer().getControlledPersonaIds().contains(actor.getPersonaId())) {
+    if (!gameContext.getGame().getPlayer().isPlayerControlled(actor.getPersonaId())) {
       // Play only entities that player does not control
       gameContext.getGame().findById(actor.getPersonaId()).ifPresent(combatPersonaEngine::playTurn);
     }

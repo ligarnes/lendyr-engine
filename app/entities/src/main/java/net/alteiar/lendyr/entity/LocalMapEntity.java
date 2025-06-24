@@ -45,7 +45,7 @@ public class LocalMapEntity implements LayeredMapWithMovable {
     this.localMap = map;
     this.layeredMap = new MapFactory(gameMap.getTiledMap()).load();
     pcEntities.clear();
-    pcEntities = gameEntity.getPlayer().getControlledPersonaIds().stream().map(gameEntity::findById).filter(Optional::isPresent).map(Optional::get).toList();
+    pcEntities = gameEntity.getPlayer().getControlledPersonas();
     npcEntities.clear();
     npcEntities.addAll(map.getEntities().stream().map(n -> new NpcEntity(gameEntity, n)).toList());
     if (map.getItemContainers() != null) {

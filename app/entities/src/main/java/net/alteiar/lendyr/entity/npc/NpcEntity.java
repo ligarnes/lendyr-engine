@@ -26,4 +26,8 @@ public class NpcEntity {
   public boolean isAlive() {
     return !persona.isDefeated();
   }
+
+  public boolean isEnemy() {
+    return relationType == NpcRelationType.ENEMY;
+  }
 }

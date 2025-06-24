@@ -1,6 +1,8 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
+import net.alteiar.lendyr.entity.EncounterEntity;
 import net.alteiar.lendyr.entity.action.exception.ProcessingException;
+import net.alteiar.lendyr.entity.event.CombatStartedEvent;
 import net.alteiar.lendyr.entity.event.GameEvent;
 import net.alteiar.lendyr.entity.event.GameModeChanged;
 import net.alteiar.lendyr.entity.event.GameSaved;
@@ -44,11 +46,21 @@ public interface EventMapper {
           LendyrPersonaChanged.newBuilder().setUpdatedPersona(PersonaMapper.INSTANCE.personaToDto(personaChangedEvent.getPersona()))).build();
 
       //
+      case CombatStartedEvent combatStartedEvent -> LendyrGameEvent.newBuilder().setCombatStarted(combatStartedToDto(combatStartedEvent)).build();
       case GameSaved gameSaved -> LendyrGameEvent.newBuilder().setSaved(savedToDto(gameSaved)).build();
       case GameModeChanged gameModeChanged -> LendyrGameEvent.newBuilder().setGameModeChanged(gameModeChangedToDto(gameModeChanged)).build();
 
       default -> throw new ProcessingException(String.format("Cannot map the action result of type %s", gameEvent.getClass().getSimpleName()));
     };
+  }
+
+  LendyrCombatStarted combatStartedToDto(CombatStartedEvent combatStartedEvent);
+
+  default LendyrEncounter encounterEntityToDto(EncounterEntity encounter) {
+    if (encounter == null || encounter.toModel() == null) {
+      return null;
+    }
+    return EncounterMapper.INSTANCE.businessToDto(encounter.toModel());
   }
 
   @Mapping(source = "itemContainer", target = "container")

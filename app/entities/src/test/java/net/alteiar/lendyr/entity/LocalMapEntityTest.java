@@ -1,7 +1,6 @@
 package net.alteiar.lendyr.entity;
 
 import com.badlogic.gdx.math.Rectangle;
-import net.alteiar.lendyr.model.Player;
 import net.alteiar.lendyr.model.encounter.GameMap;
 import net.alteiar.lendyr.model.map.LocalMap;
 import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
@@ -34,8 +33,8 @@ class LocalMapEntityTest {
     entityOnMap1 = newEntityAt(new Position(4, 4, 1));
     entityOnMap2 = newEntityAt(new Position(4, 4, 2));
 
-    Player player = Mockito.mock(Player.class);
-    Mockito.when(player.getControlledPersonaIds()).thenReturn(List.of());
+    PlayerEntity player = Mockito.mock(PlayerEntity.class);
+    Mockito.when(player.getControlledPersonas()).thenReturn(List.of());
 
     gameEntity = Mockito.mock(GameEntity.class);
     Mockito.when(gameEntity.findById(entityOnMap1.getId())).thenReturn(Optional.of(entityOnMap1));
