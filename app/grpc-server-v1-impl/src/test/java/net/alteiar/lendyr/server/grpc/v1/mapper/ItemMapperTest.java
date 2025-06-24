@@ -1,13 +1,48 @@
 package net.alteiar.lendyr.server.grpc.v1.mapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
 import net.alteiar.lendyr.grpc.model.v1.item.LendyrItem;
 import net.alteiar.lendyr.model.items.GenericItem;
+import net.alteiar.lendyr.model.items.Item;
 import net.alteiar.lendyr.model.items.Weapon;
+import net.alteiar.lendyr.persistence.dao.ItemListDao;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 class ItemMapperTest {
+
+  @Test
+  void testItems() throws IOException {
+    byte[] data = Files.readAllBytes(Paths.get("../../assembly/data/items/data-items.json"));
+    ObjectMapper objectMapper = new ObjectMapper();
+    ItemListDao items = objectMapper.readValue(data, ItemListDao.class);
+
+    Assertions.assertEquals(9, items.getItems().size());
+    Assertions.assertEquals(Item.WEAPON, items.getItems().get(0).getItemType());
+    Assertions.assertEquals(Item.WEAPON, items.getItems().get(1).getItemType());
+    Assertions.assertEquals(Item.WEAPON, items.getItems().get(2).getItemType());
+    Assertions.assertEquals(Item.WEAPON, items.getItems().get(3).getItemType());
+    Assertions.assertEquals(Item.WEAPON, items.getItems().get(4).getItemType());
+    Assertions.assertEquals(Item.OTHER, items.getItems().get(5).getItemType());
+    Assertions.assertEquals(Item.ARMOR, items.getItems().get(6).getItemType());
+    Assertions.assertEquals(Item.ARMOR, items.getItems().get(7).getItemType());
+    Assertions.assertEquals(Item.ARMOR, items.getItems().get(8).getItemType());
+
+    for (Item item : items.getItems()) {
+      LendyrItem dto = ItemMapper.INSTANCE.itemToDto(item);
+      assertItemEquals(item, dto);
+    }
+  }
+
+  private void assertItemEquals(Item expected, LendyrItem dto) {
+    Assertions.assertEquals(expected.getId(), GenericMapper.INSTANCE.convertBytesToUUID(dto.getId()));
+    Assertions.assertEquals(expected.getItemType(), dto.getItemType().name());
+  }
 
   @Test
   void weaponToDto() {

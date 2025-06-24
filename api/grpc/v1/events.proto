@@ -17,6 +17,7 @@ message LendyrGameEvent {
     // Overall actions
     LendyrGameModeChanged gameModeChanged = 1;
     LendyrGameSaved saved = 6;
+    LendyrCombatStarted combatStarted = 2;
 
     // Other events
     LendyrError error = 7;
@@ -54,7 +55,7 @@ message LendyrPersonaChanged {
 }
 
 // Generic Action
-message LendyrCombatStarted{
+message LendyrCombatStarted {
   repeated model.combat.LendyrEncounter encounter = 1;
 }
 

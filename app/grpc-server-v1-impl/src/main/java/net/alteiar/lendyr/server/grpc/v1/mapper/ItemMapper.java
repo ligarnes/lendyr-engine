@@ -3,10 +3,7 @@ package net.alteiar.lendyr.server.grpc.v1.mapper;
 import com.google.protobuf.ByteString;
 import net.alteiar.lendyr.grpc.model.v1.item.LendyrItem;
 import net.alteiar.lendyr.grpc.model.v1.item.LendyrQuest;
-import net.alteiar.lendyr.model.items.GenericItem;
-import net.alteiar.lendyr.model.items.Item;
-import net.alteiar.lendyr.model.items.QuestReference;
-import net.alteiar.lendyr.model.items.Weapon;
+import net.alteiar.lendyr.model.items.*;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -40,6 +37,8 @@ public interface ItemMapper {
 
     } else if (item instanceof GenericItem generic) {
       return genericToDto(generic);
+    } else if (item instanceof Armor armor) {
+      return armorToDto(armor);
     }
 
     return null;
@@ -51,4 +50,8 @@ public interface ItemMapper {
   }
 
   LendyrItem genericToDto(GenericItem item);
+
+  @Mapping(source = "armorRating", target = "armor.armorRating")
+  @Mapping(source = "armorPenalty", target = "armor.armorPenalty")
+  LendyrItem armorToDto(Armor armor);
 }

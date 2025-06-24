@@ -73,6 +73,10 @@ public class TiledObject {
   }
 
   public int getIntProperty(String property) {
+    if (properties == null) {
+      return -1;
+    }
+
     return properties.stream()
         .filter(p -> "int".equals(p.getType()))
         .filter(p -> p.getName().equals(property))
