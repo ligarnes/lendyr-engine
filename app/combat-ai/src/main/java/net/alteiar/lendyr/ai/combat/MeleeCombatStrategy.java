@@ -10,6 +10,7 @@ import net.alteiar.lendyr.entity.action.combat.major.AttackAction;
 import net.alteiar.lendyr.entity.action.combat.major.MajorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MinorAction;
 import net.alteiar.lendyr.entity.action.combat.minor.MoveAction;
+import net.alteiar.lendyr.model.map.layered.DynamicBlockingObject;
 import net.alteiar.lendyr.model.persona.Position;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class MeleeCombatStrategy implements CombatAiActor {
     MajorAction majorAction = AttackAction.builder().sourceId(persona.getId()).targetId(enemy.personaTarget().getId()).build();
     MinorAction minorAction;
 
-    if (enemy.distance() <= persona.getAttack().getNormalRange()) {
+    if (persona.canAttack(enemy.personaTarget())) {
       log.info("Enemy is in range (dist: {} vs attack range: {})", enemy.distance(), persona.getAttack().getNormalRange());
       minorAction = null;
     } else {
@@ -46,7 +47,9 @@ public class MeleeCombatStrategy implements CombatAiActor {
 
       if (moveAction != null) {
         Position lastPosition = moveAction.getPositions().getLast();
-        if (enemy.personaTarget().getPosition().dst(lastPosition) <= persona.getAttack().getNormalRange()) {
+        DynamicBlockingObject dynamicBlockingObject = persona.getAttackLongBoundingBox().cpy();
+        dynamicBlockingObject.getRectangle().setPosition(lastPosition.getX(), lastPosition.getY());
+        if (enemy.personaTarget().getDefenceBoundingBox().overlap(dynamicBlockingObject)) {
           majorAction = AttackAction.builder().sourceId(persona.getId()).targetId(enemy.personaTarget().getId()).build();
         }
       }

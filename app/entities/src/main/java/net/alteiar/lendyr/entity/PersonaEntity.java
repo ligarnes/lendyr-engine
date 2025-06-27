@@ -106,6 +106,13 @@ public class PersonaEntity {
     return persona.getHealthPoint();
   }
 
+  public boolean canAttack(PersonaEntity personaTarget) {
+    Rectangle attackRange = getAttackLongBoundingBox().getRectangle();
+    Rectangle target = personaTarget.getDefenceBoundingBox().getRectangle();
+
+    return attackRange.overlaps(target);
+  }
+
   public Attack getAttack() {
     PersonaItem item = persona.getEquipped().getEquippedWeapon();
     Weapon weapon = RepositoryFactory.get().getItemRepository().findWeaponById(item.getItemId()).orElse(BARE_HAND);

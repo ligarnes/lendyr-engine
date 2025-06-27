@@ -13,4 +13,8 @@ public class DynamicBlockingObject {
   public boolean overlap(DynamicBlockingObject other) {
     return rectangle.overlaps(other.getRectangle()) && layer.equals(other.getLayer());
   }
+
+  public DynamicBlockingObject cpy() {
+    return new DynamicBlockingObject(new Rectangle(rectangle), layer);
+  }
 }

@@ -47,10 +47,7 @@ public class AttackAction extends BaseAction implements MajorAction {
         .orElseThrow(() -> new NotFoundException(String.format("the persona with id [%s] does not exists", targetId)));
 
     // Check if they are in range
-    Rectangle attackRange = personaSource.getAttackLongBoundingBox().getRectangle();
-    Rectangle target = personaTarget.getDefenceBoundingBox().getRectangle();
-
-    if (!attackRange.overlaps(target)) {
+    if (!personaSource.canAttack(personaTarget)) {
       throw new NotAllowedException("Target is out of range");
     }
   }
